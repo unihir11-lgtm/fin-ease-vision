@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -211,6 +212,28 @@ const DashboardNPS = () => {
           </Button>
         </div>
       </div>
+
+      {/* New User CTA Banner */}
+      <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/5 border-primary/20">
+        <CardContent className="p-5">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-primary/10">
+                <Building2 className="w-8 h-8 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-secondary">Don't have an NPS account yet?</h3>
+                <p className="text-sm text-muted-foreground">Register for PRAN and start building your retirement corpus today. Get tax benefits up to ₹2 Lakhs!</p>
+              </div>
+            </div>
+            <Link to="/nps/register">
+              <Button className="gap-2 whitespace-nowrap">
+                Register Now <ChevronRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Tabs Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
