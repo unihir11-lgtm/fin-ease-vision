@@ -11,6 +11,10 @@ import Bonds from "./pages/Bonds";
 import BondDetails from "./pages/BondDetails";
 import FDs from "./pages/FDs";
 import FDDetails from "./pages/FDDetails";
+import IPO from "./pages/IPO";
+import IPODetails from "./pages/IPODetails";
+import IPOStatus from "./pages/IPOStatus";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +34,10 @@ const App = () => (
           <Route path="/bonds/:id" element={<BondDetails />} />
           <Route path="/fds" element={<FDs />} />
           <Route path="/fds/:id" element={<FDDetails />} />
+          <Route path="/ipo" element={<IPO />} />
+          <Route path="/ipo/status" element={<IPOStatus />} />
+          <Route path="/ipo/:id" element={<IPODetails />} />
+          <Route path="/admin/*" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
