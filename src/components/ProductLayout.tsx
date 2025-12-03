@@ -67,9 +67,9 @@ const ProductLayout = ({ children }: ProductLayoutProps) => {
         </div>
 
         {/* Secondary Navigation - Product Tabs */}
-        <nav className="hidden md:block border-t border-border/30 bg-muted/20">
+        <nav className="hidden md:block bg-secondary">
           <div className="container mx-auto px-4 md:px-6 lg:px-16">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center justify-center gap-1">
               {productNavLinks.map((link) => {
                 const Icon = link.icon;
                 const active = isActive(link.href);
@@ -77,16 +77,16 @@ const ProductLayout = ({ children }: ProductLayoutProps) => {
                   <Link
                     key={link.name}
                     to={link.href}
-                    className={`relative flex items-center gap-2 px-5 py-3.5 font-semibold text-sm transition-all duration-200
+                    className={`relative flex items-center gap-2 px-5 py-3 font-semibold text-sm transition-all duration-200
                       ${active 
-                        ? "text-primary" 
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        ? "text-white bg-white/15" 
+                        : "text-white/80 hover:text-white hover:bg-white/10"
                       }`}
                   >
                     <Icon className="w-4 h-4" />
                     {link.name}
                     {active && (
-                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-full" />
+                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-accent rounded-t-full" />
                     )}
                   </Link>
                 );
