@@ -16,7 +16,10 @@ const Bonds = () => {
     return matchesSearch && matchesRating;
   });
 
-  const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "2-digit" });
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "2-digit" });
+  };
 
   const ratings = ["all", "AAA", "AA+", "AA", "A+"];
 
@@ -92,55 +95,65 @@ const Bonds = () => {
           ))}
         </div>
 
-        {/* Bonds Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Bonds Grid - Horizontal Card Design */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredBonds.map((bond) => (
             <Link key={bond.id} to={`/bonds/${bond.id}`}>
-              <div className="finease-card bg-white rounded-2xl p-5 hover:shadow-lg transition-all group h-full">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-secondary/5 flex items-center justify-center text-2xl group-hover:bg-primary/10 transition-colors">
-                      {bond.logo}
-                    </div>
-                    <div>
-                      <Badge className={`mb-1 text-xs ${
-                        bond.rating.includes("AAA") ? "bg-green-100 text-green-700" :
-                        bond.rating.includes("AA") ? "bg-blue-100 text-blue-700" :
-                        "bg-amber-100 text-amber-700"
-                      }`}>
-                        {bond.rating}
-                      </Badge>
-                      <h3 className="font-bold text-secondary text-sm leading-tight">{bond.issuer}</h3>
-                    </div>
+              <div className="finease-card bg-white rounded-xl p-4 hover:shadow-lg transition-all group">
+                <div className="flex items-center gap-3">
+                  {/* Logo */}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center text-xl flex-shrink-0">
+                    {bond.logo}
                   </div>
+                  
+                  {/* Rating Badge */}
+                  <Badge className={`px-2 py-0.5 text-[10px] font-bold flex-shrink-0 ${
+                    bond.rating.includes("AAA") ? "bg-green-100 text-green-700" :
+                    bond.rating.includes("AA") ? "bg-blue-100 text-blue-700" :
+                    "bg-amber-100 text-amber-700"
+                  }`}>
+                    {bond.rating}
+                  </Badge>
+
+                  {/* Name */}
+                  <div className="min-w-0 flex-shrink">
+                    <h3 className="font-bold text-secondary text-sm truncate leading-tight">{bond.issuer}</h3>
+                  </div>
+
+                  {/* Maturity */}
+                  <div className="flex-shrink-0 px-2 py-1 rounded border border-primary/20 bg-primary/5 text-center">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Maturity:</p>
+                    <p className="text-xs font-bold text-primary leading-tight">{formatDate(bond.maturityDate).split(' ').slice(0, 2).join(' ')}</p>
+                  </div>
+
+                  {/* Coupon Rate */}
+                  <div className="flex-shrink-0 text-center hidden sm:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Coupon Rate</p>
+                    <p className="text-sm font-bold text-secondary">{bond.couponRate}%</p>
+                  </div>
+
+                  {/* Yield */}
+                  <div className="flex-shrink-0 text-center hidden sm:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Yield</p>
+                    <p className="text-sm font-bold text-accent">{bond.currentYield}%</p>
+                  </div>
+
+                  {/* YTM & Min Amount */}
+                  <div className="flex-shrink-0 text-center hidden lg:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">YTM</p>
+                    <p className="text-sm font-bold text-secondary">{bond.ytm}%</p>
+                  </div>
+
+                  <div className="flex-shrink-0 text-center hidden lg:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Min</p>
+                    <p className="text-sm font-bold text-secondary">₹{(bond.minInvestment / 1000).toFixed(0)}K</p>
+                  </div>
+
+                  {/* View Details Button */}
+                  <Button variant="outline" size="sm" className="flex-shrink-0 ml-auto text-primary border-primary/30 hover:bg-primary hover:text-white text-xs px-3 gap-1">
+                    View Details <ChevronRight className="w-3 h-3" />
+                  </Button>
                 </div>
-
-                <Badge variant="outline" className="mb-4 text-xs border-primary/30 text-primary">
-                  Maturity: {formatDate(bond.maturityDate)}
-                </Badge>
-
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="p-3 bg-secondary/5 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Coupon Rate</p>
-                    <p className="font-bold text-secondary">{bond.couponRate}%</p>
-                  </div>
-                  <div className="p-3 bg-secondary/5 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Current Yield</p>
-                    <p className="font-bold text-primary">{bond.currentYield}%</p>
-                  </div>
-                  <div className="p-3 bg-secondary/5 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">YTM</p>
-                    <p className="font-bold text-secondary">{bond.ytm}%</p>
-                  </div>
-                  <div className="p-3 bg-secondary/5 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Min Amount</p>
-                    <p className="font-bold text-secondary">₹{(bond.minInvestment / 1000).toFixed(0)}K</p>
-                  </div>
-                </div>
-
-                <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-white transition-all">
-                  View Details <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
               </div>
             </Link>
           ))}

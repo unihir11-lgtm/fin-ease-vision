@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { fdProviders } from "@/data/fdData";
 import { ChevronRight, PiggyBank, Shield, TrendingUp, AlertCircle, Percent, Building } from "lucide-react";
 import ProductLayout from "@/components/ProductLayout";
@@ -84,54 +85,57 @@ const FDs = () => {
           ))}
         </div>
 
-        {/* FD Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* FD Grid - Horizontal Card Design */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredFDs.map((fd) => (
             <Link key={fd.id} to={`/fds/${fd.id}`}>
-              <div className="finease-card bg-white rounded-2xl p-5 hover:shadow-lg transition-all group h-full">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl group-hover:bg-primary/20 transition-colors">
-                      {fd.logo}
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-secondary">{fd.bankName}</h3>
-                      <div className="flex items-center gap-1 text-xs text-green-600">
-                        <Shield className="w-3 h-3" />
-                        <span>DICGC Insured</span>
-                      </div>
-                    </div>
+              <div className="finease-card bg-white rounded-xl p-4 hover:shadow-lg transition-all group">
+                <div className="flex items-center gap-3">
+                  {/* Logo */}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent/10 to-primary/10 flex items-center justify-center text-xl flex-shrink-0">
+                    {fd.logo}
                   </div>
-                </div>
+                  
+                  {/* DICGC Badge */}
+                  <Badge className="px-2 py-0.5 text-[10px] font-bold flex-shrink-0 bg-green-100 text-green-700">
+                    <Shield className="w-2.5 h-2.5 mr-0.5" />
+                    DICGC
+                  </Badge>
 
-                <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl p-4 mb-4">
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Interest Rate</p>
-                      <p className="text-3xl font-bold text-primary">{fd.interestRate}%</p>
-                      <p className="text-xs text-muted-foreground">per annum</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground mb-1">Max Tenure</p>
-                      <p className="text-lg font-bold text-secondary">{fd.maxTenure}</p>
-                    </div>
+                  {/* Name */}
+                  <div className="min-w-0 flex-shrink">
+                    <h3 className="font-bold text-secondary text-sm truncate leading-tight">{fd.bankName}</h3>
                   </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="p-3 bg-secondary/5 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Min Deposit</p>
-                    <p className="font-bold text-secondary">₹{fd.minDeposit.toLocaleString()}</p>
+                  {/* Tenure */}
+                  <div className="flex-shrink-0 px-2 py-1 rounded border border-accent/20 bg-accent/5 text-center">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Tenure:</p>
+                    <p className="text-xs font-bold text-accent leading-tight">{fd.maxTenure}</p>
                   </div>
-                  <div className="p-3 bg-secondary/5 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Senior Citizen</p>
-                    <p className="font-bold text-primary">{fd.seniorCitizenRate}%</p>
-                  </div>
-                </div>
 
-                <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-white transition-all">
-                  View Details <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
+                  {/* Interest Rate */}
+                  <div className="flex-shrink-0 text-center hidden sm:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Interest</p>
+                    <p className="text-sm font-bold text-primary">{fd.interestRate}%</p>
+                  </div>
+
+                  {/* Senior Citizen Rate */}
+                  <div className="flex-shrink-0 text-center hidden sm:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Sr. Citizen</p>
+                    <p className="text-sm font-bold text-accent">{fd.seniorCitizenRate}%</p>
+                  </div>
+
+                  {/* Min Deposit */}
+                  <div className="flex-shrink-0 text-center hidden lg:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Min</p>
+                    <p className="text-sm font-bold text-secondary">₹{(fd.minDeposit / 1000).toFixed(0)}K</p>
+                  </div>
+
+                  {/* View Details Button */}
+                  <Button variant="outline" size="sm" className="flex-shrink-0 ml-auto text-primary border-primary/30 hover:bg-primary hover:text-white text-xs px-3 gap-1">
+                    View Details <ChevronRight className="w-3 h-3" />
+                  </Button>
+                </div>
               </div>
             </Link>
           ))}
