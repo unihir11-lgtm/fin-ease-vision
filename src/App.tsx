@@ -15,6 +15,7 @@ import IPO from "./pages/IPO";
 import IPODetails from "./pages/IPODetails";
 import IPOStatus from "./pages/IPOStatus";
 import Calculators from "./pages/Calculators";
+import NPS from "./pages/NPS";
 import NPSRegistration from "./pages/NPSRegistration";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/ipo/status" element={<IPOStatus />} />
           <Route path="/ipo/:id" element={<IPODetails />} />
           <Route path="/calculators" element={<Calculators />} />
+          <Route path="/nps" element={<NPS />} />
           <Route path="/nps/register" element={<NPSRegistration />} />
           <Route path="/admin/*" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
