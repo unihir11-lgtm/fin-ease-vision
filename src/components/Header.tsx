@@ -14,7 +14,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-border/30">
       {/* Top Row */}
       <div className="px-6 lg:px-20 py-5 flex items-center justify-between">
         {/* Logo */}
