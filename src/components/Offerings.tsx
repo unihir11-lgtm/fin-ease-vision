@@ -40,25 +40,23 @@ const offerings = [
 
 const Offerings = () => {
   return (
-    <section className="py-16 bg-background">
+    <section className="py-12 md:py-16 bg-background">
       <div className="container mx-auto px-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-secondary text-center font-['Raleway'] mb-12">
+        <h2 className="text-xl md:text-2xl lg:text-[28px] font-bold text-secondary text-center font-['Raleway'] mb-8 md:mb-12">
           Our offerings
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {offerings.map((offering, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
+          {offerings.map((offering) => (
             <div
               key={offering.title}
-              className={`p-6 rounded-xl card-shadow bg-card hover:shadow-lg transition-shadow ${
-                index >= 3 ? "lg:col-span-1" : ""
-              }`}
+              className="p-5 md:p-6 rounded-xl bg-card border border-border/50 hover:shadow-lg hover:border-primary/20 transition-all duration-300"
             >
-              <div className={`w-12 h-12 rounded-lg ${offering.color} flex items-center justify-center mb-4`}>
-                <offering.icon className={`w-6 h-6 ${offering.iconColor}`} />
+              <div className={`w-11 h-11 rounded-lg ${offering.color} flex items-center justify-center mb-4`}>
+                <offering.icon className={`w-5 h-5 ${offering.iconColor}`} />
               </div>
-              <h3 className="text-lg font-bold text-secondary mb-2">{offering.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <h3 className="text-base md:text-lg font-bold text-secondary mb-2">{offering.title}</h3>
+              <p className="text-sm text-muted leading-relaxed">
                 {offering.description}
               </p>
             </div>
