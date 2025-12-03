@@ -7,6 +7,12 @@ import DashboardIPO from "./dashboard/DashboardIPO";
 import DashboardNPS from "./dashboard/DashboardNPS";
 import DashboardPortfolio from "./dashboard/DashboardPortfolio";
 import DashboardKYC from "./dashboard/DashboardKYC";
+import DashboardTransactions from "./dashboard/DashboardTransactions";
+import DashboardProfile from "./dashboard/DashboardProfile";
+import DashboardNotifications from "./dashboard/DashboardNotifications";
+import DashboardReports from "./dashboard/DashboardReports";
+import DashboardSettings from "./dashboard/DashboardSettings";
+import DashboardHelp from "./dashboard/DashboardHelp";
 
 const Dashboard = () => {
   return (
@@ -14,17 +20,17 @@ const Dashboard = () => {
       <Routes>
         <Route index element={<DashboardOverview />} />
         <Route path="portfolio" element={<DashboardPortfolio />} />
-        <Route path="transactions" element={<DashboardOverview />} />
+        <Route path="transactions" element={<DashboardTransactions />} />
         <Route path="ipo" element={<DashboardIPO />} />
         <Route path="bonds" element={<DashboardBonds />} />
         <Route path="fds" element={<DashboardFDs />} />
         <Route path="nps" element={<DashboardNPS />} />
         <Route path="kyc" element={<DashboardKYC />} />
-        <Route path="profile" element={<DashboardOverview />} />
-        <Route path="notifications" element={<DashboardOverview />} />
-        <Route path="reports" element={<DashboardOverview />} />
-        <Route path="settings" element={<DashboardOverview />} />
-        <Route path="help" element={<DashboardOverview />} />
+        <Route path="profile" element={<DashboardProfile />} />
+        <Route path="notifications" element={<DashboardNotifications />} />
+        <Route path="reports" element={<DashboardReports />} />
+        <Route path="settings" element={<DashboardSettings />} />
+        <Route path="help" element={<DashboardHelp />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </DashboardLayout>
