@@ -50,6 +50,10 @@
     --footer-copyright: 178 93% 23%;
     --text-gray: 200 10% 44%;
     
+    /* Section backgrounds */
+    --section-alt: 210 20% 98%;
+    --section-teal: 168 40% 97%;
+    
     /* Card styling - refined */
     --card-border: 195 60% 94%;
     --card-shadow: 0 2px 12px 0 rgba(23, 93, 128, 0.06);
@@ -59,6 +63,7 @@
     --gradient-hero: linear-gradient(135deg, hsl(197 77% 18%) 0%, hsl(197 77% 12%) 100%);
     --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 20% 99%) 100%);
     --gradient-subtle: linear-gradient(180deg, hsl(168 40% 98%) 0%, hsl(0 0% 100%) 100%);
+    --gradient-section: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(0 0% 100%) 100%);
 
     /* Shadows - refined */
     --shadow-xs: 0 1px 2px hsl(0 0% 0% / 0.04);
@@ -67,6 +72,13 @@
     --shadow-card-hover: 0 12px 40px hsl(197 77% 17% / 0.14);
     --shadow-button: 0 4px 14px hsl(168 72% 40% / 0.25);
     --shadow-button-hover: 0 6px 20px hsl(168 72% 40% / 0.35);
+    
+    /* Icon backgrounds */
+    --icon-teal: 168 60% 95%;
+    --icon-orange: 35 90% 95%;
+    --icon-blue: 210 80% 95%;
+    --icon-purple: 270 60% 95%;
+    --icon-red: 0 70% 95%;
   }
 }
 
