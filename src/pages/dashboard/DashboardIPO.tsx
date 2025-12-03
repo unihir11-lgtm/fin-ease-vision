@@ -83,8 +83,11 @@ const DashboardIPO = () => {
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {upcomingIPOs.map((ipo) => (
-            <div key={ipo.id} className="bg-white rounded-xl p-5 border border-border hover:shadow-md transition-all">
-              <div className="flex items-start justify-between mb-4">
+            <div 
+              key={ipo.id} 
+              className="finease-card flex-col bg-white rounded-2xl p-5 border border-[#E7F6FE] shadow-[0_4px_20px_0_rgba(23,93,128,0.08)] hover:shadow-[0_6px_24px_0_rgba(23,93,128,0.12)] transition-all"
+            >
+              <div className="flex items-start justify-between mb-4 w-full">
                 <div>
                   <h3 className="font-bold text-secondary text-lg">{ipo.company}</h3>
                   <p className="text-sm text-muted">Issue Size: {ipo.issueSize}</p>
@@ -94,7 +97,7 @@ const DashboardIPO = () => {
                 </Badge>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+              <div className="grid grid-cols-2 gap-4 mb-4 text-sm w-full">
                 <div>
                   <p className="text-muted">Price Range</p>
                   <p className="font-medium text-secondary">{ipo.priceRange}</p>
@@ -114,17 +117,17 @@ const DashboardIPO = () => {
               </div>
 
               {ipo.subscriptionStatus && (
-                <div className="bg-green-50 text-green-700 text-sm px-3 py-2 rounded-lg mb-4">
+                <div className="bg-green-50 text-green-700 text-sm px-3 py-2 rounded-lg mb-4 w-full">
                   {ipo.subscriptionStatus}
                 </div>
               )}
 
-              <div className="flex items-center justify-between pt-3 border-t border-border">
+              <div className="flex items-center justify-between pt-3 border-t border-border w-full">
                 <div className="flex items-center gap-1 text-sm text-muted">
                   <Calendar className="w-4 h-4" />
                   Listing: {ipo.listingDate}
                 </div>
-                <Button size="sm" className="bg-primary" disabled={ipo.status !== "Open"}>
+                <Button variant="finease" size="sm" disabled={ipo.status !== "Open"}>
                   {ipo.status === "Open" ? "Apply Now" : "Notify Me"}
                 </Button>
               </div>
@@ -139,10 +142,10 @@ const DashboardIPO = () => {
           <Clock className="w-5 h-5 text-primary" />
           Your IPO Applications
         </h2>
-        <div className="bg-white rounded-xl border border-border overflow-hidden">
+        <div className="bg-white rounded-2xl border border-[#E7F6FE] shadow-[0_4px_20px_0_rgba(23,93,128,0.08)] overflow-hidden">
           <div className="divide-y divide-border">
             {appliedIPOs.map((ipo) => (
-              <div key={ipo.id} className="p-4 hover:bg-gray-50 transition-colors">
+              <div key={ipo.id} className="p-5 hover:bg-gray-50/50 transition-colors">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <h3 className="font-bold text-secondary">{ipo.company}</h3>

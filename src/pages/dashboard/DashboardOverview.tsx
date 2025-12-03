@@ -72,8 +72,8 @@ const DashboardOverview = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-primary to-primary/80 rounded-xl p-5 text-white">
-          <div className="flex items-center justify-between mb-3">
+        <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-gradient-to-br from-primary to-primary/80 text-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)]">
+          <div className="flex items-center justify-between w-full mb-1">
             <span className="text-sm text-white/70">Total Portfolio</span>
             <span className="flex items-center gap-1 text-xs text-white bg-white/20 px-2 py-0.5 rounded">
               <ArrowUpRight className="w-3 h-3" />
@@ -86,18 +86,16 @@ const DashboardOverview = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl p-5 border border-border">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-muted">Total Invested</span>
-          </div>
+        <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)]">
+          <span className="text-sm text-muted">Total Invested</span>
           <p className="text-2xl font-bold text-secondary flex items-center">
             <IndianRupee className="w-5 h-5" />
             {totalInvested.toLocaleString()}
           </p>
         </div>
 
-        <div className="bg-white rounded-xl p-5 border border-border">
-          <div className="flex items-center justify-between mb-3">
+        <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)]">
+          <div className="flex items-center justify-between w-full">
             <span className="text-sm text-muted">Total Returns</span>
             <span className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded">
               <ArrowUpRight className="w-3 h-3" />
@@ -110,14 +108,12 @@ const DashboardOverview = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl p-5 border border-border">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-muted">Active Investments</span>
-          </div>
+        <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)]">
+          <span className="text-sm text-muted">Active Investments</span>
           <p className="text-2xl font-bold text-secondary">
             {userPortfolio.bonds.length + userPortfolio.fds.length}
           </p>
-          <p className="text-xs text-muted mt-1">
+          <p className="text-xs text-muted">
             {userPortfolio.bonds.length} Bonds • {userPortfolio.fds.length} FDs
           </p>
         </div>
@@ -129,12 +125,12 @@ const DashboardOverview = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {quickActions.map((action) => (
             <Link key={action.title} to={action.href}>
-              <div className="bg-white rounded-xl p-4 border border-border hover:shadow-md hover:border-primary/30 transition-all group cursor-pointer">
-                <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center mb-3`}>
+              <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)] hover:shadow-[0_6px_24px_0_rgba(23,93,128,0.12)] transition-all group cursor-pointer">
+                <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center`}>
                   <action.icon className="w-5 h-5 text-white" />
                 </div>
                 <h3 className="font-semibold text-secondary group-hover:text-primary transition-colors">{action.title}</h3>
-                <p className="text-xs text-muted mt-1">{action.description}</p>
+                <p className="text-xs text-muted">{action.description}</p>
               </div>
             </Link>
           ))}
