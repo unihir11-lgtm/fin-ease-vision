@@ -12,8 +12,10 @@ import {
   IndianRupee,
   CheckCircle,
   ArrowUpRight,
-  ArrowDownRight,
+  Bell,
 } from "lucide-react";
+import PortfolioChart from "@/components/dashboard/PortfolioChart";
+import CashFlowTimeline from "@/components/dashboard/CashFlowTimeline";
 
 const DashboardOverview = () => {
   const totalBondValue = userPortfolio.bonds.reduce((sum, b) => sum + b.currentValue, 0);
@@ -29,6 +31,22 @@ const DashboardOverview = () => {
     { title: "NPS", description: "Manage pension savings", icon: Building2, href: "/dashboard/nps", color: "bg-purple-500" },
     { title: "Analytics", description: "Stock screener & tools", icon: BarChart3, href: "/dashboard/analytics", color: "bg-orange-500" },
   ];
+
+  // Upcoming maturity alerts
+  const upcomingMaturities = [
+    ...userPortfolio.fds.map(fd => ({
+      type: 'FD',
+      name: `${fd.bankName} FD`,
+      date: fd.maturityDate,
+      value: fd.maturityValue,
+    })),
+    ...userPortfolio.bonds.map(bond => ({
+      type: 'Bond',
+      name: bond.issuer,
+      date: bond.maturityDate,
+      value: bond.currentValue,
+    })),
+  ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 3);
 
   return (
     <div className="space-y-6">
@@ -54,16 +72,16 @@ const DashboardOverview = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-border">
+        <div className="bg-gradient-to-br from-primary to-primary/80 rounded-xl p-5 text-white">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-muted">Total Portfolio</span>
-            <span className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded">
+            <span className="text-sm text-white/70">Total Portfolio</span>
+            <span className="flex items-center gap-1 text-xs text-white bg-white/20 px-2 py-0.5 rounded">
               <ArrowUpRight className="w-3 h-3" />
               +12.5%
             </span>
           </div>
-          <p className="text-2xl font-bold text-secondary flex items-center">
-            <IndianRupee className="w-5 h-5" />
+          <p className="text-3xl font-bold flex items-center">
+            <IndianRupee className="w-6 h-6" />
             {(totalBondValue + totalFDValue).toLocaleString()}
           </p>
         </div>
@@ -99,6 +117,9 @@ const DashboardOverview = () => {
           <p className="text-2xl font-bold text-secondary">
             {userPortfolio.bonds.length + userPortfolio.fds.length}
           </p>
+          <p className="text-xs text-muted mt-1">
+            {userPortfolio.bonds.length} Bonds • {userPortfolio.fds.length} FDs
+          </p>
         </div>
       </div>
 
@@ -120,13 +141,70 @@ const DashboardOverview = () => {
         </div>
       </div>
 
-      {/* Portfolio Breakdown & Upcoming */}
+      {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Portfolio Breakdown */}
+        <PortfolioChart />
+        
+        {/* Upcoming Maturities */}
+        <div className="bg-white rounded-xl p-5 border border-border">
+          <h3 className="font-bold text-secondary mb-4 flex items-center gap-2">
+            <Bell className="w-5 h-5 text-primary" />
+            Upcoming Maturities
+          </h3>
+          <div className="space-y-3">
+            {upcomingMaturities.map((item, index) => {
+              const daysUntil = Math.ceil((new Date(item.date).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+              const isUrgent = daysUntil <= 30;
+              
+              return (
+                <div 
+                  key={index} 
+                  className={`p-3 rounded-lg border ${
+                    isUrgent ? 'bg-orange-50 border-orange-200' : 'bg-gray-50 border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        item.type === 'FD' ? 'bg-green-100' : 'bg-teal-100'
+                      }`}>
+                        {item.type === 'FD' ? (
+                          <PiggyBank className="w-4 h-4 text-green-600" />
+                        ) : (
+                          <Banknote className="w-4 h-4 text-teal-600" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-secondary text-sm">{item.name}</p>
+                        <p className="text-xs text-muted">{item.date}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-secondary">₹{item.value.toLocaleString()}</p>
+                      <p className={`text-xs ${isUrgent ? 'text-orange-600 font-medium' : 'text-muted'}`}>
+                        {daysUntil > 0 ? `${daysUntil} days` : 'Matured'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <Link to="/dashboard/portfolio" className="flex items-center justify-center gap-1 text-sm text-primary font-medium pt-4">
+            View All Maturities <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Cash Flow Timeline */}
+      <CashFlowTimeline />
+
+      {/* Portfolio Breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl p-5 border border-border">
           <h3 className="font-bold text-secondary mb-4">Portfolio Breakdown</h3>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
                   <Banknote className="w-5 h-5 text-teal-600" />
@@ -138,11 +216,13 @@ const DashboardOverview = () => {
               </div>
               <div className="text-right">
                 <p className="font-bold text-secondary">₹{totalBondValue.toLocaleString()}</p>
-                <p className="text-xs text-green-600">+{((totalBondValue / (totalBondValue + totalFDValue)) * 100).toFixed(1)}%</p>
+                <p className="text-xs text-green-600">
+                  {((totalBondValue / (totalBondValue + totalFDValue)) * 100).toFixed(1)}% of portfolio
+                </p>
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                   <PiggyBank className="w-5 h-5 text-green-600" />
@@ -154,7 +234,9 @@ const DashboardOverview = () => {
               </div>
               <div className="text-right">
                 <p className="font-bold text-secondary">₹{totalFDValue.toLocaleString()}</p>
-                <p className="text-xs text-green-600">+{((totalFDValue / (totalBondValue + totalFDValue)) * 100).toFixed(1)}%</p>
+                <p className="text-xs text-green-600">
+                  {((totalFDValue / (totalBondValue + totalFDValue)) * 100).toFixed(1)}% of portfolio
+                </p>
               </div>
             </div>
 
@@ -168,28 +250,17 @@ const DashboardOverview = () => {
         <div className="bg-white rounded-xl p-5 border border-border">
           <h3 className="font-bold text-secondary mb-4 flex items-center gap-2">
             <Calendar className="w-5 h-5 text-primary" />
-            Upcoming Payments
+            Upcoming Coupon Payments
           </h3>
           <div className="space-y-3">
             {userPortfolio.bonds.map((bond) => (
               <div key={bond.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div>
                   <p className="font-medium text-secondary">{bond.issuer}</p>
-                  <p className="text-xs text-muted">Coupon payment • {bond.nextCouponDate}</p>
+                  <p className="text-xs text-muted">{bond.payoutFrequency} • {bond.nextCouponDate}</p>
                 </div>
                 <p className="font-bold text-primary">
                   ₹{Math.round(bond.investedAmount * bond.couponRate / 100 / 4).toLocaleString()}
-                </p>
-              </div>
-            ))}
-            {userPortfolio.fds.slice(0, 1).map((fd) => (
-              <div key={fd.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium text-secondary">{fd.bankName} FD</p>
-                  <p className="text-xs text-muted">Maturity • {fd.maturityDate}</p>
-                </div>
-                <p className="font-bold text-green-600">
-                  ₹{fd.maturityValue.toLocaleString()}
                 </p>
               </div>
             ))}
