@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, Shield, Percent } from "lucide-react";
+import { ArrowRight, TrendingUp, Shield, Percent, Building2 } from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
 
 const Hero = () => {
@@ -52,9 +52,10 @@ const Hero = () => {
                   Start Investing <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link to="/calculators">
-                <Button variant="heroOutline" size="lg">
-                  Try Calculators
+              <Link to="/nps/register">
+                <Button variant="heroOutline" size="lg" className="gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Open NPS Account
                 </Button>
               </Link>
             </div>
