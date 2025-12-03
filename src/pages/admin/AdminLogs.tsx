@@ -1,26 +1,48 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
-  Search, Download, Activity, User, 
-  Shield, AlertTriangle, Info, CheckCircle,
-  Clock, Filter
+  Search, Download, Activity, User, Shield, AlertTriangle, 
+  Info, CheckCircle, Clock, Filter, RefreshCw, Calendar,
+  Globe, Monitor, Smartphone, Database, CreditCard, FileText
 } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 const mockLogs = [
-  { id: 1, action: "User login", user: "admin@finease.com", type: "auth", level: "info", timestamp: "2024-01-15 14:32:45", ip: "192.168.1.100" },
-  { id: 2, action: "IPO added - Aurionpro Solutions", user: "admin@finease.com", type: "cms", level: "success", timestamp: "2024-01-15 14:28:12", ip: "192.168.1.100" },
-  { id: 3, action: "KYC approved for user #12345", user: "kyc@finease.com", type: "kyc", level: "success", timestamp: "2024-01-15 14:15:30", ip: "192.168.1.101" },
-  { id: 4, action: "Failed login attempt", user: "unknown", type: "auth", level: "warning", timestamp: "2024-01-15 13:45:22", ip: "203.45.67.89" },
-  { id: 5, action: "Bond rate updated - HDFC", user: "admin@finease.com", type: "cms", level: "info", timestamp: "2024-01-15 13:30:15", ip: "192.168.1.100" },
-  { id: 6, action: "NPS payment processed - ₹50,000", user: "nps@finease.com", type: "payment", level: "success", timestamp: "2024-01-15 13:15:08", ip: "192.168.1.102" },
-  { id: 7, action: "User registration - Rahul Sharma", user: "system", type: "user", level: "info", timestamp: "2024-01-15 12:45:33", ip: "182.73.45.123" },
-  { id: 8, action: "Security alert - Multiple failed attempts", user: "system", type: "security", level: "error", timestamp: "2024-01-15 12:30:00", ip: "203.45.67.89" },
-  { id: 9, action: "FD provider added - Bajaj Finance", user: "admin@finease.com", type: "cms", level: "success", timestamp: "2024-01-15 12:00:45", ip: "192.168.1.100" },
-  { id: 10, action: "Settlement batch processed - BATCH-2024-001", user: "nps@finease.com", type: "payment", level: "success", timestamp: "2024-01-15 11:30:22", ip: "192.168.1.102" },
+  { id: 1, action: "User login successful", user: "admin@finease.com", type: "auth", level: "success", timestamp: "2024-01-15 14:32:45", ip: "192.168.1.100", device: "Chrome / Windows", location: "Mumbai, IN" },
+  { id: 2, action: "IPO added - Aurionpro Solutions", user: "admin@finease.com", type: "cms", level: "success", timestamp: "2024-01-15 14:28:12", ip: "192.168.1.100", device: "Chrome / Windows", location: "Mumbai, IN" },
+  { id: 3, action: "KYC approved for user #12345", user: "kyc@finease.com", type: "kyc", level: "success", timestamp: "2024-01-15 14:15:30", ip: "192.168.1.101", device: "Safari / MacOS", location: "Bangalore, IN" },
+  { id: 4, action: "Failed login attempt - Invalid credentials", user: "unknown@test.com", type: "auth", level: "warning", timestamp: "2024-01-15 13:45:22", ip: "203.45.67.89", device: "Firefox / Linux", location: "Unknown" },
+  { id: 5, action: "Bond rate updated - HDFC Infrastructure", user: "admin@finease.com", type: "cms", level: "info", timestamp: "2024-01-15 13:30:15", ip: "192.168.1.100", device: "Chrome / Windows", location: "Mumbai, IN" },
+  { id: 6, action: "NPS payment processed - ₹50,000", user: "nps@finease.com", type: "payment", level: "success", timestamp: "2024-01-15 13:15:08", ip: "192.168.1.102", device: "Edge / Windows", location: "Delhi, IN" },
+  { id: 7, action: "New user registration - Rahul Sharma", user: "system", type: "user", level: "info", timestamp: "2024-01-15 12:45:33", ip: "182.73.45.123", device: "Mobile / Android", location: "Pune, IN" },
+  { id: 8, action: "Security alert - Multiple failed login attempts", user: "system", type: "security", level: "error", timestamp: "2024-01-15 12:30:00", ip: "203.45.67.89", device: "Unknown", location: "Unknown" },
+  { id: 9, action: "FD provider added - Bajaj Finance", user: "admin@finease.com", type: "cms", level: "success", timestamp: "2024-01-15 12:00:45", ip: "192.168.1.100", device: "Chrome / Windows", location: "Mumbai, IN" },
+  { id: 10, action: "Settlement batch processed - BATCH-2024-001", user: "nps@finease.com", type: "payment", level: "success", timestamp: "2024-01-15 11:30:22", ip: "192.168.1.102", device: "Edge / Windows", location: "Delhi, IN" },
+  { id: 11, action: "Database backup completed", user: "system", type: "system", level: "info", timestamp: "2024-01-15 11:00:00", ip: "192.168.1.1", device: "Server", location: "AWS Mumbai" },
+  { id: 12, action: "API rate limit exceeded", user: "api@partner.com", type: "security", level: "warning", timestamp: "2024-01-15 10:45:12", ip: "45.67.89.123", device: "API Client", location: "Singapore" },
+];
+
+const activityTrend = [
+  { hour: "00:00", logs: 12 },
+  { hour: "04:00", logs: 8 },
+  { hour: "08:00", logs: 45 },
+  { hour: "12:00", logs: 78 },
+  { hour: "16:00", logs: 92 },
+  { hour: "20:00", logs: 56 },
+];
+
+const typeDistribution = [
+  { type: "Auth", count: 156, color: "#3b82f6" },
+  { type: "CMS", count: 89, color: "#22c55e" },
+  { type: "Payment", count: 67, color: "#f59e0b" },
+  { type: "KYC", count: 45, color: "#8b5cf6" },
+  { type: "Security", count: 23, color: "#ef4444" },
+  { type: "System", count: 34, color: "#6b7280" },
 ];
 
 const AdminLogs = () => {
@@ -30,7 +52,8 @@ const AdminLogs = () => {
 
   const filteredLogs = mockLogs.filter((log) => {
     const matchesSearch = log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          log.user.toLowerCase().includes(searchTerm.toLowerCase());
+                          log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          log.ip.includes(searchTerm);
     const matchesLevel = levelFilter === "all" || log.level === levelFilter;
     const matchesType = typeFilter === "all" || log.type === typeFilter;
     return matchesSearch && matchesLevel && matchesType;
@@ -46,133 +69,279 @@ const AdminLogs = () => {
   };
 
   const getLevelBadge = (level: string) => {
-    const styles = {
-      success: "bg-green-100 text-green-700",
-      warning: "bg-amber-100 text-amber-700",
-      error: "bg-red-100 text-red-700",
-      info: "bg-blue-100 text-blue-700",
+    const styles: Record<string, string> = {
+      success: "bg-green-100 text-green-700 border-green-200",
+      warning: "bg-amber-100 text-amber-700 border-amber-200",
+      error: "bg-red-100 text-red-700 border-red-200",
+      info: "bg-blue-100 text-blue-700 border-blue-200",
     };
-    return styles[level as keyof typeof styles] || styles.info;
+    return styles[level] || styles.info;
   };
 
-  const stats = [
-    { label: "Total Logs", value: mockLogs.length, icon: Activity },
-    { label: "Success", value: mockLogs.filter(l => l.level === "success").length, color: "text-green-600" },
-    { label: "Warnings", value: mockLogs.filter(l => l.level === "warning").length, color: "text-amber-600" },
-    { label: "Errors", value: mockLogs.filter(l => l.level === "error").length, color: "text-red-600" },
-  ];
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case "auth": return <User className="w-3 h-3" />;
+      case "cms": return <FileText className="w-3 h-3" />;
+      case "payment": return <CreditCard className="w-3 h-3" />;
+      case "kyc": return <Shield className="w-3 h-3" />;
+      case "security": return <AlertTriangle className="w-3 h-3" />;
+      case "system": return <Database className="w-3 h-3" />;
+      default: return <Activity className="w-3 h-3" />;
+    }
+  };
+
+  const stats = {
+    total: mockLogs.length,
+    success: mockLogs.filter(l => l.level === "success").length,
+    warnings: mockLogs.filter(l => l.level === "warning").length,
+    errors: mockLogs.filter(l => l.level === "error").length,
+  };
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-secondary">Activity Logs</h1>
-          <p className="text-muted-foreground">Monitor all system activities and events</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-secondary flex items-center gap-2">
+            <Activity className="w-7 h-7 text-primary" />
+            Activity Logs
+          </h1>
+          <p className="text-muted-foreground mt-1">Monitor all system activities, events, and security alerts</p>
         </div>
-        <Button variant="outline" className="gap-2">
-          <Download className="w-4 h-4" /> Export Logs
-        </Button>
+        <div className="flex gap-3">
+          <Button variant="outline" className="gap-2">
+            <RefreshCw className="w-4 h-4" /> Refresh
+          </Button>
+          <Button variant="outline" className="gap-2">
+            <Download className="w-4 h-4" /> Export Logs
+          </Button>
+        </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((stat, i) => (
-          <Card key={i} className="finease-card">
-            <CardContent className="p-4 text-center">
-              <p className={`text-2xl font-bold ${stat.color || 'text-secondary'}`}>{stat.value}</p>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
-            </CardContent>
-          </Card>
-        ))}
+        <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10">
+                <Activity className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-secondary">{stats.total}</p>
+                <p className="text-xs text-muted-foreground">Total Logs (24h)</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-green-100">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-green-600">{stats.success}</p>
+                <p className="text-xs text-muted-foreground">Successful</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-amber-100">
+                <AlertTriangle className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-amber-600">{stats.warnings}</p>
+                <p className="text-xs text-muted-foreground">Warnings</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-red-100">
+                <Shield className="w-5 h-5 text-red-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-red-600">{stats.errors}</p>
+                <p className="text-xs text-muted-foreground">Errors</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Activity className="w-4 h-4 text-primary" />
+              Activity Trend (24 Hours)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-32">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={activityTrend}>
+                  <defs>
+                    <linearGradient id="colorLogs" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                  <XAxis dataKey="hour" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6b7280' }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6b7280' }} />
+                  <Tooltip />
+                  <Area type="monotone" dataKey="logs" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorLogs)" strokeWidth={2} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Filter className="w-4 h-4 text-primary" />
+              By Event Type
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-32">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={typeDistribution} layout="vertical">
+                  <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6b7280' }} />
+                  <YAxis dataKey="type" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#6b7280' }} width={60} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Filters */}
-      <Card className="finease-card">
+      <Card>
         <CardContent className="p-4">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Search logs..."
+                placeholder="Search by action, user, or IP address..."
                 className="pl-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               <Tabs value={levelFilter} onValueChange={setLevelFilter}>
-                <TabsList>
-                  <TabsTrigger value="all">All Levels</TabsTrigger>
-                  <TabsTrigger value="success">Success</TabsTrigger>
-                  <TabsTrigger value="info">Info</TabsTrigger>
-                  <TabsTrigger value="warning">Warning</TabsTrigger>
-                  <TabsTrigger value="error">Error</TabsTrigger>
+                <TabsList className="bg-muted/50">
+                  <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
+                  <TabsTrigger value="success" className="text-xs">Success</TabsTrigger>
+                  <TabsTrigger value="info" className="text-xs">Info</TabsTrigger>
+                  <TabsTrigger value="warning" className="text-xs">Warning</TabsTrigger>
+                  <TabsTrigger value="error" className="text-xs">Error</TabsTrigger>
                 </TabsList>
               </Tabs>
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-border bg-background text-sm"
-              >
-                <option value="all">All Types</option>
-                <option value="auth">Authentication</option>
-                <option value="cms">CMS</option>
-                <option value="kyc">KYC</option>
-                <option value="payment">Payment</option>
-                <option value="user">User</option>
-                <option value="security">Security</option>
-              </select>
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Event Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="auth">Authentication</SelectItem>
+                  <SelectItem value="cms">CMS Updates</SelectItem>
+                  <SelectItem value="kyc">KYC</SelectItem>
+                  <SelectItem value="payment">Payment</SelectItem>
+                  <SelectItem value="user">User</SelectItem>
+                  <SelectItem value="security">Security</SelectItem>
+                  <SelectItem value="system">System</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Logs Table */}
-      <Card className="finease-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-primary" />
-            Recent Activity
-          </CardTitle>
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Activity className="w-4 h-4 text-primary" />
+              Recent Activity ({filteredLogs.length} logs)
+            </CardTitle>
+            <Button variant="outline" size="sm" className="gap-2">
+              <Calendar className="w-4 h-4" />
+              Date Range
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b bg-secondary/5">
-                  <th className="text-left p-4 font-medium text-secondary">Level</th>
-                  <th className="text-left p-4 font-medium text-secondary">Action</th>
-                  <th className="text-left p-4 font-medium text-secondary">User</th>
-                  <th className="text-left p-4 font-medium text-secondary">Type</th>
-                  <th className="text-left p-4 font-medium text-secondary">IP Address</th>
-                  <th className="text-left p-4 font-medium text-secondary">Timestamp</th>
+                <tr className="border-b bg-muted/30">
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Level</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Action</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">User</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Type</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Location</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Device</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Timestamp</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredLogs.map((log) => (
-                  <tr key={log.id} className="border-b hover:bg-secondary/5 transition-colors">
+                  <tr key={log.id} className="border-b hover:bg-muted/20 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-2">
                         {getLevelIcon(log.level)}
-                        <Badge className={getLevelBadge(log.level)}>{log.level}</Badge>
+                        <Badge className={`text-xs border ${getLevelBadge(log.level)}`}>
+                          {log.level}
+                        </Badge>
                       </div>
                     </td>
-                    <td className="p-4 font-medium text-secondary">{log.action}</td>
+                    <td className="p-4">
+                      <p className="font-medium text-secondary text-sm">{log.action}</p>
+                      <p className="text-xs text-muted-foreground font-mono">{log.ip}</p>
+                    </td>
                     <td className="p-4">
                       <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">{log.user}</span>
+                        <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                          <User className="w-3.5 h-3.5 text-primary" />
+                        </div>
+                        <span className="text-sm text-muted-foreground">{log.user}</span>
                       </div>
                     </td>
                     <td className="p-4">
-                      <Badge variant="outline">{log.type}</Badge>
+                      <Badge variant="outline" className="text-xs gap-1">
+                        {getTypeIcon(log.type)}
+                        {log.type}
+                      </Badge>
                     </td>
-                    <td className="p-4 text-muted-foreground font-mono text-sm">{log.ip}</td>
                     <td className="p-4">
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Clock className="w-4 h-4" />
-                        <span className="text-sm">{log.timestamp}</span>
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Globe className="w-3 h-3" />
+                        {log.location}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        {log.device.includes("Mobile") ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
+                        <span className="text-xs">{log.device}</span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Clock className="w-3 h-3" />
+                        <span className="text-xs">{log.timestamp}</span>
                       </div>
                     </td>
                   </tr>
@@ -182,6 +351,16 @@ const AdminLogs = () => {
           </div>
         </CardContent>
       </Card>
+
+      {filteredLogs.length === 0 && (
+        <Card>
+          <CardContent className="p-12 text-center">
+            <Activity className="w-16 h-16 text-muted-foreground/20 mx-auto mb-4" />
+            <h3 className="font-semibold text-secondary mb-2">No logs found</h3>
+            <p className="text-muted-foreground text-sm">Try adjusting your filters</p>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
