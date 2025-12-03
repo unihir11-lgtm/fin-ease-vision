@@ -7,8 +7,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ipoData } from "@/data/ipoData";
 import { 
   Clock, TrendingUp, AlertCircle, FileText, Users, ChevronRight, 
-  IndianRupee, BarChart3, Target, Calendar, Filter, Download,
-  ArrowUpRight, Briefcase, Star
+  IndianRupee, BarChart3, Target, Calendar, Download, Flame,
+  ArrowUpRight, Briefcase, Star, Eye, Percent, Sparkles
 } from "lucide-react";
 import ProductLayout from "@/components/ProductLayout";
 
@@ -29,7 +29,7 @@ const IPO = () => {
     const size = parseFloat(ipo.issueSize?.replace(/[^0-9.]/g, '') || '0');
     return sum + size;
   }, 0);
-  const avgSubscription = 2.5; // Mock data
+  const avgSubscription = 2.5;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -64,76 +64,156 @@ const IPO = () => {
   };
 
   const stats = [
-    { label: "Open IPOs", value: openIPOs, icon: TrendingUp, color: "bg-green-500", bgColor: "bg-green-50" },
-    { label: "Upcoming", value: upcomingIPOs, icon: Calendar, color: "bg-blue-500", bgColor: "bg-blue-50" },
-    { label: "Total Issue Size", value: `₹${(totalIssueSize / 100).toFixed(0)}Cr`, icon: IndianRupee, color: "bg-purple-500", bgColor: "bg-purple-50" },
-    { label: "Avg. Subscription", value: `${avgSubscription}x`, icon: BarChart3, color: "bg-amber-500", bgColor: "bg-amber-50" },
+    { label: "Open IPOs", value: openIPOs, icon: TrendingUp, color: "bg-green-500", bgColor: "bg-green-50", textColor: "text-green-600" },
+    { label: "Upcoming", value: upcomingIPOs, icon: Calendar, color: "bg-blue-500", bgColor: "bg-blue-50", textColor: "text-blue-600" },
+    { label: "Total Issue Size", value: `₹${(totalIssueSize / 100).toFixed(0)}Cr`, icon: IndianRupee, color: "bg-purple-500", bgColor: "bg-purple-50", textColor: "text-purple-600" },
+    { label: "Avg. Subscription", value: `${avgSubscription}x`, icon: BarChart3, color: "bg-amber-500", bgColor: "bg-amber-50", textColor: "text-amber-600" },
   ];
+
+  // Featured IPO (first open IPO)
+  const featuredIPO = ipoData.find(ipo => ipo.status === "Open");
 
   return (
     <ProductLayout>
       <div className="container mx-auto px-4 md:px-6 py-6">
         {/* Hero Section */}
-        <div className="bg-gradient-to-br from-secondary via-secondary/95 to-primary/80 rounded-2xl p-6 md:p-8 mb-8 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#0a344a] via-[#175d80] to-[#1dab91] rounded-3xl p-8 md:p-12 mb-8 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-30"></div>
-          <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-                  <TrendingUp className="w-5 h-5" />
+          <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            <div className="max-w-xl">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <TrendingUp className="w-6 h-6" />
                 </div>
                 <span className="text-white/90 text-sm font-semibold tracking-wide uppercase">Initial Public Offerings</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-3 font-['Raleway']">Invest in IPOs</h1>
-              <p className="text-white/80 max-w-lg text-base">Get early access to companies going public. Apply for IPOs seamlessly with FinEase.</p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link to="/ipo/status">
-                <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 gap-2">
-                  <FileText className="w-4 h-4" />
-                  Check IPO Status
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-display leading-tight">
+                Invest in <span className="text-[#1dab91]">IPOs</span>
+              </h1>
+              <p className="text-white/80 text-lg mb-6">Get early access to companies going public. Apply for IPOs seamlessly with FinEase and build your portfolio.</p>
+              <div className="flex flex-wrap gap-3">
+                <Link to="/ipo/status">
+                  <Button size="lg" className="bg-white text-[#175d80] hover:bg-white/90 gap-2 font-semibold">
+                    <FileText className="w-5 h-5" />
+                    Check IPO Status
+                  </Button>
+                </Link>
+                <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 gap-2">
+                  <Download className="w-5 h-5" />
+                  Download Report
                 </Button>
-              </Link>
-              <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20 gap-2">
-                <Download className="w-4 h-4" />
-                Download Report
-              </Button>
+              </div>
+            </div>
+            
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {stats.map((stat, i) => (
+                <div key={i} className="bg-white/10 backdrop-blur-sm rounded-2xl p-5 text-center border border-white/10 hover:bg-white/15 transition-colors">
+                  <div className={`w-12 h-12 ${stat.bgColor} rounded-xl flex items-center justify-center mx-auto mb-3`}>
+                    <stat.icon className={`w-6 h-6 ${stat.textColor}`} />
+                  </div>
+                  <p className="text-3xl font-bold">{stat.value}</p>
+                  <p className="text-sm text-white/70">{stat.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {stats.map((stat, i) => (
-            <Card key={i} className="border border-border/50 hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2.5 rounded-xl ${stat.bgColor}`}>
-                    <stat.icon className={`w-5 h-5 ${stat.color.replace('bg-', 'text-')}`} />
+        {/* Featured IPO */}
+        {featuredIPO && (
+          <Card className="mb-8 border-2 border-[#1dab91]/30 bg-gradient-to-r from-[#1dab91]/5 to-transparent overflow-hidden">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row">
+                <div className="lg:w-2/3 p-6 lg:p-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Badge className="bg-[#1dab91] text-white border-0 gap-1">
+                      <Flame className="w-3 h-3" />
+                      Featured IPO
+                    </Badge>
+                    <Badge className="bg-green-100 text-green-700 border-0 gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      Hot
+                    </Badge>
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-secondary">{stat.value}</p>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#175d80]/20 to-[#1dab91]/20 flex items-center justify-center text-4xl border border-border/50">
+                      {featuredIPO.logo}
+                    </div>
+                    <div>
+                      <h2 className="text-2xl lg:text-3xl font-bold text-[#0a344a] mb-1">{featuredIPO.companyShortName}</h2>
+                      <p className="text-muted-foreground">{featuredIPO.type} • {featuredIPO.issueSize}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="bg-muted/50 rounded-xl p-4">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Price Band</p>
+                      <p className="text-xl font-bold text-[#175d80]">₹{featuredIPO.priceRange.min} - ₹{featuredIPO.priceRange.max}</p>
+                    </div>
+                    <div className="bg-muted/50 rounded-xl p-4">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Lot Size</p>
+                      <p className="text-xl font-bold text-[#175d80]">{featuredIPO.lotSize} shares</p>
+                    </div>
+                    <div className="bg-muted/50 rounded-xl p-4">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Min Investment</p>
+                      <p className="text-xl font-bold text-[#1dab91]">₹{featuredIPO.minInvestment.toLocaleString()}</p>
+                    </div>
+                    <div className="bg-green-50 rounded-xl p-4">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">GMP</p>
+                      <p className="text-xl font-bold text-green-600">+₹{Math.floor(Math.random() * 50) + 20}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <Link to={`/ipo/${featuredIPO.id}`}>
+                      <Button size="lg" className="bg-[#1dab91] hover:bg-[#18937c] text-white gap-2">
+                        Apply Now <ArrowUpRight className="w-4 h-4" />
+                      </Button>
+                    </Link>
+                    <Link to={`/ipo/${featuredIPO.id}`}>
+                      <Button size="lg" variant="outline" className="gap-2">
+                        <Eye className="w-4 h-4" /> View Details
+                      </Button>
+                    </Link>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                <div className="lg:w-1/3 bg-gradient-to-br from-[#0a344a] to-[#175d80] p-6 lg:p-8 text-white flex flex-col justify-center">
+                  <div className="text-center">
+                    <p className="text-white/70 text-sm mb-2">Bidding Closes In</p>
+                    <div className="text-4xl font-bold font-mono mb-4">{countdowns[featuredIPO.id] || "00:00:00"}</div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/70">Opens</span>
+                        <span className="font-semibold">{new Date(featuredIPO.bidDates.start).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/70">Closes</span>
+                        <span className="font-semibold">{new Date(featuredIPO.bidDates.end).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/70">Listing</span>
+                        <span className="font-semibold">{new Date(featuredIPO.bidDates.end).getDate() + 7} {new Date(featuredIPO.bidDates.end).toLocaleDateString('en-IN', { month: 'short' })}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <Tabs value={statusFilter} onValueChange={setStatusFilter}>
-            <TabsList className="bg-muted/50">
-              <TabsTrigger value="Open" className="data-[state=active]:bg-white data-[state=active]:text-primary gap-2">
+            <TabsList className="bg-muted/50 p-1">
+              <TabsTrigger value="Open" className="data-[state=active]:bg-white data-[state=active]:text-[#1dab91] data-[state=active]:shadow-sm gap-2 px-4">
                 <div className="w-2 h-2 rounded-full bg-green-500"></div>
                 Open ({openIPOs})
               </TabsTrigger>
-              <TabsTrigger value="Upcoming" className="data-[state=active]:bg-white data-[state=active]:text-primary gap-2">
+              <TabsTrigger value="Upcoming" className="data-[state=active]:bg-white data-[state=active]:text-[#175d80] data-[state=active]:shadow-sm gap-2 px-4">
                 <div className="w-2 h-2 rounded-full bg-blue-500"></div>
                 Upcoming ({upcomingIPOs})
               </TabsTrigger>
-              <TabsTrigger value="Closed" className="data-[state=active]:bg-white data-[state=active]:text-primary">
+              <TabsTrigger value="Closed" className="data-[state=active]:bg-white data-[state=active]:shadow-sm px-4">
                 Closed
               </TabsTrigger>
             </TabsList>
@@ -144,9 +224,9 @@ const IPO = () => {
               <button
                 key={type}
                 onClick={() => setBoardFilter(type)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
                   boardFilter === type
-                    ? "bg-primary text-white shadow-md"
+                    ? "bg-[#175d80] text-white shadow-lg"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
                 }`}
               >
@@ -156,106 +236,114 @@ const IPO = () => {
           </div>
         </div>
 
-        {/* IPO List */}
-        <Card className="border border-border/50 mb-8">
-          <CardHeader className="pb-0 border-b">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-primary" />
-                {statusFilter} IPOs
-              </CardTitle>
-              <span className="text-sm text-muted-foreground">{filteredIPOs.length} results</span>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="divide-y divide-border/50">
-              {filteredIPOs.map((ipo) => {
-                const closeDate = formatDate(ipo.bidDates.end);
-                return (
-                  <Link key={ipo.id} to={`/ipo/${ipo.id}`} className="block">
-                    <div className="p-4 hover:bg-muted/30 transition-all">
-                      <div className="flex items-center gap-4 flex-wrap md:flex-nowrap">
-                        {/* Logo */}
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center text-2xl flex-shrink-0 border border-border/50">
-                          {ipo.logo}
+        {/* IPO Cards Grid */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {filteredIPOs.map((ipo) => {
+            const closeDate = formatDate(ipo.bidDates.end);
+            const gmp = Math.floor(Math.random() * 50) + 10;
+            const expectedReturn = ((gmp / ipo.priceRange.max) * 100).toFixed(1);
+            
+            return (
+              <Link key={ipo.id} to={`/ipo/${ipo.id}`} className="block group">
+                <Card className="h-full border-border/50 hover:border-[#1dab91]/50 hover:shadow-xl transition-all duration-300 overflow-hidden">
+                  <CardContent className="p-0">
+                    {/* Card Header */}
+                    <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl border border-border/50 group-hover:scale-105 transition-transform">
+                            {ipo.logo}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <Badge className={`text-xs font-bold ${
+                                ipo.type === "Main Board" 
+                                  ? "bg-purple-100 text-purple-700" 
+                                  : "bg-blue-100 text-blue-700"
+                              }`}>
+                                {ipo.type}
+                              </Badge>
+                              {ipo.status === "Open" && (
+                                <Badge className="bg-green-100 text-green-700 text-xs">Live</Badge>
+                              )}
+                            </div>
+                            <h3 className="font-bold text-lg text-[#0a344a] group-hover:text-[#1dab91] transition-colors">{ipo.companyShortName}</h3>
+                            <p className="text-sm text-muted-foreground">{ipo.issueSize}</p>
+                          </div>
                         </div>
-                        
-                        {/* Type Badge */}
-                        <Badge className={`px-2.5 py-1 text-xs font-bold flex-shrink-0 ${
-                          ipo.type === "Main Board" 
-                            ? "bg-purple-100 text-purple-700 border border-purple-200" 
-                            : "bg-blue-100 text-blue-700 border border-blue-200"
-                        }`}>
-                          {ipo.type === "Main Board" ? "Main" : "SME"}
-                        </Badge>
-
-                        {/* Name */}
-                        <div className="min-w-[160px] flex-shrink-0">
-                          <h3 className="font-semibold text-secondary text-sm truncate max-w-[180px]">{ipo.companyShortName}</h3>
-                          <p className="text-xs text-muted-foreground truncate">{ipo.type}</p>
-                        </div>
-
-                        {/* Closes Date Box */}
-                        <div className="flex-shrink-0 px-3 py-2 rounded-lg border border-secondary/20 bg-secondary/5 text-center min-w-[80px]">
-                          <p className="text-[10px] text-muted-foreground leading-tight uppercase tracking-wide">Closes</p>
-                          <p className="text-sm font-bold text-secondary leading-tight">{closeDate.day} {closeDate.month}</p>
-                        </div>
-
-                        {/* Price */}
-                        <div className="flex-shrink-0 text-center min-w-[60px]">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Price</p>
-                          <p className="text-sm font-bold text-secondary">₹{ipo.priceRange.max}</p>
-                        </div>
-
-                        {/* Min Investment */}
-                        <div className="flex-shrink-0 text-center min-w-[80px]">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Min Invest</p>
-                          <p className="text-sm font-bold text-primary">₹{(ipo.minInvestment / 1000).toFixed(0)}K</p>
-                        </div>
-
-                        {/* Lot Size */}
-                        <div className="flex-shrink-0 text-center min-w-[70px]">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Lot Size</p>
-                          <p className="text-sm font-bold text-secondary">{ipo.lotSize}</p>
-                        </div>
-
-                        {/* GMP */}
-                        <div className="flex-shrink-0 text-center min-w-[60px]">
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wide">GMP</p>
-                          <p className="text-sm font-bold text-green-600">+₹{Math.floor(Math.random() * 50) + 10}</p>
-                        </div>
-
-                        {/* Countdown for Open IPOs */}
                         {ipo.status === "Open" && (
-                          <div className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-600 border border-green-200">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span className="text-xs font-semibold font-mono">{countdowns[ipo.id] || "Closed"}</span>
+                          <div className="text-right">
+                            <p className="text-xs text-muted-foreground">Closes</p>
+                            <p className="text-lg font-bold text-[#175d80]">{closeDate.day} {closeDate.month}</p>
                           </div>
                         )}
-
-                        {/* Apply/Details Button */}
-                        <Button 
-                          variant={ipo.status === "Open" ? "default" : "outline"} 
-                          size="sm" 
-                          className="flex-shrink-0 ml-auto gap-1"
-                        >
-                          {ipo.status === "Open" ? "Apply Now" : "View Details"}
-                          <ChevronRight className="w-4 h-4" />
-                        </Button>
                       </div>
                     </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+                    
+                    {/* Card Body */}
+                    <div className="p-5">
+                      <div className="grid grid-cols-3 gap-4 mb-5">
+                        <div className="text-center p-3 bg-muted/30 rounded-xl">
+                          <p className="text-xs text-muted-foreground mb-1">Price</p>
+                          <p className="text-lg font-bold text-[#0a344a]">₹{ipo.priceRange.max}</p>
+                        </div>
+                        <div className="text-center p-3 bg-muted/30 rounded-xl">
+                          <p className="text-xs text-muted-foreground mb-1">Lot Size</p>
+                          <p className="text-lg font-bold text-[#0a344a]">{ipo.lotSize}</p>
+                        </div>
+                        <div className="text-center p-3 bg-green-50 rounded-xl">
+                          <p className="text-xs text-muted-foreground mb-1">GMP</p>
+                          <p className="text-lg font-bold text-green-600">+₹{gmp}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <p className="text-xs text-muted-foreground">Min Investment</p>
+                          <p className="text-xl font-bold text-[#1dab91]">₹{ipo.minInvestment.toLocaleString()}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-muted-foreground">Expected Return</p>
+                          <div className="flex items-center gap-1 text-green-600">
+                            <Percent className="w-4 h-4" />
+                            <span className="text-xl font-bold">{expectedReturn}%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Countdown for Open IPOs */}
+                      {ipo.status === "Open" && (
+                        <div className="flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 mb-4">
+                          <Clock className="w-4 h-4" />
+                          <span className="text-sm font-medium">Ends in</span>
+                          <span className="font-bold font-mono">{countdowns[ipo.id] || "Closed"}</span>
+                        </div>
+                      )}
+
+                      <Button 
+                        className={`w-full gap-2 ${
+                          ipo.status === "Open" 
+                            ? "bg-[#1dab91] hover:bg-[#18937c] text-white" 
+                            : ""
+                        }`}
+                        variant={ipo.status === "Open" ? "default" : "outline"}
+                      >
+                        {ipo.status === "Open" ? "Apply Now" : "View Details"}
+                        <ChevronRight className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
+        </div>
 
         {filteredIPOs.length === 0 && (
           <Card className="border border-border/50">
             <CardContent className="py-16 text-center">
               <Users className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-secondary mb-2">No IPOs Found</h3>
+              <h3 className="text-lg font-semibold text-[#0a344a] mb-2">No IPOs Found</h3>
               <p className="text-muted-foreground">No IPOs found for the selected filters. Try changing the filter criteria.</p>
             </CardContent>
           </Card>
@@ -263,54 +351,36 @@ const IPO = () => {
 
         {/* Quick Tips */}
         <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <Card className="border border-border/50 hover:shadow-md transition-shadow">
-            <CardContent className="p-5">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <Target className="w-5 h-5 text-primary" />
+          {[
+            { icon: Target, title: "Apply Early", desc: "Submit your application before the last day to avoid technical issues.", color: "bg-[#1dab91]/10", iconColor: "text-[#1dab91]" },
+            { icon: Star, title: "Research Well", desc: "Read the RHP and understand company fundamentals before investing.", color: "bg-green-50", iconColor: "text-green-600" },
+            { icon: ArrowUpRight, title: "Diversify", desc: "Don't put all your money in one IPO. Spread across multiple offerings.", color: "bg-amber-50", iconColor: "text-amber-600" },
+          ].map((tip, i) => (
+            <Card key={i} className="border border-border/50 hover:shadow-lg hover:-translate-y-1 transition-all">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className={`p-3 ${tip.color} rounded-xl`}>
+                    <tip.icon className={`w-6 h-6 ${tip.iconColor}`} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#0a344a] mb-1">{tip.title}</h4>
+                    <p className="text-sm text-muted-foreground">{tip.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold text-secondary mb-1">Apply Early</h4>
-                  <p className="text-sm text-muted-foreground">Submit your application before the last day to avoid any technical issues.</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="border border-border/50 hover:shadow-md transition-shadow">
-            <CardContent className="p-5">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <Star className="w-5 h-5 text-green-600" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-secondary mb-1">Research Well</h4>
-                  <p className="text-sm text-muted-foreground">Read the RHP and understand company fundamentals before investing.</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="border border-border/50 hover:shadow-md transition-shadow">
-            <CardContent className="p-5">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-amber-100 rounded-lg">
-                  <ArrowUpRight className="w-5 h-5 text-amber-600" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-secondary mb-1">Diversify</h4>
-                  <p className="text-sm text-muted-foreground">Don't put all your money in one IPO. Spread across multiple offerings.</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Compliance Disclaimer */}
         <Card className="bg-amber-50 border border-amber-200">
-          <CardContent className="p-5">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="p-2 bg-amber-100 rounded-lg">
+                <AlertCircle className="w-5 h-5 text-amber-600" />
+              </div>
               <div>
-                <h3 className="font-bold text-secondary mb-2">Important SEBI Disclaimer</h3>
+                <h3 className="font-bold text-[#0a344a] mb-2">Important SEBI Disclaimer</h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• IPO investments are subject to market risks. Read all scheme related documents carefully.</li>
                   <li>• Grey Market Premium (GMP) is for informational purposes only and is not endorsed by SEBI.</li>
