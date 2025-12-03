@@ -1,5 +1,6 @@
 import { Menu, X, Search, User } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/finease-logo.png";
 
 const Header = () => {
@@ -7,8 +8,8 @@ const Header = () => {
 
   const navLinks = [
     { name: "IPO", href: "#ipo" },
-    { name: "Bond", href: "#bond" },
-    { name: "FD", href: "#fd" },
+    { name: "Bond", href: "/bonds" },
+    { name: "FD", href: "/fds" },
     { name: "NPS", href: "#nps" },
     { name: "Screener", href: "#screener" },
   ];
@@ -18,13 +19,13 @@ const Header = () => {
       {/* Top Row */}
       <div className="px-6 lg:px-20 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center">
+        <Link to="/" className="flex items-center">
           <img 
             src={logo} 
             alt="FinEase Logo" 
             className="h-10 md:h-12 object-contain"
           />
-        </a>
+        </Link>
 
         {/* Search and Login - Desktop */}
         <div className="hidden md:flex items-center gap-6">
@@ -39,14 +40,14 @@ const Header = () => {
           </div>
 
           {/* Login Button */}
-          <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+          <Link to="/auth" className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
             <div className="h-12 w-12 p-3 bg-[#E4FFFB] rounded-full flex items-center justify-center">
               <User className="w-6 h-6 text-secondary" />
             </div>
             <span className="text-muted text-lg font-bold whitespace-nowrap">
               Login / Sign up
             </span>
-          </div>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -61,13 +62,23 @@ const Header = () => {
       {/* Bottom Row - Navigation */}
       <nav className="hidden md:flex px-6 lg:px-20 py-2.5 justify-end items-center gap-8 border-t border-border/30">
         {navLinks.map((link) => (
-          <a
-            key={link.name}
-            href={link.href}
-            className="text-muted text-lg font-medium hover:text-primary transition-colors duration-300"
-          >
-            {link.name}
-          </a>
+          link.href.startsWith('#') ? (
+            <a
+              key={link.name}
+              href={link.href}
+              className="text-muted text-lg font-medium hover:text-primary transition-colors duration-300"
+            >
+              {link.name}
+            </a>
+          ) : (
+            <Link
+              key={link.name}
+              to={link.href}
+              className="text-muted text-lg font-medium hover:text-primary transition-colors duration-300"
+            >
+              {link.name}
+            </Link>
+          )
         ))}
       </nav>
 
@@ -87,26 +98,37 @@ const Header = () => {
           {/* Mobile Nav Links */}
           <nav className="flex flex-col gap-3 mb-4">
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-muted text-lg font-medium hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.name}
-              </a>
+              link.href.startsWith('#') ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-muted text-lg font-medium hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className="text-muted text-lg font-medium hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
           </nav>
 
           {/* Mobile Login */}
-          <div className="flex items-center gap-2 pt-3 border-t border-border/50">
+          <Link to="/auth" className="flex items-center gap-2 pt-3 border-t border-border/50" onClick={() => setIsMenuOpen(false)}>
             <div className="h-10 w-10 p-2 bg-[#E4FFFB] rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-secondary" />
             </div>
             <span className="text-muted text-base font-bold">
               Login / Sign up
             </span>
-          </div>
+          </Link>
         </div>
       )}
     </header>
