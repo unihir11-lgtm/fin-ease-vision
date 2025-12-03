@@ -1,27 +1,29 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Search, Download, CreditCard, CheckCircle, 
-  Clock, XCircle, IndianRupee, Eye, TrendingUp, Calendar, RefreshCw
+  Clock, XCircle, IndianRupee, Eye, TrendingUp, Calendar, RefreshCw,
+  Filter, ArrowUpRight, ArrowDownRight, FileText, Users, Receipt
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, PieChart as RechartsPie, Pie, Cell, AreaChart, Area } from "recharts";
 
 const mockPayments = [
-  { id: "PAY001", user: "Rahul Sharma", pran: "1122334455", amount: 50000, date: "2024-01-15", status: "completed", type: "Tier I", tier: "Tier 1", frequency: "Monthly" },
-  { id: "PAY002", user: "Priya Patel", pran: "1122334456", amount: 25000, date: "2024-01-14", status: "pending", type: "Tier I", tier: "Tier 1", frequency: "One-time" },
-  { id: "PAY003", user: "Amit Kumar", pran: "1122334457", amount: 100000, date: "2024-01-13", status: "completed", type: "Tier II", tier: "Tier 2", frequency: "Quarterly" },
-  { id: "PAY004", user: "Sneha Reddy", pran: "1122334458", amount: 30000, date: "2024-01-12", status: "failed", type: "Tier I", tier: "Tier 1", frequency: "Monthly" },
-  { id: "PAY005", user: "Vikram Singh", pran: "1122334459", amount: 75000, date: "2024-01-11", status: "completed", type: "Tier I", tier: "Tier 1 & 2", frequency: "Monthly" },
-  { id: "PAY006", user: "Neha Gupta", pran: "1122334460", amount: 45000, date: "2024-01-10", status: "completed", type: "Tier II", tier: "Tier 2", frequency: "One-time" },
-  { id: "PAY007", user: "Arjun Nair", pran: "1122334461", amount: 60000, date: "2024-01-09", status: "pending", type: "Tier I", tier: "Tier 1", frequency: "Monthly" },
-  { id: "PAY008", user: "Kavita Joshi", pran: "1122334462", amount: 35000, date: "2024-01-08", status: "completed", type: "Tier I", tier: "Tier 1", frequency: "Quarterly" },
+  { id: "PAY-2025-001", user: "Rahul Sharma", pran: "1100345678901", amount: 50000, date: "2025-11-15", status: "completed", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
+  { id: "PAY-2025-002", user: "Priya Patel", pran: "1100345678902", amount: 25000, date: "2025-11-14", status: "pending", tier: "Tier 1", frequency: "One-time", fund: "Active Choice", pfm: "ICICI Prudential" },
+  { id: "PAY-2025-003", user: "Amit Kumar", pran: "1100345678903", amount: 100000, date: "2025-11-13", status: "completed", tier: "Tier 1 & 2", frequency: "Quarterly", fund: "Aggressive", pfm: "SBI Pension" },
+  { id: "PAY-2025-004", user: "Sneha Reddy", pran: "1100345678904", amount: 30000, date: "2025-11-12", status: "failed", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
+  { id: "PAY-2025-005", user: "Vikram Singh", pran: "1100345678905", amount: 75000, date: "2025-11-11", status: "completed", tier: "Tier 1 & 2", frequency: "Monthly", fund: "Moderate", pfm: "UTI Retirement" },
+  { id: "PAY-2025-006", user: "Neha Gupta", pran: "1100345678906", amount: 45000, date: "2025-11-10", status: "completed", tier: "Tier 1", frequency: "One-time", fund: "Conservative", pfm: "Kotak Pension" },
+  { id: "PAY-2025-007", user: "Arjun Nair", pran: "1100345678907", amount: 60000, date: "2025-11-09", status: "pending_approval", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
+  { id: "PAY-2025-008", user: "Kavita Joshi", pran: "1100345678908", amount: 35000, date: "2025-11-08", status: "completed", tier: "Tier 1", frequency: "Quarterly", fund: "Active Choice", pfm: "ICICI Prudential" },
 ];
 
 const AdminNPSPayments = () => {
@@ -39,32 +41,57 @@ const AdminNPSPayments = () => {
   });
 
   const totalCompleted = mockPayments.filter(p => p.status === "completed").reduce((a, b) => a + b.amount, 0);
-  const totalPending = mockPayments.filter(p => p.status === "pending").reduce((a, b) => a + b.amount, 0);
+  const totalPending = mockPayments.filter(p => p.status === "pending" || p.status === "pending_approval").reduce((a, b) => a + b.amount, 0);
   const totalFailed = mockPayments.filter(p => p.status === "failed").reduce((a, b) => a + b.amount, 0);
-
-  const stats = [
-    { label: "Total Collections", value: `₹${(totalCompleted / 100000).toFixed(1)}L`, icon: IndianRupee, color: "bg-primary/10 text-primary" },
-    { label: "Completed", value: mockPayments.filter(p => p.status === "completed").length, icon: CheckCircle, color: "bg-green-100 text-green-600" },
-    { label: "Pending", value: mockPayments.filter(p => p.status === "pending").length, icon: Clock, color: "bg-amber-100 text-amber-600" },
-    { label: "Failed", value: mockPayments.filter(p => p.status === "failed").length, icon: XCircle, color: "bg-red-100 text-red-600" },
-  ];
+  const totalTransactions = mockPayments.length;
 
   const monthlyTrend = [
-    { month: "Jan", tier1: 180000, tier2: 120000 },
-    { month: "Feb", tier1: 220000, tier2: 150000 },
-    { month: "Mar", tier1: 195000, tier2: 130000 },
-    { month: "Apr", tier1: 280000, tier2: 180000 },
-    { month: "May", tier1: 320000, tier2: 200000 },
+    { month: "Jul", tier1: 180000, tier2: 120000, total: 300000 },
+    { month: "Aug", tier1: 220000, tier2: 150000, total: 370000 },
+    { month: "Sep", tier1: 195000, tier2: 130000, total: 325000 },
+    { month: "Oct", tier1: 280000, tier2: 180000, total: 460000 },
+    { month: "Nov", tier1: 420000, tier2: 200000, total: 620000 },
   ];
 
   const contributionByType = [
-    { name: "Monthly", value: 420000 },
-    { name: "Quarterly", value: 180000 },
-    { name: "One-time", value: 95000 },
+    { name: "Monthly SIP", value: 420000, color: "#3B82F6" },
+    { name: "Quarterly", value: 180000, color: "#22C55E" },
+    { name: "One-time", value: 95000, color: "#F59E0B" },
   ];
+
+  const fundDistribution = [
+    { name: "Auto Choice", amount: 145000 },
+    { name: "Active Choice", amount: 60000 },
+    { name: "Aggressive", amount: 100000 },
+    { name: "Moderate", amount: 75000 },
+    { name: "Conservative", amount: 45000 },
+  ];
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "completed":
+        return <Badge className="bg-green-100 text-green-700 border-green-200"><CheckCircle className="w-3 h-3 mr-1" />Completed</Badge>;
+      case "pending":
+        return <Badge className="bg-amber-100 text-amber-700 border-amber-200"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
+      case "pending_approval":
+        return <Badge className="bg-blue-100 text-blue-700 border-blue-200"><Clock className="w-3 h-3 mr-1" />Awaiting Approval</Badge>;
+      case "failed":
+        return <Badge className="bg-red-100 text-red-700 border-red-200"><XCircle className="w-3 h-3 mr-1" />Failed</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
 
   const handleRetry = (id: string) => {
     toast({ title: "Payment Retry Initiated", description: `Retrying payment ${id}...` });
+  };
+
+  const handleApprove = (id: string) => {
+    toast({ title: "Payment Approved", description: `Payment ${id} has been approved and processed.` });
+  };
+
+  const handleReject = (id: string) => {
+    toast({ title: "Payment Rejected", description: `Payment ${id} has been rejected.` });
   };
 
   return (
@@ -72,91 +99,170 @@ const AdminNPSPayments = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-secondary">NPS Payment Management</h1>
-          <p className="text-muted-foreground">Track and manage all NPS contributions and payments</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-secondary font-display">NPS Payment Management</h1>
+          <p className="text-muted-foreground mt-1">Track contributions, process payments, and manage settlements</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" className="gap-2">
             <Download className="w-4 h-4" /> Export Report
           </Button>
           <Button className="gap-2 bg-primary">
-            <CreditCard className="w-4 h-4" /> New Payment
+            <CreditCard className="w-4 h-4" /> Record Payment
           </Button>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((stat, i) => (
-          <Card key={i} className="bg-white border">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className={`p-2.5 rounded-xl ${stat.color}`}>
-                  <stat.icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-secondary">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10">
+                <IndianRupee className="w-5 h-5 text-primary" />
               </div>
-            </CardContent>
-          </Card>
-        ))}
+              <div>
+                <p className="text-2xl font-bold text-secondary">₹{(totalCompleted / 100000).toFixed(1)}L</p>
+                <p className="text-xs text-muted-foreground">Total Collected</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-green-100">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-secondary">{mockPayments.filter(p => p.status === "completed").length}</p>
+                <p className="text-xs text-muted-foreground">Completed</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-amber-100">
+                <Clock className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-secondary">{mockPayments.filter(p => p.status.includes("pending")).length}</p>
+                <p className="text-xs text-muted-foreground">Pending</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-red-100">
+                <XCircle className="w-5 h-5 text-red-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-secondary">{mockPayments.filter(p => p.status === "failed").length}</p>
+                <p className="text-xs text-muted-foreground">Failed</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gradient-to-br from-green-50 to-green-100/50 border-green-200">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-green-100">
+                <TrendingUp className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-green-600">+24%</p>
+                <p className="text-xs text-muted-foreground">vs Last Month</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Monthly Trend */}
-        <Card className="bg-white border">
+        <Card className="lg:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-primary" />
-              Monthly Contribution Trend
+              Monthly Collection Trend
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-48">
+            <div className="h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyTrend}>
+                <AreaChart data={monthlyTrend}>
+                  <defs>
+                    <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
                   <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="#9CA3AF" />
                   <YAxis tick={{ fontSize: 11 }} stroke="#9CA3AF" tickFormatter={(v) => `₹${v/1000}K`} />
                   <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`]} />
                   <Legend />
-                  <Bar dataKey="tier1" name="Tier I" fill="#23698e" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="tier2" name="Tier II" fill="#1dab91" radius={[4, 4, 0, 0]} />
-                </BarChart>
+                  <Area type="monotone" dataKey="total" name="Total" stroke="hsl(var(--primary))" fill="url(#colorTotal)" strokeWidth={2} />
+                  <Line type="monotone" dataKey="tier1" name="Tier 1" stroke="#3B82F6" strokeWidth={2} dot={{ fill: '#3B82F6' }} />
+                  <Line type="monotone" dataKey="tier2" name="Tier 2" stroke="#22C55E" strokeWidth={2} dot={{ fill: '#22C55E' }} />
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
         {/* Contribution Type Distribution */}
-        <Card className="bg-white border">
+        <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
               <Calendar className="w-4 h-4 text-primary" />
-              Contribution by Frequency
+              By Frequency
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={contributionByType} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                  <XAxis type="number" tick={{ fontSize: 11 }} stroke="#9CA3AF" tickFormatter={(v) => `₹${v/1000}K`} />
-                  <YAxis dataKey="name" type="category" tick={{ fontSize: 11 }} stroke="#9CA3AF" width={80} />
-                  <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`]} />
-                  <Bar dataKey="value" fill="#23698e" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="flex items-center gap-4">
+              <div className="w-28 h-28">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RechartsPie>
+                    <Pie
+                      data={contributionByType}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={25}
+                      outerRadius={50}
+                      paddingAngle={3}
+                      dataKey="value"
+                    >
+                      {contributionByType.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`]} />
+                  </RechartsPie>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex-1 space-y-2">
+                {contributionByType.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                      <span className="text-muted-foreground">{item.name}</span>
+                    </div>
+                    <span className="font-medium text-secondary">₹{(item.value / 1000)}K</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Filters */}
-      <Card className="bg-white border">
+      <Card>
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
@@ -172,6 +278,7 @@ const AdminNPSPayments = () => {
               <TabsList className="bg-muted/50">
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="completed">Completed</TabsTrigger>
+                <TabsTrigger value="pending_approval">Awaiting Approval</TabsTrigger>
                 <TabsTrigger value="pending">Pending</TabsTrigger>
                 <TabsTrigger value="failed">Failed</TabsTrigger>
               </TabsList>
@@ -181,12 +288,18 @@ const AdminNPSPayments = () => {
       </Card>
 
       {/* Payments Table */}
-      <Card className="bg-white border">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center gap-2">
-            <CreditCard className="w-4 h-4 text-primary" />
-            Payment Entries ({filteredPayments.length})
-          </CardTitle>
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-primary" />
+              Payment Entries ({filteredPayments.length})
+            </CardTitle>
+            <Button variant="outline" size="sm" className="gap-2">
+              <Filter className="w-4 h-4" />
+              More Filters
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -194,10 +307,11 @@ const AdminNPSPayments = () => {
               <thead>
                 <tr className="border-b bg-muted/30">
                   <th className="text-left p-4 font-medium text-secondary text-sm">Payment ID</th>
-                  <th className="text-left p-4 font-medium text-secondary text-sm">User</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">User Details</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">PRAN</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Tier</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Frequency</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Fund</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Amount</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Date</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Status</th>
@@ -207,24 +321,22 @@ const AdminNPSPayments = () => {
               <tbody>
                 {filteredPayments.map((payment) => (
                   <tr key={payment.id} className="border-b hover:bg-muted/20 transition-colors">
-                    <td className="p-4 font-mono text-sm text-primary">{payment.id}</td>
-                    <td className="p-4 font-medium text-secondary text-sm">{payment.user}</td>
+                    <td className="p-4">
+                      <p className="font-mono text-sm text-primary">{payment.id}</p>
+                    </td>
+                    <td className="p-4">
+                      <p className="font-medium text-secondary text-sm">{payment.user}</p>
+                      <p className="text-xs text-muted-foreground">{payment.pfm}</p>
+                    </td>
                     <td className="p-4 font-mono text-sm text-muted-foreground">{payment.pran}</td>
                     <td className="p-4">
                       <Badge variant="outline" className="text-xs">{payment.tier}</Badge>
                     </td>
                     <td className="p-4 text-sm text-muted-foreground">{payment.frequency}</td>
+                    <td className="p-4 text-sm text-muted-foreground">{payment.fund}</td>
                     <td className="p-4 font-bold text-secondary text-sm">₹{payment.amount.toLocaleString()}</td>
                     <td className="p-4 text-sm text-muted-foreground">{payment.date}</td>
-                    <td className="p-4">
-                      <Badge className={
-                        payment.status === "completed" ? "bg-green-100 text-green-700" :
-                        payment.status === "pending" ? "bg-amber-100 text-amber-700" :
-                        "bg-red-100 text-red-700"
-                      }>
-                        {payment.status}
-                      </Badge>
-                    </td>
+                    <td className="p-4">{getStatusBadge(payment.status)}</td>
                     <td className="p-4">
                       <div className="flex justify-end gap-1">
                         <Dialog>
@@ -254,7 +366,7 @@ const AdminNPSPayments = () => {
                                   </div>
                                   <div>
                                     <Label className="text-xs text-muted-foreground">Amount</Label>
-                                    <p className="font-bold text-primary">₹{selectedPayment.amount.toLocaleString()}</p>
+                                    <p className="font-bold text-primary text-lg">₹{selectedPayment.amount.toLocaleString()}</p>
                                   </div>
                                   <div>
                                     <Label className="text-xs text-muted-foreground">Tier</Label>
@@ -264,11 +376,39 @@ const AdminNPSPayments = () => {
                                     <Label className="text-xs text-muted-foreground">Frequency</Label>
                                     <p className="font-medium">{selectedPayment.frequency}</p>
                                   </div>
+                                  <div>
+                                    <Label className="text-xs text-muted-foreground">Fund Selection</Label>
+                                    <p className="font-medium">{selectedPayment.fund}</p>
+                                  </div>
+                                  <div>
+                                    <Label className="text-xs text-muted-foreground">PFM</Label>
+                                    <p className="font-medium">{selectedPayment.pfm}</p>
+                                  </div>
                                 </div>
+                                
+                                {selectedPayment.status === "pending_approval" && (
+                                  <div className="flex gap-3 pt-4 border-t">
+                                    <Button onClick={() => handleApprove(selectedPayment.id)} className="flex-1 bg-green-600 hover:bg-green-700">
+                                      <CheckCircle className="w-4 h-4 mr-2" />
+                                      Approve
+                                    </Button>
+                                    <Button variant="destructive" onClick={() => handleReject(selectedPayment.id)} className="flex-1">
+                                      <XCircle className="w-4 h-4 mr-2" />
+                                      Reject
+                                    </Button>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </DialogContent>
                         </Dialog>
+                        {payment.status === "pending_approval" && (
+                          <>
+                            <Button variant="outline" size="sm" onClick={() => handleApprove(payment.id)} className="gap-1 text-green-600 border-green-200 hover:bg-green-50">
+                              <CheckCircle className="w-3 h-3" /> Approve
+                            </Button>
+                          </>
+                        )}
                         {payment.status === "failed" && (
                           <Button variant="outline" size="sm" onClick={() => handleRetry(payment.id)} className="gap-1">
                             <RefreshCw className="w-3 h-3" /> Retry
@@ -283,6 +423,16 @@ const AdminNPSPayments = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">Showing {filteredPayments.length} of {mockPayments.length} payments</p>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" disabled>Previous</Button>
+          <Button variant="outline" size="sm" className="bg-primary text-white">1</Button>
+          <Button variant="outline" size="sm">Next</Button>
+        </div>
+      </div>
     </div>
   );
 };
