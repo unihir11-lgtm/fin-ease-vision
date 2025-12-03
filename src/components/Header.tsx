@@ -52,7 +52,7 @@ const Header = () => {
       </div>
 
       {/* Desktop Navigation */}
-      <nav className="hidden md:flex px-4 sm:px-6 lg:px-16 xl:px-20 py-2.5 justify-end items-center gap-1 border-t border-border/30 bg-muted/20">
+      <nav className="hidden md:flex px-4 sm:px-6 lg:px-16 xl:px-20 py-2 justify-center items-center gap-2 bg-secondary">
         {navLinks.map((link) =>
           link.external ? (
             <a 
@@ -60,7 +60,7 @@ const Header = () => {
               href={link.href} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-4 py-2 text-muted-foreground text-sm font-semibold hover:text-primary hover:bg-primary/5 rounded-lg transition-all duration-200"
+              className="px-5 py-2 text-white/80 text-sm font-semibold hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200"
             >
               {link.name}
             </a>
@@ -68,15 +68,15 @@ const Header = () => {
             <Link 
               key={link.name} 
               to={link.href} 
-              className={`relative px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
+              className={`relative px-5 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 isActive(link.href) 
-                  ? "text-primary bg-primary/8" 
-                  : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                  ? "text-white bg-white/15" 
+                  : "text-white/80 hover:text-white hover:bg-white/10"
               }`}
             >
               {link.name}
               {isActive(link.href) && (
-                <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-accent" />
               )}
             </Link>
           )

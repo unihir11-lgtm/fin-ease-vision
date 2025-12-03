@@ -67,12 +67,12 @@ export function DashboardSidebar() {
           to={item.url}
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
             isActive(item.url)
-              ? "bg-primary/10 text-primary font-medium"
-              : "text-muted hover:bg-gray-100 hover:text-secondary"
+              ? "bg-primary/10 text-primary font-semibold"
+              : "text-foreground/70 hover:bg-muted/60 hover:text-secondary"
           }`}
         >
           <item.icon className="w-5 h-5 flex-shrink-0" />
-          {!collapsed && <span>{item.title}</span>}
+          {!collapsed && <span className="font-medium">{item.title}</span>}
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
@@ -89,7 +89,7 @@ export function DashboardSidebar() {
       <SidebarContent className="px-2 py-4">
         {/* Main Menu */}
         <SidebarGroup>
-          <SidebarGroupLabel className="px-3 text-xs font-semibold text-muted uppercase tracking-wider mb-2">
+        <SidebarGroupLabel className="px-3 text-xs font-bold text-secondary/60 uppercase tracking-wider mb-2">
             {!collapsed && "Dashboard"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -103,7 +103,7 @@ export function DashboardSidebar() {
 
         {/* Products */}
         <SidebarGroup className="mt-6">
-          <SidebarGroupLabel className="px-3 text-xs font-semibold text-muted uppercase tracking-wider mb-2">
+          <SidebarGroupLabel className="px-3 text-xs font-bold text-secondary/60 uppercase tracking-wider mb-2">
             {!collapsed && "Products"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -118,7 +118,7 @@ export function DashboardSidebar() {
                     href="https://www.thefinease.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted hover:bg-gray-100 hover:text-secondary transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/70 hover:bg-muted/60 hover:text-secondary transition-colors"
                   >
                     <BarChart3 className="w-5 h-5 flex-shrink-0" />
                     {!collapsed && (
@@ -136,7 +136,7 @@ export function DashboardSidebar() {
 
         {/* Account */}
         <SidebarGroup className="mt-6">
-          <SidebarGroupLabel className="px-3 text-xs font-semibold text-muted uppercase tracking-wider mb-2">
+          <SidebarGroupLabel className="px-3 text-xs font-bold text-secondary/60 uppercase tracking-wider mb-2">
             {!collapsed && "Account"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -155,7 +155,7 @@ export function DashboardSidebar() {
             <SidebarMenuButton asChild>
               <Link
                 to="/dashboard/help"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted hover:bg-gray-100 hover:text-secondary transition-colors"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-foreground/70 hover:bg-muted/60 hover:text-secondary transition-colors"
               >
                 <HelpCircle className="w-5 h-5" />
                 {!collapsed && <span>Help & Support</span>}

@@ -44,21 +44,21 @@ const AdminSidebar = () => {
     `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
       active
         ? "bg-primary text-white shadow-md"
-        : "text-gray-600 hover:bg-gray-50 hover:text-secondary"
+        : "text-foreground/70 hover:bg-muted/60 hover:text-secondary"
     }`;
 
   const subLinkClass = (active: boolean) =>
     `flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all text-sm ${
       active
-        ? "bg-primary/10 text-primary font-medium"
-        : "text-gray-500 hover:bg-gray-50 hover:text-secondary"
+        ? "bg-primary/10 text-primary font-semibold"
+        : "text-foreground/70 hover:bg-muted/60 hover:text-secondary"
     }`;
 
   const groupButtonClass = (active: boolean) =>
     `flex items-center justify-between w-full px-4 py-3 rounded-xl transition-all ${
       active
-        ? "bg-gray-100 text-secondary"
-        : "text-gray-600 hover:bg-gray-50"
+        ? "bg-muted/60 text-secondary"
+        : "text-foreground/70 hover:bg-muted/50"
     }`;
 
   return (
