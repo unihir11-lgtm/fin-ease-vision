@@ -1,55 +1,55 @@
-import { MapPin, Mail, Phone } from "lucide-react";
+import { MapPin, Mail, Phone, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 
 const Footer = () => {
   const services = ["IPO", "Bond", "FD", "NPS", "Screener"];
 
   const socialLinks = [
-    { name: "Facebook", href: "#" },
-    { name: "Twitter", href: "#" },
-    { name: "LinkedIn", href: "#" },
-    { name: "Instagram", href: "#" },
+    { name: "Facebook", icon: Facebook, href: "#" },
+    { name: "Twitter", icon: Twitter, href: "#" },
+    { name: "LinkedIn", icon: Linkedin, href: "#" },
+    { name: "Instagram", icon: Instagram, href: "#" },
   ];
 
   return (
     <footer id="contact" className="w-full bg-[#0a344a] text-white font-sans overflow-hidden">
-      <div className="container mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-20">
+      <div className="container mx-auto px-6 py-10 md:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-16">
           {/* Brand & Contact Info */}
           <div className="space-y-5">
-            <h2 className="text-[30px] font-extrabold leading-10">Finease</h2>
+            <h2 className="text-2xl md:text-[28px] font-extrabold leading-tight font-['Raleway']">Finease</h2>
 
-            <div className="space-y-5">
-              <div className="flex items-start gap-4">
-                <MapPin className="w-6 h-6 text-white flex-shrink-0" />
-                <p className="text-base text-[#eaeaea] leading-[150%]">
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-white/80 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-white/80 leading-relaxed">
                   36, Third floor, Palm spring<br />
                   complex, Ellisbridge, Ahmedabad-380006, Gujarat
                 </p>
               </div>
-              <div className="flex items-center gap-4">
-                <Mail className="w-6 h-6 text-white flex-shrink-0" />
-                <a href="mailto:fineaseresearchpvtltd@gmail.com" className="text-base text-[#eaeaea] lowercase hover:text-white transition-colors">
+              <div className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-white/80 flex-shrink-0" />
+                <a href="mailto:fineaseresearchpvtltd@gmail.com" className="text-sm text-white/80 lowercase hover:text-white transition-colors">
                   fineaseresearchpvtltd@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-4">
-                <Phone className="w-6 h-6 text-white flex-shrink-0" />
-                <a href="tel:079-2666588" className="text-base text-[#eaeaea] hover:text-white transition-colors">
+              <div className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-white/80 flex-shrink-0" />
+                <a href="tel:079-2666588" className="text-sm text-white/80 hover:text-white transition-colors">
                   079-2666588
                 </a>
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="flex gap-2.5 pt-3">
-              {socialLinks.map((social, index) => (
+            <div className="flex gap-2.5 pt-2">
+              {socialLinks.map((social) => (
                 <a
-                  key={index}
+                  key={social.name}
                   href={social.href}
-                  className="w-10 h-10 rounded-full bg-[#23698e] flex items-center justify-center hover:bg-[#2d7ba3] transition-colors"
+                  className="w-9 h-9 rounded-full bg-[#23698e] flex items-center justify-center hover:bg-[#2d7ba3] transition-colors"
                   aria-label={social.name}
                 >
-                  <div className="w-5 h-5 rounded-full bg-white/30" />
+                  <social.icon className="w-4 h-4 text-white" />
                 </a>
               ))}
             </div>
@@ -57,15 +57,15 @@ const Footer = () => {
 
           {/* Our Services */}
           <div>
-            <h4 className="font-bold text-white mb-3.5 text-base leading-[22px] font-['Raleway']">
+            <h4 className="font-bold text-white mb-4 text-base font-['Raleway']">
               Our Services
             </h4>
-            <ul className="space-y-3.5">
+            <ul className="space-y-3">
               {services.map((service) => (
                 <li key={service}>
                   <a
-                    href="#"
-                    className="text-base text-[#eaeaea] font-medium leading-[150%] hover:text-white transition-colors"
+                    href={`#${service.toLowerCase()}`}
+                    className="text-sm text-white/80 font-medium hover:text-white transition-colors"
                   >
                     {service}
                   </a>
@@ -75,35 +75,29 @@ const Footer = () => {
           </div>
 
           {/* Quick Contact Form */}
-          <div className="lg:w-[405px]">
-            <h4 className="font-bold text-white mb-3.5 text-base leading-[22px] font-['Raleway']">
+          <div>
+            <h4 className="font-bold text-white mb-4 text-base font-['Raleway']">
               Quick Contact
             </h4>
             <form className="space-y-2.5">
-              <div className="rounded-md bg-[#23698e] px-4 py-2">
-                <input
-                  type="text"
-                  placeholder="Name"
-                  className="w-full bg-transparent text-base text-[#eaeaea] placeholder:text-[#eaeaea] outline-none leading-[150%] font-medium"
-                />
-              </div>
-              <div className="rounded-md bg-[#23698e] px-4 py-2">
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="w-full bg-transparent text-base text-[#eaeaea] placeholder:text-[#eaeaea] outline-none leading-[150%] font-medium"
-                />
-              </div>
-              <div className="rounded-md bg-[#23698e] px-4 py-2">
-                <textarea
-                  placeholder="Message"
-                  rows={3}
-                  className="w-full bg-transparent text-base text-[#eaeaea] placeholder:text-[#eaeaea] outline-none resize-none leading-[150%] font-medium"
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="Name"
+                className="w-full rounded-md bg-[#23698e] px-4 py-2.5 text-sm text-white placeholder:text-white/70 outline-none focus:ring-1 focus:ring-primary"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full rounded-md bg-[#23698e] px-4 py-2.5 text-sm text-white placeholder:text-white/70 outline-none focus:ring-1 focus:ring-primary"
+              />
+              <textarea
+                placeholder="Message"
+                rows={3}
+                className="w-full rounded-md bg-[#23698e] px-4 py-2.5 text-sm text-white placeholder:text-white/70 outline-none resize-none focus:ring-1 focus:ring-primary"
+              />
               <button 
                 type="submit"
-                className="h-10 rounded-md bg-[#1dab91] px-3 py-2 text-white font-bold text-base leading-[25px] tracking-[1px] capitalize hover:bg-[#19987f] transition-colors"
+                className="h-9 rounded-md bg-primary px-5 py-2 text-white font-bold text-sm tracking-wide capitalize hover:bg-primary/90 transition-colors"
               >
                 Submit
               </button>
@@ -113,8 +107,8 @@ const Footer = () => {
       </div>
 
       {/* Copyright */}
-      <div className="w-full h-[54px] bg-[#057170] flex items-center justify-center px-5 py-3">
-        <p className="text-lg text-[#eaeaea] font-semibold leading-[150%]">
+      <div className="w-full h-12 bg-[#057170] flex items-center justify-center px-5">
+        <p className="text-sm md:text-base text-white/90 font-medium">
           Copyright © 2024 FinEase
         </p>
       </div>

@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { Menu, X, Search, User } from "lucide-react";
 import { useState } from "react";
+import logo from "@/assets/finease-logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,34 +14,36 @@ const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-border/30">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       {/* Top Row */}
-      <div className="px-6 lg:px-20 py-5 flex items-center justify-between">
+      <div className="px-6 lg:px-20 py-4 flex items-center justify-between">
         {/* Logo */}
         <a href="/" className="flex items-center">
           <img 
-            src="https://placehold.co/148x54" 
+            src={logo} 
             alt="FinEase Logo" 
-            className="w-[148px] h-[54px] object-contain"
+            className="h-10 md:h-12 object-contain"
           />
         </a>
 
         {/* Search and Login - Desktop */}
-        <div className="hidden md:flex items-center gap-[30px]">
+        <div className="hidden md:flex items-center gap-6">
           {/* Search Bar */}
-          <div className="w-[467px] h-[52px] px-4 py-1.5 bg-[#F5F5F5] rounded-md border border-[rgba(47,54,63,0.15)] flex items-center gap-2.5">
-            <Search className="w-6 h-6 text-[#707070]" />
-            <span className="text-[#707070] text-base font-medium opacity-80">
-              Search Stock, MF, IPO...
-            </span>
+          <div className="w-[400px] lg:w-[467px] h-[48px] px-4 py-1.5 bg-[#F5F5F5] rounded-md border border-[rgba(47,54,63,0.15)] flex items-center gap-2.5">
+            <Search className="w-5 h-5 text-muted" />
+            <input 
+              type="text"
+              placeholder="Search Stock, MF, IPO..."
+              className="flex-1 bg-transparent text-muted placeholder:text-muted text-base font-medium outline-none"
+            />
           </div>
 
           {/* Login Button */}
-          <div className="flex items-center gap-2">
-            <div className="h-[52px] p-[13px] bg-[#E4FFFB] rounded-full flex items-center justify-center">
-              <User className="w-[26px] h-[26px] text-[#266985]" />
+          <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+            <div className="h-12 w-12 p-3 bg-[#E4FFFB] rounded-full flex items-center justify-center">
+              <User className="w-6 h-6 text-secondary" />
             </div>
-            <span className="text-[#707070] text-lg font-bold">
+            <span className="text-muted text-lg font-bold whitespace-nowrap">
               Login / Sign up
             </span>
           </div>
@@ -49,7 +51,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-[#707070]"
+          className="md:hidden text-muted p-2"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -57,12 +59,12 @@ const Header = () => {
       </div>
 
       {/* Bottom Row - Navigation */}
-      <nav className="hidden md:flex px-6 lg:px-20 py-2.5 justify-end items-center gap-[30px] border-b border-border/30">
+      <nav className="hidden md:flex px-6 lg:px-20 py-2.5 justify-end items-center gap-8 border-t border-border/30">
         {navLinks.map((link) => (
           <a
             key={link.name}
             href={link.href}
-            className="text-[#707070] text-xl font-medium hover:text-primary transition-colors duration-300"
+            className="text-muted text-lg font-medium hover:text-primary transition-colors duration-300"
           >
             {link.name}
           </a>
@@ -71,13 +73,15 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden px-6 pb-4 border-b border-border animate-fade-in">
+        <div className="md:hidden px-6 pb-4 border-b border-border bg-white animate-fade-in">
           {/* Mobile Search */}
           <div className="w-full px-4 py-3 bg-[#F5F5F5] rounded-md border border-[rgba(47,54,63,0.15)] flex items-center gap-2.5 mb-4">
-            <Search className="w-5 h-5 text-[#707070]" />
-            <span className="text-[#707070] text-sm font-medium opacity-80">
-              Search Stock, MF, IPO...
-            </span>
+            <Search className="w-5 h-5 text-muted" />
+            <input 
+              type="text"
+              placeholder="Search Stock, MF, IPO..."
+              className="flex-1 bg-transparent text-sm text-muted placeholder:text-muted font-medium outline-none"
+            />
           </div>
 
           {/* Mobile Nav Links */}
@@ -86,7 +90,7 @@ const Header = () => {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-[#707070] text-lg font-medium hover:text-primary transition-colors"
+                className="text-muted text-lg font-medium hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.name}
@@ -97,9 +101,9 @@ const Header = () => {
           {/* Mobile Login */}
           <div className="flex items-center gap-2 pt-3 border-t border-border/50">
             <div className="h-10 w-10 p-2 bg-[#E4FFFB] rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-[#266985]" />
+              <User className="w-5 h-5 text-secondary" />
             </div>
-            <span className="text-[#707070] text-base font-bold">
+            <span className="text-muted text-base font-bold">
               Login / Sign up
             </span>
           </div>
