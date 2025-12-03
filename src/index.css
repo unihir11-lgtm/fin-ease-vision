@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,13 +9,13 @@
   :root {
     /* FinEase Light Theme */
     --background: 0 0% 100%;
-    --foreground: 200 15% 25%;
+    --foreground: 200 18% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 200 15% 25%;
+    --card-foreground: 200 18% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 200 15% 25%;
+    --popover-foreground: 200 18% 20%;
 
     /* Primary - Teal accent */
     --primary: 168 72% 40%;
@@ -26,8 +26,8 @@
     --secondary-foreground: 0 0% 100%;
 
     /* Muted - Gray text */
-    --muted: 0 0% 56%;
-    --muted-foreground: 0 0% 44%;
+    --muted: 210 10% 94%;
+    --muted-foreground: 200 10% 44%;
 
     /* Accent - Teal green for buttons */
     --accent: 174 77% 39%;
@@ -36,11 +36,11 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
+    --border: 210 14% 91%;
+    --input: 210 14% 91%;
     --ring: 168 72% 40%;
 
-    --radius: 0.375rem;
+    --radius: 0.5rem;
 
     /* Custom tokens */
     --hero-bg: 197 77% 17%;
@@ -48,19 +48,25 @@
     --footer-input: 197 60% 35%;
     --footer-button: 168 72% 40%;
     --footer-copyright: 178 93% 23%;
-    --text-gray: 0 0% 44%;
+    --text-gray: 200 10% 44%;
     
-    /* Card styling */
-    --card-border: 195 85% 95%;
-    --card-shadow: 0 4px 20px 0 rgba(23, 93, 128, 0.08);
+    /* Card styling - refined */
+    --card-border: 195 60% 94%;
+    --card-shadow: 0 2px 12px 0 rgba(23, 93, 128, 0.06);
+    --card-shadow-hover: 0 8px 30px 0 rgba(23, 93, 128, 0.12);
     
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(197 77% 20%) 0%, hsl(197 77% 14%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(197 77% 18%) 0%, hsl(197 77% 12%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 20% 99%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(168 40% 98%) 0%, hsl(0 0% 100%) 100%);
 
-    /* Shadows */
-    --shadow-card: 0 4px 20px hsl(0 0% 0% / 0.08);
-    --shadow-button: 0 4px 12px hsl(168 72% 40% / 0.3);
+    /* Shadows - refined */
+    --shadow-xs: 0 1px 2px hsl(0 0% 0% / 0.04);
+    --shadow-sm: 0 2px 8px hsl(0 0% 0% / 0.06);
+    --shadow-card: 0 4px 20px hsl(197 77% 17% / 0.08);
+    --shadow-card-hover: 0 12px 40px hsl(197 77% 17% / 0.14);
+    --shadow-button: 0 4px 14px hsl(168 72% 40% / 0.25);
+    --shadow-button-hover: 0 6px 20px hsl(168 72% 40% / 0.35);
   }
 }
 
@@ -71,10 +77,18 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improved focus styles */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
   }
 }
 
@@ -83,76 +97,119 @@
     background: var(--gradient-hero);
   }
 
+  .bg-gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+
   .card-shadow {
     box-shadow: var(--shadow-card);
+  }
+
+  .card-shadow-hover {
+    box-shadow: var(--shadow-card-hover);
   }
 
   .glow-button {
     box-shadow: var(--shadow-button);
   }
 
-  /* FinEase Card Style */
-  .finease-card {
-    display: flex;
-    padding: 20px;
-    align-items: flex-start;
-    gap: 10px;
-    flex: 1 0 0;
-    border-radius: 16px;
-    border: 1px solid #E7F6FE;
-    background: #FFF;
-    box-shadow: 0 4px 20px 0 rgba(23, 93, 128, 0.08);
+  .glow-button:hover {
+    box-shadow: var(--shadow-button-hover);
   }
 
-  /* FinEase Button Style */
+  /* FinEase Card Style - Enhanced */
+  .finease-card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    align-items: flex-start;
+    gap: 12px;
+    border-radius: 16px;
+    border: 1px solid hsl(var(--card-border));
+    background: hsl(var(--card));
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .finease-card:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* FinEase Button Style - Enhanced */
   .finease-btn {
-    color: #FFF;
+    color: hsl(var(--primary-foreground));
     text-align: center;
     font-family: 'Nunito', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 700;
-    line-height: 24px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
     border-radius: 12px;
-    padding: 12px 24px;
+    padding: 12px 28px;
     background: hsl(var(--primary));
-    box-shadow: 0 4px 12px rgba(23, 93, 128, 0.2);
-    transition: all 0.2s ease;
+    box-shadow: var(--shadow-button);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .finease-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(23, 93, 128, 0.25);
+    box-shadow: var(--shadow-button-hover);
+  }
+
+  .finease-btn:active {
+    transform: translateY(0);
+  }
+
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
-/* Custom animations */
+/* Custom animations - Enhanced */
 @keyframes float {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-12px);
   }
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
   }
 }
 
@@ -161,9 +218,19 @@
 }
 
 .animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
+  animation: fade-in 0.4s ease-out forwards;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.6s ease-out forwards;
+  animation: slide-up 0.5s ease-out forwards;
 }
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Stagger animations */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
