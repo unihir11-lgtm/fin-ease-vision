@@ -13,7 +13,7 @@ const productNavLinks = [
   { name: "IPO", href: "/ipo", icon: TrendingUp },
   { name: "Bond", href: "/bonds", icon: Landmark },
   { name: "FD", href: "/fds", icon: Banknote },
-  { name: "NPS", href: "/dashboard/nps", icon: PiggyBank },
+  { name: "NPS", href: "/nps", icon: PiggyBank },
   { name: "Calculators", href: "/calculators", icon: Calculator },
 ];
 
