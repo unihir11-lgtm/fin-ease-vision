@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ipoData } from "@/data/ipoData";
-import { Clock, Calendar, TrendingUp, AlertCircle, FileText, Users, ChevronRight } from "lucide-react";
+import { Clock, TrendingUp, AlertCircle, FileText, Users, ChevronRight } from "lucide-react";
 import ProductLayout from "@/components/ProductLayout";
 
 const IPO = () => {
@@ -45,14 +45,16 @@ const IPO = () => {
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+    const day = date.getDate();
+    const month = date.toLocaleDateString("en-IN", { month: "short" });
+    return { day, month };
   };
 
   return (
     <ProductLayout>
       <div className="container mx-auto px-4 md:px-6 py-6">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-secondary to-secondary/80 rounded-2xl p-6 md:p-8 mb-8 text-white">
+        <div className="bg-secondary rounded-2xl p-6 md:p-8 mb-8 text-white">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -63,7 +65,7 @@ const IPO = () => {
               <p className="text-white/80 max-w-lg">Get early access to companies going public. Apply for IPOs seamlessly with FinEase.</p>
             </div>
             <Link to="/ipo/status">
-              <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Button variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20">
                 <FileText className="w-4 h-4 mr-2" />
                 Check IPO Status
               </Button>
@@ -74,7 +76,7 @@ const IPO = () => {
         {/* Filters */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <Tabs value={statusFilter} onValueChange={setStatusFilter}>
-            <TabsList className="bg-secondary/5">
+            <TabsList className="bg-muted/50">
               <TabsTrigger value="Open" className="data-[state=active]:bg-white data-[state=active]:text-primary">
                 Open
               </TabsTrigger>
@@ -92,10 +94,10 @@ const IPO = () => {
               <button
                 key={type}
                 onClick={() => setBoardFilter(type)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   boardFilter === type
                     ? "bg-primary text-white"
-                    : "bg-secondary/5 text-muted-foreground hover:bg-secondary/10"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
                 }`}
               >
                 {type}
@@ -104,71 +106,74 @@ const IPO = () => {
           </div>
         </div>
 
-        {/* IPO Grid - Horizontal Card Design */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filteredIPOs.map((ipo) => (
-            <Link key={ipo.id} to={`/ipo/${ipo.id}`}>
-              <div className="finease-card bg-white rounded-xl p-4 hover:shadow-lg transition-all group">
-                <div className="flex items-center gap-3">
-                  {/* Logo */}
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center text-xl flex-shrink-0">
-                    {ipo.logo}
-                  </div>
-                  
-                  {/* Type Badge */}
-                  <Badge className={`px-2 py-0.5 text-[10px] font-bold flex-shrink-0 ${
-                    ipo.type === "Main Board" 
-                      ? "bg-purple-100 text-purple-700" 
-                      : "bg-blue-100 text-blue-700"
-                  }`}>
-                    {ipo.type === "Main Board" ? "Main" : "SME"}
-                  </Badge>
-
-                  {/* Name */}
-                  <div className="min-w-0 flex-shrink">
-                    <h3 className="font-bold text-secondary text-sm truncate leading-tight">{ipo.companyShortName}</h3>
-                  </div>
-
-                  {/* Date */}
-                  <div className="flex-shrink-0 px-2 py-1 rounded border border-secondary/20 bg-secondary/5 text-center">
-                    <p className="text-[9px] text-muted-foreground leading-tight">Closes:</p>
-                    <p className="text-xs font-bold text-secondary leading-tight">{formatDate(ipo.bidDates.end)}</p>
-                  </div>
-
-                  {/* Price Range */}
-                  <div className="flex-shrink-0 text-center hidden sm:block">
-                    <p className="text-[9px] text-muted-foreground leading-tight">Price</p>
-                    <p className="text-sm font-bold text-primary">₹{ipo.priceRange.max}</p>
-                  </div>
-
-                  {/* Min Investment */}
-                  <div className="flex-shrink-0 text-center hidden sm:block">
-                    <p className="text-[9px] text-muted-foreground leading-tight">Min Invest</p>
-                    <p className="text-sm font-bold text-accent">₹{(ipo.minInvestment / 1000).toFixed(0)}K</p>
-                  </div>
-
-                  {/* Lot Size */}
-                  <div className="flex-shrink-0 text-center hidden lg:block">
-                    <p className="text-[9px] text-muted-foreground leading-tight">Lot Size</p>
-                    <p className="text-sm font-bold text-secondary">{ipo.lotSize}</p>
-                  </div>
-
-                  {/* Countdown for Open IPOs */}
-                  {ipo.status === "Open" && (
-                    <div className="flex-shrink-0 items-center gap-1 px-2 py-1 rounded-full bg-green-50 text-green-600 hidden xl:flex">
-                      <Clock className="w-3 h-3" />
-                      <span className="text-[10px] font-medium">{countdowns[ipo.id] || "00:00:00"}</span>
+        {/* IPO List - Full Width Rows */}
+        <div className="space-y-3">
+          {filteredIPOs.map((ipo) => {
+            const closeDate = formatDate(ipo.bidDates.end);
+            return (
+              <Link key={ipo.id} to={`/ipo/${ipo.id}`} className="block">
+                <div className="bg-white rounded-xl border border-border/50 p-4 hover:shadow-md hover:border-primary/20 transition-all">
+                  <div className="flex items-center gap-4 flex-wrap md:flex-nowrap">
+                    {/* Logo */}
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center text-xl flex-shrink-0">
+                      {ipo.logo}
                     </div>
-                  )}
+                    
+                    {/* Type Badge */}
+                    <Badge className={`px-2.5 py-1 text-xs font-bold flex-shrink-0 ${
+                      ipo.type === "Main Board" 
+                        ? "bg-purple-100 text-purple-700" 
+                        : "bg-blue-100 text-blue-700"
+                    }`}>
+                      {ipo.type === "Main Board" ? "Main" : "SME"}
+                    </Badge>
 
-                  {/* View Details Button */}
-                  <Button variant="outline" size="sm" className="flex-shrink-0 ml-auto text-primary border-primary/30 hover:bg-primary hover:text-white text-xs px-3 gap-1">
-                    {ipo.status === "Open" ? "Apply" : "Details"} <ChevronRight className="w-3 h-3" />
-                  </Button>
+                    {/* Name */}
+                    <div className="min-w-[140px] flex-shrink-0">
+                      <h3 className="font-semibold text-secondary text-sm truncate max-w-[160px]">{ipo.companyShortName}</h3>
+                    </div>
+
+                    {/* Closes Date Box */}
+                    <div className="flex-shrink-0 px-3 py-1.5 rounded-lg border border-secondary/20 bg-secondary/5 text-center min-w-[70px]">
+                      <p className="text-[10px] text-muted-foreground leading-tight">Closes:</p>
+                      <p className="text-xs font-bold text-secondary leading-tight">{closeDate.day} {closeDate.month}</p>
+                    </div>
+
+                    {/* Price */}
+                    <div className="flex-shrink-0 text-center min-w-[50px]">
+                      <p className="text-[10px] text-muted-foreground">Price</p>
+                      <p className="text-sm font-bold text-secondary">₹{ipo.priceRange.max}</p>
+                    </div>
+
+                    {/* Min Investment */}
+                    <div className="flex-shrink-0 text-center min-w-[70px]">
+                      <p className="text-[10px] text-muted-foreground">Min Invest</p>
+                      <p className="text-sm font-bold text-accent">₹{(ipo.minInvestment / 1000).toFixed(0)}K</p>
+                    </div>
+
+                    {/* Lot Size */}
+                    <div className="flex-shrink-0 text-center min-w-[60px]">
+                      <p className="text-[10px] text-muted-foreground">Lot Size</p>
+                      <p className="text-sm font-bold text-secondary">{ipo.lotSize}</p>
+                    </div>
+
+                    {/* Countdown for Open IPOs */}
+                    {ipo.status === "Open" && (
+                      <div className="flex-shrink-0 flex items-center gap-1 px-2 py-1 rounded-full bg-green-50 text-green-600">
+                        <Clock className="w-3 h-3" />
+                        <span className="text-xs font-medium">{countdowns[ipo.id] || "Closed"}</span>
+                      </div>
+                    )}
+
+                    {/* Apply/Details Button */}
+                    <button className="flex-shrink-0 ml-auto flex items-center gap-1 text-primary hover:text-primary/80 font-semibold text-sm transition-colors">
+                      {ipo.status === "Open" ? "Apply" : "Details"} <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
         {filteredIPOs.length === 0 && (
@@ -179,12 +184,12 @@ const IPO = () => {
         )}
 
         {/* Compliance Disclaimer */}
-        <div className="mt-10 p-5 bg-amber-50 border border-amber-200 rounded-xl">
+        <div className="mt-8 p-5 bg-amber-50 border border-amber-200 rounded-xl">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div>
               <h3 className="font-bold text-secondary mb-2">Important SEBI Disclaimer</h3>
-              <ul className="text-sm text-muted-foreground space-y-1.5">
+              <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• IPO investments are subject to market risks. Read all scheme related documents carefully.</li>
                 <li>• Grey Market Premium (GMP) is for informational purposes only.</li>
                 <li>• Do not subscribe based on premium price alone. Consider company fundamentals.</li>
