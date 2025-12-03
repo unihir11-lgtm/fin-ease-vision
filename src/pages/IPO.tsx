@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ipoData } from "@/data/ipoData";
-import { Clock, Calendar, TrendingUp, AlertCircle, FileText, Users } from "lucide-react";
+import { Clock, Calendar, TrendingUp, AlertCircle, FileText, Users, ChevronRight } from "lucide-react";
 import ProductLayout from "@/components/ProductLayout";
 
 const IPO = () => {
@@ -104,50 +104,70 @@ const IPO = () => {
           </div>
         </div>
 
-        {/* IPO Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* IPO Grid - Horizontal Card Design */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredIPOs.map((ipo) => (
-            <div key={ipo.id} className="finease-card bg-white rounded-2xl p-5 hover:shadow-lg transition-all group">
-              <div className="flex items-start justify-between mb-4">
+            <Link key={ipo.id} to={`/ipo/${ipo.id}`}>
+              <div className="finease-card bg-white rounded-xl p-4 hover:shadow-lg transition-all group">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-secondary/5 flex items-center justify-center text-2xl group-hover:bg-primary/10 transition-colors">
+                  {/* Logo */}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary/10 to-primary/10 flex items-center justify-center text-xl flex-shrink-0">
                     {ipo.logo}
                   </div>
-                  <div>
-                    <Badge variant="outline" className="mb-1 text-xs border-primary/30 text-primary">{ipo.type}</Badge>
-                    <h3 className="font-bold text-secondary text-sm leading-tight">{ipo.companyShortName}</h3>
+                  
+                  {/* Type Badge */}
+                  <Badge className={`px-2 py-0.5 text-[10px] font-bold flex-shrink-0 ${
+                    ipo.type === "Main Board" 
+                      ? "bg-purple-100 text-purple-700" 
+                      : "bg-blue-100 text-blue-700"
+                  }`}>
+                    {ipo.type === "Main Board" ? "Main" : "SME"}
+                  </Badge>
+
+                  {/* Name */}
+                  <div className="min-w-0 flex-shrink">
+                    <h3 className="font-bold text-secondary text-sm truncate leading-tight">{ipo.companyShortName}</h3>
                   </div>
-                </div>
-                {ipo.status === "Open" && (
-                  <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-50 text-green-600">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span className="text-xs font-medium">{countdowns[ipo.id] || "00:00:00"}</span>
+
+                  {/* Date */}
+                  <div className="flex-shrink-0 px-2 py-1 rounded border border-secondary/20 bg-secondary/5 text-center">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Closes:</p>
+                    <p className="text-xs font-bold text-secondary leading-tight">{formatDate(ipo.bidDates.end)}</p>
                   </div>
-                )}
-              </div>
 
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                <Calendar className="w-4 h-4" />
-                <span>{formatDate(ipo.bidDates.start)} - {formatDate(ipo.bidDates.end)}</span>
-              </div>
+                  {/* Price Range */}
+                  <div className="flex-shrink-0 text-center hidden sm:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Price</p>
+                    <p className="text-sm font-bold text-primary">₹{ipo.priceRange.max}</p>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="p-3 bg-secondary/5 rounded-lg">
-                  <p className="text-xs text-muted-foreground mb-1">Price Range</p>
-                  <p className="font-bold text-secondary">₹{ipo.priceRange.min}-{ipo.priceRange.max}</p>
+                  {/* Min Investment */}
+                  <div className="flex-shrink-0 text-center hidden sm:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Min Invest</p>
+                    <p className="text-sm font-bold text-accent">₹{(ipo.minInvestment / 1000).toFixed(0)}K</p>
+                  </div>
+
+                  {/* Lot Size */}
+                  <div className="flex-shrink-0 text-center hidden lg:block">
+                    <p className="text-[9px] text-muted-foreground leading-tight">Lot Size</p>
+                    <p className="text-sm font-bold text-secondary">{ipo.lotSize}</p>
+                  </div>
+
+                  {/* Countdown for Open IPOs */}
+                  {ipo.status === "Open" && (
+                    <div className="flex-shrink-0 items-center gap-1 px-2 py-1 rounded-full bg-green-50 text-green-600 hidden xl:flex">
+                      <Clock className="w-3 h-3" />
+                      <span className="text-[10px] font-medium">{countdowns[ipo.id] || "00:00:00"}</span>
+                    </div>
+                  )}
+
+                  {/* View Details Button */}
+                  <Button variant="outline" size="sm" className="flex-shrink-0 ml-auto text-primary border-primary/30 hover:bg-primary hover:text-white text-xs px-3 gap-1">
+                    {ipo.status === "Open" ? "Apply" : "Details"} <ChevronRight className="w-3 h-3" />
+                  </Button>
                 </div>
-                <div className="p-3 bg-secondary/5 rounded-lg">
-                  <p className="text-xs text-muted-foreground mb-1">Min Investment</p>
-                  <p className="font-bold text-secondary">₹{ipo.minInvestment.toLocaleString()}</p>
-                </div>
               </div>
-
-              <Link to={`/ipo/${ipo.id}`} className="block">
-                <Button className="w-full" variant="finease">
-                  {ipo.status === "Open" ? "Apply Now" : ipo.status === "Upcoming" ? "Notify Me" : "View Details"}
-                </Button>
-              </Link>
-            </div>
+            </Link>
           ))}
         </div>
 
