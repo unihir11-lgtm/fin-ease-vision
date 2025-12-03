@@ -6,53 +6,53 @@
 
 @layer base {
   :root {
-    /* FinEase Dark Theme - Warm Sophisticated Fintech */
-    --background: 20 14% 2%;
-    --foreground: 32 25% 80%;
+    /* FinEase Dark Teal Theme */
+    --background: 197 77% 16%;
+    --foreground: 0 0% 100%;
 
-    --card: 20 12% 5%;
-    --card-foreground: 32 25% 80%;
+    --card: 197 77% 16%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 20 12% 5%;
-    --popover-foreground: 32 25% 80%;
+    --popover: 197 77% 16%;
+    --popover-foreground: 0 0% 100%;
 
-    /* Primary - Orange accent */
-    --primary: 16 87% 42%;
-    --primary-foreground: 32 25% 95%;
+    /* Primary - Teal accent */
+    --primary: 168 72% 40%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Warm beige */
-    --secondary: 32 25% 76%;
-    --secondary-foreground: 20 14% 2%;
+    /* Secondary - Light gray text */
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 197 77% 16%;
 
-    /* Muted - Olive green */
-    --muted: 68 14% 50%;
-    --muted-foreground: 68 14% 70%;
+    /* Muted - Lighter teal for inputs */
+    --muted: 197 60% 35%;
+    --muted-foreground: 0 0% 92%;
 
-    /* Accent - Light cream */
-    --accent: 30 18% 82%;
-    --accent-foreground: 20 14% 2%;
+    /* Accent - Teal green for buttons */
+    --accent: 174 77% 39%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 32 15% 15%;
-    --input: 32 15% 15%;
-    --ring: 16 87% 42%;
+    --border: 197 50% 25%;
+    --input: 197 60% 35%;
+    --ring: 168 72% 40%;
 
-    --radius: 0.75rem;
+    --radius: 0.375rem;
 
     /* Custom tokens */
-    --cream: 32 25% 76%;
-    --cream-light: 30 18% 85%;
-    --olive: 68 14% 50%;
-    --brown-dark: 16 67% 20%;
-    --orange-glow: 16 87% 42%;
+    --footer-bg: 197 77% 16%;
+    --footer-input: 197 60% 35%;
+    --footer-button: 168 72% 40%;
+    --footer-copyright: 178 93% 23%;
+    --text-muted: 0 0% 92%;
     
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(20 14% 4%) 0%, hsl(20 12% 2%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(32 15% 8%) 0%, hsl(20 12% 4%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(16 87% 42%) 0%, hsl(16 87% 35%) 100%);
-    --gradient-text: linear-gradient(135deg, hsl(32 25% 85%) 0%, hsl(32 25% 70%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(197 77% 18%) 0%, hsl(197 77% 14%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(197 70% 20%) 0%, hsl(197 77% 16%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(168 72% 40%) 0%, hsl(168 72% 35%) 100%);
+    --gradient-text: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(0 0% 92%) 100%);
 
     /* Shadows */
     --shadow-glow: 0 0 60px hsl(16 87% 42% / 0.15);
