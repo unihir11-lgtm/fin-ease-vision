@@ -28,6 +28,7 @@ import {
   Wallet,
   History,
   Download,
+  ExternalLink,
 } from "lucide-react";
 import logo from "@/assets/finease-logo.png";
 
@@ -42,7 +43,6 @@ const productItems = [
   { title: "Bonds", url: "/dashboard/bonds", icon: Banknote },
   { title: "Fixed Deposits", url: "/dashboard/fds", icon: PiggyBank },
   { title: "NPS", url: "/dashboard/nps", icon: Building2 },
-  { title: "Stock Analytics", url: "/dashboard/analytics", icon: BarChart3 },
 ];
 
 const accountItems = [
@@ -111,6 +111,25 @@ export function DashboardSidebar() {
               {productItems.map((item) => (
                 <MenuItem key={item.title} item={item} />
               ))}
+              {/* Screener - External Link */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a
+                    href="https://www.thefinease.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted hover:bg-gray-100 hover:text-secondary transition-colors"
+                  >
+                    <BarChart3 className="w-5 h-5 flex-shrink-0" />
+                    {!collapsed && (
+                      <>
+                        <span>Screener</span>
+                        <ExternalLink className="w-3 h-3 ml-auto opacity-50" />
+                      </>
+                    )}
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -13,6 +13,7 @@ import {
   CheckCircle,
   ArrowUpRight,
   Bell,
+  ExternalLink,
 } from "lucide-react";
 import PortfolioChart from "@/components/dashboard/PortfolioChart";
 import CashFlowTimeline from "@/components/dashboard/CashFlowTimeline";
@@ -25,11 +26,11 @@ const DashboardOverview = () => {
   const totalReturns = (totalBondValue + totalFDValue) - totalInvested;
 
   const quickActions = [
-    { title: "IPO", description: "Apply for upcoming IPOs", icon: TrendingUp, href: "/dashboard/ipo", color: "bg-blue-500" },
-    { title: "Bonds", description: "Explore bond offerings", icon: Banknote, href: "/dashboard/bonds", color: "bg-teal-500" },
-    { title: "Fixed Deposits", description: "Book high-yield FDs", icon: PiggyBank, href: "/dashboard/fds", color: "bg-green-500" },
-    { title: "NPS", description: "Manage pension savings", icon: Building2, href: "/dashboard/nps", color: "bg-purple-500" },
-    { title: "Analytics", description: "Stock screener & tools", icon: BarChart3, href: "/dashboard/analytics", color: "bg-orange-500" },
+    { title: "IPO", description: "Apply for upcoming IPOs", icon: TrendingUp, href: "/dashboard/ipo", color: "bg-blue-500", external: false },
+    { title: "Bonds", description: "Explore bond offerings", icon: Banknote, href: "/dashboard/bonds", color: "bg-teal-500", external: false },
+    { title: "Fixed Deposits", description: "Book high-yield FDs", icon: PiggyBank, href: "/dashboard/fds", color: "bg-green-500", external: false },
+    { title: "NPS", description: "Manage pension savings", icon: Building2, href: "/dashboard/nps", color: "bg-purple-500", external: false },
+    { title: "Screener", description: "Stock screener & tools", icon: BarChart3, href: "https://www.thefinease.com/", color: "bg-orange-500", external: true },
   ];
 
   // Upcoming maturity alerts
@@ -47,6 +48,7 @@ const DashboardOverview = () => {
       value: bond.currentValue,
     })),
   ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 3);
+
 
   return (
     <div className="space-y-6">
@@ -123,17 +125,32 @@ const DashboardOverview = () => {
       <div>
         <h2 className="text-lg font-bold text-secondary mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {quickActions.map((action) => (
-            <Link key={action.title} to={action.href}>
-              <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)] hover:shadow-[0_6px_24px_0_rgba(23,93,128,0.12)] transition-all group cursor-pointer">
-                <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center`}>
-                  <action.icon className="w-5 h-5 text-white" />
+          {quickActions.map((action) => 
+            action.external ? (
+              <a key={action.title} href={action.href} target="_blank" rel="noopener noreferrer">
+                <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)] hover:shadow-[0_6px_24px_0_rgba(23,93,128,0.12)] transition-all group cursor-pointer h-full">
+                  <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center`}>
+                    <action.icon className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <h3 className="font-semibold text-secondary group-hover:text-primary transition-colors">{action.title}</h3>
+                    <ExternalLink className="w-3 h-3 text-muted" />
+                  </div>
+                  <p className="text-xs text-muted">{action.description}</p>
                 </div>
-                <h3 className="font-semibold text-secondary group-hover:text-primary transition-colors">{action.title}</h3>
-                <p className="text-xs text-muted">{action.description}</p>
-              </div>
-            </Link>
-          ))}
+              </a>
+            ) : (
+              <Link key={action.title} to={action.href}>
+                <div className="flex flex-col items-start gap-2 p-5 rounded-2xl border border-[#E7F6FE] bg-white shadow-[0_4px_20px_0_rgba(23,93,128,0.08)] hover:shadow-[0_6px_24px_0_rgba(23,93,128,0.12)] transition-all group cursor-pointer h-full">
+                  <div className={`w-10 h-10 ${action.color} rounded-lg flex items-center justify-center`}>
+                    <action.icon className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-secondary group-hover:text-primary transition-colors">{action.title}</h3>
+                  <p className="text-xs text-muted">{action.description}</p>
+                </div>
+              </Link>
+            )
+          )}
         </div>
       </div>
 
