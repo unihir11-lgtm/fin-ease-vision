@@ -25,7 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/kyc" element={<KYC />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/bonds" element={<Bonds />} />
           <Route path="/bonds/:id" element={<BondDetails />} />
           <Route path="/fds" element={<FDs />} />
