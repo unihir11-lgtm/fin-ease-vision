@@ -1,7 +1,8 @@
 import { userPortfolio } from "@/data/mockData";
 import { 
   IndianRupee, TrendingUp, Banknote, PiggyBank, Download, Filter,
-  ArrowUpRight, ArrowDownRight, Eye, ChevronRight, Calendar, Percent
+  ArrowUpRight, ArrowDownRight, Eye, ChevronRight, Calendar, Percent,
+  Wallet, Target, Clock, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,34 +37,56 @@ const DashboardPortfolio = () => {
       value: `₹${totalPortfolio.toLocaleString()}`, 
       change: `+${returnsPercentage}%`, 
       positive: true, 
-      icon: IndianRupee,
-      color: "bg-primary text-white",
-      iconBg: "bg-white/20"
+      icon: Wallet,
+      color: "bg-gradient-to-br from-primary to-primary/80",
+      iconBg: "bg-white/20",
+      isPrimary: true
     },
     { 
       label: "Total Invested", 
       value: `₹${totalInvested.toLocaleString()}`, 
       subtext: `${userPortfolio.bonds.length + userPortfolio.fds.length} investments`,
-      icon: TrendingUp,
+      icon: Target,
       color: "bg-white",
-      iconBg: "bg-blue-100 text-blue-600"
+      iconBg: "bg-blue-100",
+      iconColor: "text-blue-600"
     },
     { 
       label: "Total Returns", 
       value: `₹${totalReturns.toLocaleString()}`, 
       change: `+${returnsPercentage}%`, 
       positive: true, 
-      icon: ArrowUpRight,
+      icon: TrendingUp,
       color: "bg-white",
-      iconBg: "bg-green-100 text-green-600"
+      iconBg: "bg-green-100",
+      iconColor: "text-green-600"
     },
     { 
       label: "Active Holdings", 
       value: `${userPortfolio.bonds.length + userPortfolio.fds.length}`, 
       subtext: `${userPortfolio.bonds.length} Bonds • ${userPortfolio.fds.length} FDs`,
-      icon: Banknote,
+      icon: BarChart3,
       color: "bg-white",
-      iconBg: "bg-purple-100 text-purple-600"
+      iconBg: "bg-purple-100",
+      iconColor: "text-purple-600"
+    },
+    { 
+      label: "Next Maturity", 
+      value: "15 Jun 2025", 
+      subtext: "HDFC Bank FD",
+      icon: Clock,
+      color: "bg-white",
+      iconBg: "bg-amber-100",
+      iconColor: "text-amber-600"
+    },
+    { 
+      label: "Avg. Yield", 
+      value: `${returnsPercentage}%`, 
+      subtext: "Annualized",
+      icon: Percent,
+      color: "bg-white",
+      iconBg: "bg-teal-100",
+      iconColor: "text-teal-600"
     },
   ];
 
@@ -88,24 +111,24 @@ const DashboardPortfolio = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {stats.map((stat, i) => (
-          <Card key={i} className={`border border-gray-200 ${stat.color === "bg-primary text-white" ? "bg-gradient-to-br from-primary to-primary/90 text-white" : ""}`}>
-            <CardContent className="p-5">
+          <Card key={i} className={`border border-border/60 ${stat.isPrimary ? stat.color + " text-white" : ""}`}>
+            <CardContent className="p-4">
               <div className="flex items-start justify-between">
-                <div className={`p-2.5 rounded-xl ${stat.color === "bg-primary text-white" ? stat.iconBg : stat.iconBg}`}>
-                  <stat.icon className={`w-5 h-5 ${stat.color === "bg-primary text-white" ? "text-white" : ""}`} />
+                <div className={`p-2 rounded-xl ${stat.isPrimary ? stat.iconBg : stat.iconBg}`}>
+                  <stat.icon className={`w-4 h-4 ${stat.isPrimary ? "text-white" : stat.iconColor}`} />
                 </div>
                 {stat.change && (
-                  <span className={`text-sm flex items-center gap-0.5 ${stat.positive ? (stat.color === "bg-primary text-white" ? "text-green-300 bg-white/20" : "text-green-600 bg-green-50") : "text-red-500 bg-red-50"} px-2 py-0.5 rounded-full`}>
+                  <span className={`text-xs flex items-center gap-0.5 ${stat.positive ? (stat.isPrimary ? "text-green-300 bg-white/20" : "text-green-600 bg-green-50") : "text-red-500 bg-red-50"} px-1.5 py-0.5 rounded-full`}>
                     {stat.positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                     {stat.change}
                   </span>
                 )}
               </div>
-              <div className="mt-3">
-                <p className={`text-2xl font-bold ${stat.color === "bg-primary text-white" ? "" : "text-secondary"}`}>{stat.value}</p>
-                <p className={`text-sm ${stat.color === "bg-primary text-white" ? "text-white/70" : "text-gray-500"}`}>
+              <div className="mt-2">
+                <p className={`text-xl font-bold ${stat.isPrimary ? "" : "text-secondary"}`}>{stat.value}</p>
+                <p className={`text-xs ${stat.isPrimary ? "text-white/70" : "text-muted-foreground"}`}>
                   {stat.subtext || stat.label}
                 </p>
               </div>
