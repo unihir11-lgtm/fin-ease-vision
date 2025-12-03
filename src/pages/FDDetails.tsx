@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -11,10 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { fdProviders } from "@/data/fdData";
-import { ArrowLeft, Shield, CheckCircle, User, Search } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { fdProviders } from "@/data/fdData";
+import { ArrowLeft, Shield, CheckCircle, User, Search, Building2, Users, Calendar, TrendingUp, Landmark, Clock, Banknote, FileText, BadgeCheck, ArrowRight } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 import logo from "@/assets/finease-logo.png";
 import Footer from "@/components/Footer";
 
@@ -23,37 +23,34 @@ const FDDetails = () => {
   const navigate = useNavigate();
   const fd = fdProviders.find((f) => f.id === id);
 
-  const [customerType, setCustomerType] = useState<"below60" | "above60">("below60");
+  const [isSeniorCitizen, setIsSeniorCitizen] = useState(false);
   const [depositAmount, setDepositAmount] = useState(100000);
-  const [tenure, setTenure] = useState(60);
-  const [payoutFrequency, setPayoutFrequency] = useState("Annually");
+  const [selectedTenure, setSelectedTenure] = useState("60");
+  const [compounding, setCompounding] = useState("Quarterly");
 
   if (!fd) {
     return <div className="p-8 text-center">FD not found</div>;
   }
 
   // Get rate based on tenure and customer type
-  const getRate = () => {
-    const tenureOption = fd.tenureOptions.find((t) => t.months === tenure);
-    if (!tenureOption) return customerType === "above60" ? fd.seniorCitizenRate : fd.interestRate;
-    return customerType === "above60" ? tenureOption.seniorRate : tenureOption.rate;
+  const getRate = (months: number) => {
+    const tenureOption = fd.tenureOptions.find((t) => t.months === months);
+    if (!tenureOption) return isSeniorCitizen ? fd.seniorCitizenRate : fd.interestRate;
+    return isSeniorCitizen ? tenureOption.seniorRate : tenureOption.rate;
   };
 
-  const rate = getRate();
+  const tenure = parseInt(selectedTenure);
+  const rate = getRate(tenure);
 
   // Calculate interest and maturity
   const calculateReturns = () => {
     const years = tenure / 12;
     let maturityValue: number;
-    let totalInterest: number;
+    
+    const compoundingFrequency = compounding === "Monthly" ? 12 : compounding === "Quarterly" ? 4 : compounding === "Half-Yearly" ? 2 : 1;
+    maturityValue = depositAmount * Math.pow(1 + rate / 100 / compoundingFrequency, compoundingFrequency * years);
 
-    if (payoutFrequency === "Cumulative") {
-      maturityValue = depositAmount * Math.pow(1 + rate / 100 / 4, 4 * years);
-    } else {
-      maturityValue = depositAmount * (1 + (rate / 100) * years);
-    }
-
-    totalInterest = maturityValue - depositAmount;
+    const totalInterest = maturityValue - depositAmount;
     
     const maturityDate = new Date();
     maturityDate.setMonth(maturityDate.getMonth() + tenure);
@@ -61,7 +58,7 @@ const FDDetails = () => {
     return {
       totalInterest: Math.round(totalInterest),
       maturityValue: Math.round(maturityValue),
-      maturityDate: maturityDate.toLocaleDateString("en-IN", { month: "short", year: "numeric" }),
+      maturityDate: maturityDate.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" }),
     };
   };
 
@@ -75,13 +72,40 @@ const FDDetails = () => {
     navigate("/dashboard/fds");
   };
 
+  // Format tenure for display
+  const formatTenure = (months: number) => {
+    if (months >= 12) {
+      const years = Math.floor(months / 12);
+      const remainingMonths = months % 12;
+      if (remainingMonths === 0) return `${years}Y`;
+      return `${years}Y ${remainingMonths}M`;
+    }
+    return `${months}M`;
+  };
+
+  // Mock comparison banks
+  const comparisonBanks = [
+    { name: "SBI", rate: 6.95, logo: "🏦" },
+    { name: "HDFC Bank", rate: 7.1, logo: "🏛️" },
+    { name: fd.bankName, rate: fd.interestRate, logo: fd.logo, highlight: true },
+  ];
+
+  // Bank info
+  const bankInfo = {
+    aum: "₹9,600Cr+",
+    customers: "33L+",
+    branches: "700+",
+    founded: "2017",
+    listedOn: "NSE, BSE",
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+      <header className="bg-card border-b border-border sticky top-0 z-50">
+        <div className="container mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link to="/fds" className="text-muted hover:text-primary">
+            <Link to="/fds" className="text-muted-foreground hover:text-primary">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <Link to="/">
@@ -89,229 +113,330 @@ const FDDetails = () => {
             </Link>
           </div>
           <div className="hidden md:flex relative w-[300px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
-            <Input placeholder="Search Stock, MF, IPO..." className="pl-10 bg-gray-50" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input placeholder="Search Stock, MF, IPO..." className="pl-10 bg-muted/30" />
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/ipo" className="text-muted hover:text-primary font-medium">IPO</Link>
-            <Link to="/bonds" className="text-muted hover:text-primary font-medium">Bond</Link>
+            <Link to="/ipo" className="text-muted-foreground hover:text-primary font-medium">IPO</Link>
+            <Link to="/bonds" className="text-muted-foreground hover:text-primary font-medium">Bond</Link>
             <Link to="/fds" className="text-primary font-medium">FD</Link>
-            <Link to="/dashboard/nps" className="text-muted hover:text-primary font-medium">NPS</Link>
-            <a href="https://www.thefinease.com/" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-primary font-medium">Screener</a>
+            <Link to="/dashboard/nps" className="text-muted-foreground hover:text-primary font-medium">NPS</Link>
           </nav>
           <Link to="/auth" className="flex items-center gap-2">
-            <div className="h-10 w-10 p-2 bg-[#E4FFFB] rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-secondary" />
+            <div className="h-10 w-10 p-2 bg-accent rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-primary" />
             </div>
-            <span className="hidden md:block text-muted font-bold">Login / Sign up</span>
+            <span className="hidden md:block text-muted-foreground font-bold">Login</span>
           </Link>
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-8">
-        {/* FD Header Card */}
-        <Card className="finease-card mb-8 bg-gradient-to-r from-primary/5 to-white">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-3xl">
+      <main className="container mx-auto px-4 md:px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Hero Banner */}
+            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-primary/20 via-primary/10 to-accent/20 h-48 md:h-64">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20320%22%3E%3Cpath%20fill%3D%22%2323698e%22%20fill-opacity%3D%220.1%22%20d%3D%22M0%2C128L48%2C144C96%2C160%2C192%2C192%2C288%2C186.7C384%2C181%2C480%2C139%2C576%2C138.7C672%2C139%2C768%2C181%2C864%2C181.3C960%2C181%2C1056%2C139%2C1152%2C117.3C1248%2C96%2C1344%2C96%2C1392%2C96L1440%2C96L1440%2C320L1392%2C320C1344%2C320%2C1248%2C320%2C1152%2C320C1056%2C320%2C960%2C320%2C864%2C320C768%2C320%2C672%2C320%2C576%2C320C480%2C320%2C384%2C320%2C288%2C320C192%2C320%2C96%2C320%2C48%2C320L0%2C320Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E')] bg-cover bg-bottom opacity-50"></div>
+              <div className="absolute top-4 left-4 flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-card flex items-center justify-center text-2xl shadow-lg">
                   {fd.logo}
                 </div>
+                <span className="font-bold text-foreground text-lg">{fd.bankName}</span>
+              </div>
+              <div className="absolute bottom-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/30 to-transparent"></div>
+            </div>
+
+            {/* Bank Name and Badges */}
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-3">{fd.bankName}</h1>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="bg-muted/50 text-xs font-semibold tracking-wider">
+                  RBI-REGULATED
+                </Badge>
+                <span className="text-muted-foreground">■</span>
+                <Badge variant="outline" className="bg-muted/50 text-xs font-semibold tracking-wider">
+                  {fd.type.toUpperCase()}
+                </Badge>
+              </div>
+            </div>
+
+            {/* Interest Rates Table */}
+            <Card className="finease-card overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left p-4 text-muted-foreground font-medium text-sm">Tenure</th>
+                      <th className="text-right p-4 text-muted-foreground font-medium text-sm">Regular</th>
+                      <th className="text-right p-4 text-muted-foreground font-medium text-sm">Sr. Citizen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fd.tenureOptions.map((option, index) => (
+                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-foreground">{formatTenure(option.months)}</span>
+                            {option.months === 60 && (
+                              <Badge className="bg-accent/20 text-accent-foreground text-xs">
+                                <TrendingUp className="w-3 h-3 mr-1" />
+                                POPULAR
+                              </Badge>
+                            )}
+                          </div>
+                        </td>
+                        <td className="p-4 text-right font-semibold text-foreground">{option.rate.toFixed(2)}%</td>
+                        <td className="p-4 text-right font-semibold text-foreground">{option.seniorRate.toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+
+            {/* Feature Highlights */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl">
+                <Clock className="w-5 h-5 text-primary mt-0.5" />
                 <div>
-                  <h1 className="text-xl md:text-2xl font-bold text-secondary">{fd.bankName}</h1>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge variant="outline">Regulated by the RBI</Badge>
-                    <Badge variant="outline">{fd.type}</Badge>
+                  <p className="font-semibold text-foreground">Instant withdrawal available</p>
+                  <p className="text-sm text-muted-foreground">After minimum lock-in period</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl">
+                <Shield className="w-5 h-5 text-primary mt-0.5" />
+                <div>
+                  <p className="font-semibold text-foreground">Up to ₹5 lakh insured by DICGC</p>
+                  <p className="text-sm text-muted-foreground">RBI's deposit insurance</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl">
+                <Banknote className="w-5 h-5 text-primary mt-0.5" />
+                <div>
+                  <p className="font-semibold text-foreground">Monthly/Quarterly payouts</p>
+                  <p className="text-sm text-muted-foreground">Flexible interest payment options</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-4 bg-muted/30 rounded-xl">
+                <FileText className="w-5 h-5 text-primary mt-0.5" />
+                <div>
+                  <p className="font-semibold text-foreground">Physical FD receipt available</p>
+                  <p className="text-sm text-muted-foreground">On request from the bank</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Compare with Top Banks */}
+            <Card className="finease-card">
+              <CardHeader>
+                <CardTitle className="text-lg text-foreground">Compare with top banks</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-4">
+                  {comparisonBanks.map((bank, index) => (
+                    <div key={index} className={`text-center p-4 rounded-xl ${bank.highlight ? 'bg-primary/10 border-2 border-primary' : 'bg-muted/30'}`}>
+                      <div className="text-2xl mb-2">{bank.logo}</div>
+                      <p className={`text-xl font-bold ${bank.highlight ? 'text-primary' : 'text-foreground'}`}>{bank.rate}%</p>
+                      <p className="text-sm text-muted-foreground mt-1">{bank.name}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-4 text-center">*Highest FD rates in each bank</p>
+              </CardContent>
+            </Card>
+
+            {/* About Bank */}
+            <Card className="finease-card">
+              <CardHeader>
+                <CardTitle className="text-lg text-foreground">About {fd.bankName}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-6">{fd.about}</p>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div className="text-center p-3 bg-muted/30 rounded-xl">
+                    <Building2 className="w-5 h-5 text-primary mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">AUM</p>
+                    <p className="font-bold text-foreground">{bankInfo.aum}</p>
+                  </div>
+                  <div className="text-center p-3 bg-muted/30 rounded-xl">
+                    <Users className="w-5 h-5 text-primary mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Customers</p>
+                    <p className="font-bold text-foreground">{bankInfo.customers}</p>
+                  </div>
+                  <div className="text-center p-3 bg-muted/30 rounded-xl">
+                    <Landmark className="w-5 h-5 text-primary mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Branches</p>
+                    <p className="font-bold text-foreground">{bankInfo.branches}</p>
+                  </div>
+                  <div className="text-center p-3 bg-muted/30 rounded-xl">
+                    <Calendar className="w-5 h-5 text-primary mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Founded</p>
+                    <p className="font-bold text-foreground">{bankInfo.founded}</p>
+                  </div>
+                  <div className="text-center p-3 bg-muted/30 rounded-xl col-span-2 md:col-span-1">
+                    <TrendingUp className="w-5 h-5 text-primary mx-auto mb-2" />
+                    <p className="text-sm text-muted-foreground">Listed on</p>
+                    <p className="font-bold text-foreground">{bankInfo.listedOn}</p>
                   </div>
                 </div>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-muted">Returns upto</p>
-                <p className="text-2xl md:text-3xl font-bold text-primary">{fd.interestRate}% p.a</p>
-                <p className="text-muted">Tenure {fd.maxTenure}</p>
-              </div>
+              </CardContent>
+            </Card>
+
+            {/* FinEase Promise */}
+            <Card className="finease-card bg-gradient-to-r from-primary/5 to-accent/5">
+              <CardHeader>
+                <CardTitle className="text-lg text-foreground flex items-center gap-2">
+                  <BadgeCheck className="w-5 h-5 text-primary" />
+                  FinEase Promise
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                  <div>
+                    <p className="font-medium text-foreground">Your money goes directly to {fd.bankName}</p>
+                    <p className="text-sm text-muted-foreground">We do not hold your funds at any point</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                  <div>
+                    <p className="font-medium text-foreground">You will get an FD receipt from {fd.bankName}</p>
+                    <p className="text-sm text-muted-foreground">Official documentation directly from the bank</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+                  <div>
+                    <p className="font-medium text-foreground">Your interest & principal are paid by {fd.bankName}</p>
+                    <p className="text-sm text-muted-foreground">Direct bank transfer to your account</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Disclaimer */}
+            <div className="bg-muted/30 rounded-xl p-6">
+              <h3 className="font-bold text-foreground mb-3">Important Disclaimer</h3>
+              <ul className="text-sm text-muted-foreground space-y-2">
+                <li>• Fixed Deposits are subject to terms and conditions of the respective bank/NBFC.</li>
+                <li>• Interest rates are subject to change without prior notice.</li>
+                <li>• TDS will be deducted at source as per Income Tax rules if interest exceeds ₹40,000 (₹50,000 for senior citizens) in a financial year.</li>
+                <li>• FDs up to ₹5 lakhs per depositor per bank are insured under DICGC.</li>
+                <li>• Premature withdrawal may attract penalty as per bank's policy.</li>
+              </ul>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Calculator Section */}
-        <h2 className="text-xl font-bold text-primary mb-6">Fixed Deposit Calculator</h2>
+          {/* Right Column - Sticky Calculator */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
+              <Card className="finease-card">
+                <CardContent className="p-6 space-y-6">
+                  {/* Amount Input */}
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-2 block">Amount</label>
+                    <Input
+                      type="number"
+                      value={depositAmount}
+                      onChange={(e) => setDepositAmount(Number(e.target.value))}
+                      className="text-lg font-semibold"
+                      min={fd.minDeposit}
+                      max={fd.maxDeposit}
+                    />
+                  </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Calculator Form */}
-          <Card className="finease-card lg:col-span-2">
-            <CardContent className="p-6 space-y-6">
-              {/* Customer Type */}
-              <div className="flex items-center justify-between">
-                <span className="font-medium text-secondary">Customer Type</span>
-                <div className="flex gap-2">
+                  {/* Senior Citizen Toggle */}
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm text-muted-foreground">Sr. Citizen</label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">{isSeniorCitizen ? "Yes" : "No"}</span>
+                      <Switch
+                        checked={isSeniorCitizen}
+                        onCheckedChange={setIsSeniorCitizen}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Tenure Select */}
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-2 block">Interest rate and tenure</label>
+                    <Select value={selectedTenure} onValueChange={setSelectedTenure}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {fd.tenureOptions.map((option) => (
+                          <SelectItem key={option.months} value={option.months.toString()}>
+                            {formatTenure(option.months)} ({(isSeniorCitizen ? option.seniorRate : option.rate).toFixed(2)}%)
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Compounding Select */}
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-2 block">Compounding</label>
+                    <Select value={compounding} onValueChange={setCompounding}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Monthly">Monthly</SelectItem>
+                        <SelectItem value="Quarterly">Quarterly</SelectItem>
+                        <SelectItem value="Half-Yearly">Half-Yearly</SelectItem>
+                        <SelectItem value="Yearly">Yearly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Calculation Results */}
+                  <div className="border-t border-border pt-4 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Investment amount</span>
+                      <span className="font-semibold text-foreground">₹{depositAmount.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Compounding</span>
+                      <span className="font-semibold text-foreground">{compounding}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">FD rate applicable</span>
+                      <span className="font-semibold text-foreground">{rate.toFixed(2)}%</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">FD tenure</span>
+                      <span className="font-semibold text-foreground">{formatTenure(tenure)}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Maturity amount</span>
+                      <span className="font-semibold text-foreground">₹{returns.maturityValue.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Interest earned</span>
+                      <span className="font-bold text-primary">₹{returns.totalInterest.toLocaleString()}</span>
+                    </div>
+                  </div>
+
+                  {/* Invest Button */}
                   <Button
-                    variant={customerType === "below60" ? "default" : "outline"}
-                    onClick={() => setCustomerType("below60")}
-                    className={customerType === "below60" ? "finease-btn" : ""}
+                    className="w-full finease-btn"
+                    size="lg"
+                    onClick={handleOpenFD}
                   >
-                    Below 60 Age Group
+                    Invest now
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
-                  <Button
-                    variant={customerType === "above60" ? "default" : "outline"}
-                    onClick={() => setCustomerType("above60")}
-                    className={customerType === "above60" ? "finease-btn" : ""}
-                  >
-                    Above 60 Age Group
-                  </Button>
-                </div>
-              </div>
 
-              {/* Deposit Amount */}
-              <div>
-                <div className="flex justify-between mb-2">
-                  <span className="font-medium text-secondary">Deposit Amount</span>
-                  <span className="font-bold text-secondary">₹{depositAmount.toLocaleString()}</span>
-                </div>
-                <Slider
-                  value={[depositAmount]}
-                  onValueChange={(value) => setDepositAmount(value[0])}
-                  min={fd.minDeposit}
-                  max={Math.min(fd.maxDeposit, 3000000)}
-                  step={5000}
-                  className="my-4"
-                />
-                <div className="flex justify-between text-sm text-muted">
-                  <span>₹{fd.minDeposit.toLocaleString()}</span>
-                  <span>₹3CR</span>
-                </div>
-              </div>
-
-              {/* Tenure */}
-              <div>
-                <div className="flex justify-between mb-2">
-                  <span className="font-medium text-secondary">Customer Tenure</span>
-                  <span className="font-bold text-secondary">{tenure}</span>
-                </div>
-                <Slider
-                  value={[tenure]}
-                  onValueChange={(value) => setTenure(value[0])}
-                  min={12}
-                  max={60}
-                  step={1}
-                  className="my-4"
-                />
-                <div className="flex justify-between text-sm text-muted">
-                  <span>12</span>
-                  <span>60</span>
-                </div>
-              </div>
-
-              {/* Interest Payout */}
-              <div>
-                <span className="font-medium text-secondary">Interest Amount Frequency</span>
-                <Select value={payoutFrequency} onValueChange={setPayoutFrequency}>
-                  <SelectTrigger className="mt-2">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {fd.payoutOptions.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Results Card */}
-          <Card className="finease-card bg-primary text-white">
-            <CardContent className="p-6 space-y-4">
-              <div className="text-center">
-                <p className="text-sm opacity-80">Annualized Rate of Interest</p>
-                <p className="text-4xl font-bold mt-1">{rate.toFixed(2)}%</p>
-              </div>
-              <div className="space-y-3 pt-4">
-                <div className="flex justify-between">
-                  <span className="opacity-80">Total Interest</span>
-                  <span className="font-bold">₹{returns.totalInterest.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="opacity-80">Maturity Time</span>
-                  <span className="font-bold">{returns.maturityDate}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="opacity-80">Total maturity Payout</span>
-                  <span className="font-bold">₹{(returns.maturityValue / 100000).toFixed(2)}L</span>
-                </div>
-              </div>
-              <Button
-                className="w-full bg-white text-primary hover:bg-white/90 font-bold mt-4"
-                size="lg"
-                onClick={handleOpenFD}
-              >
-                Open FD
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Why Invest Section */}
-        <Card className="finease-card mb-8">
-          <CardHeader>
-            <CardTitle className="text-primary">Why to Invest now?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {fd.features.map((feature, index) => (
-                <div key={index} className="border-b pb-4">
-                  <h4 className="font-bold text-secondary mb-1">
-                    {feature.split(":")[0] || feature.split(" ").slice(0, 3).join(" ")}
-                  </h4>
-                  <p className="text-sm text-muted">{feature}</p>
-                </div>
-              ))}
-              <div className="border-b pb-4">
-                <h4 className="font-bold text-secondary mb-1">DICGC Insured</h4>
-                <p className="text-sm text-muted">
-                  Insured up to ₹5 Lakh by wholly-owned subsidiary of the Reserve Bank of India
-                </p>
-              </div>
-              <div className="border-b pb-4">
-                <h4 className="font-bold text-secondary mb-1">No New Bank Account</h4>
-                <p className="text-sm text-muted">
-                  Skip Opening a New Bank Account, invest in Fixed Deposits Effortlessly
-                </p>
-              </div>
-              <div className="border-b pb-4">
-                <h4 className="font-bold text-secondary mb-1">Choose Your Own Term</h4>
-                <p className="text-sm text-muted">
-                  Pick a Fixed Deposit Tenure from 12 months to 36 months - Fits Your Goals!
-                </p>
-              </div>
-              <div className="border-b pb-4">
-                <h4 className="font-bold text-secondary mb-1">Easy Withdrawal</h4>
-                <p className="text-sm text-muted">
-                  Flexible withdrawals available after 7 days
-                </p>
-              </div>
-              <div className="border-b pb-4 md:col-span-2">
-                <h4 className="font-bold text-secondary mb-1">Competitive Interest Rates</h4>
-                <p className="text-sm text-muted">
-                  Enjoy attractive interest rates that enhance your savings potential.
-                </p>
-              </div>
+                  <p className="text-xs text-center text-muted-foreground">
+                    Min. ₹{fd.minDeposit.toLocaleString()} • Max. ₹{fd.maxDeposit.toLocaleString()}
+                  </p>
+                </CardContent>
+              </Card>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Compliance Disclaimer */}
-        <div className="bg-gray-100 rounded-xl p-6 mb-8">
-          <h3 className="font-bold text-secondary mb-3">Important Disclaimer</h3>
-          <ul className="text-sm text-muted space-y-2">
-            <li>• Fixed Deposits are subject to terms and conditions of the respective bank/NBFC.</li>
-            <li>• Interest rates are subject to change without prior notice.</li>
-            <li>• TDS will be deducted at source as per Income Tax rules if interest exceeds ₹40,000 (₹50,000 for senior citizens) in a financial year.</li>
-            <li>• FDs up to ₹5 lakhs per depositor per bank are insured under DICGC.</li>
-            <li>• Premature withdrawal may attract penalty as per bank's policy.</li>
-          </ul>
+          </div>
         </div>
       </main>
 
