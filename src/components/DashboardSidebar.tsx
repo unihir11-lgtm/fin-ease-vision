@@ -46,8 +46,7 @@ const productItems = [
 ];
 
 const accountItems = [
-  { title: "KYC Status", url: "/dashboard/kyc", icon: FileText },
-  { title: "Profile", url: "/dashboard/profile", icon: User },
+  { title: "Profile & KYC", url: "/dashboard/profile", icon: User },
   { title: "Notifications", url: "/dashboard/notifications", icon: Bell },
   { title: "Reports", url: "/dashboard/reports", icon: Download },
   { title: "Settings", url: "/dashboard/settings", icon: Settings },
