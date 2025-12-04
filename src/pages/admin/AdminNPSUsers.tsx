@@ -11,20 +11,77 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Search, Download, Eye, Edit2, Trash2, Users, UserPlus, 
   TrendingUp, IndianRupee, PieChart, CheckCircle, Clock, XCircle,
-  FileText, AlertTriangle, MoreVertical, Filter, RefreshCw
+  FileText, AlertTriangle, MoreVertical, Filter, RefreshCw,
+  User, MapPin, CreditCard, Wallet, UserCheck, Building2, ScrollText
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from "recharts";
 
 const npsUsers = [
-  { id: 1, name: "Rahul Sharma", email: "rahul@email.com", mobile: "9876543210", status: "Active", pranCard: "1100345678901", tier: "Tier 1 & 2", riskProfile: "High", totalContribution: 580000, corpus: 685000, returns: 18.1, joinDate: "15 Jan 2020", kycStatus: "Verified", pfm: "HDFC Pension" },
-  { id: 2, name: "Priya Patel", email: "priya@email.com", mobile: "9876543211", status: "Active", pranCard: "1100345678902", tier: "Tier 1", riskProfile: "Medium", totalContribution: 320000, corpus: 368000, returns: 15.0, joinDate: "22 Mar 2021", kycStatus: "Verified", pfm: "ICICI Prudential" },
-  { id: 3, name: "Amit Kumar", email: "amit@email.com", mobile: "9876543212", status: "Pending KYC", pranCard: "1100345678903", tier: "Tier 1 & 2", riskProfile: "Low", totalContribution: 0, corpus: 0, returns: 0, joinDate: "01 Nov 2025", kycStatus: "Pending", pfm: "SBI Pension" },
-  { id: 4, name: "Sneha Reddy", email: "sneha@email.com", mobile: "9876543213", status: "Active", pranCard: "1100345678904", tier: "Tier 1", riskProfile: "High", totalContribution: 450000, corpus: 535500, returns: 19.0, joinDate: "10 Aug 2019", kycStatus: "Verified", pfm: "HDFC Pension" },
-  { id: 5, name: "Vikram Singh", email: "vikram@email.com", mobile: "9876543214", status: "Inactive", pranCard: "1100345678905", tier: "Tier 1 & 2", riskProfile: "Medium", totalContribution: 890000, corpus: 1023500, returns: 15.0, joinDate: "05 Feb 2018", kycStatus: "Verified", pfm: "UTI Retirement" },
-  { id: 6, name: "Neha Gupta", email: "neha@email.com", mobile: "9876543215", status: "Active", pranCard: "1100345678906", tier: "Tier 1", riskProfile: "Low", totalContribution: 280000, corpus: 308000, returns: 10.0, joinDate: "18 Jun 2022", kycStatus: "Verified", pfm: "Kotak Pension" },
-  { id: 7, name: "Arjun Nair", email: "arjun@email.com", mobile: "9876543216", status: "Pending KYC", pranCard: "1100345678907", tier: "Tier 1 & 2", riskProfile: "High", totalContribution: 0, corpus: 0, returns: 0, joinDate: "28 Oct 2025", kycStatus: "Under Review", pfm: "HDFC Pension" },
-  { id: 8, name: "Kavita Joshi", email: "kavita@email.com", mobile: "9876543217", status: "Active", pranCard: "1100345678908", tier: "Tier 1", riskProfile: "Medium", totalContribution: 520000, corpus: 598000, returns: 15.0, joinDate: "12 Apr 2020", kycStatus: "Verified", pfm: "ICICI Prudential" },
+  { 
+    id: 1, name: "Rahul Sharma", email: "rahul@email.com", mobile: "9876543210", status: "Active", pranCard: "1100345678901", tier: "Tier 1 & 2", riskProfile: "High", totalContribution: 580000, corpus: 685000, returns: 18.1, joinDate: "15 Jan 2020", kycStatus: "Verified", pfm: "HDFC Pension",
+    dob: "15 Mar 1985", gender: "Male", pan: "ABCDE1234F", aadhaar: "XXXX XXXX 4567",
+    address: "123, Green Park, Sector 12, Gurgaon, Haryana - 122001",
+    bankName: "HDFC Bank", accountNo: "XXXX XXXX 5678", ifsc: "HDFC0001234",
+    contributionFrequency: "Monthly", contributionAmount: 10000,
+    nomineeName: "Sunita Sharma", nomineeRelation: "Wife", nomineeDob: "22 Aug 1988"
+  },
+  { 
+    id: 2, name: "Priya Patel", email: "priya@email.com", mobile: "9876543211", status: "Active", pranCard: "1100345678902", tier: "Tier 1", riskProfile: "Medium", totalContribution: 320000, corpus: 368000, returns: 15.0, joinDate: "22 Mar 2021", kycStatus: "Verified", pfm: "ICICI Prudential",
+    dob: "08 Jul 1990", gender: "Female", pan: "PQRST5678G", aadhaar: "XXXX XXXX 7890",
+    address: "45, Rose Garden, Andheri West, Mumbai - 400058",
+    bankName: "ICICI Bank", accountNo: "XXXX XXXX 9012", ifsc: "ICIC0002345",
+    contributionFrequency: "Quarterly", contributionAmount: 25000,
+    nomineeName: "Ramesh Patel", nomineeRelation: "Father", nomineeDob: "10 Dec 1960"
+  },
+  { 
+    id: 3, name: "Amit Kumar", email: "amit@email.com", mobile: "9876543212", status: "Pending KYC", pranCard: "1100345678903", tier: "Tier 1 & 2", riskProfile: "Low", totalContribution: 0, corpus: 0, returns: 0, joinDate: "01 Nov 2025", kycStatus: "Pending", pfm: "SBI Pension",
+    dob: "20 Nov 1995", gender: "Male", pan: "LMNOP9012H", aadhaar: "XXXX XXXX 1234",
+    address: "78, Lajpat Nagar, New Delhi - 110024",
+    bankName: "SBI", accountNo: "XXXX XXXX 3456", ifsc: "SBIN0003456",
+    contributionFrequency: "Monthly", contributionAmount: 5000,
+    nomineeName: "Kavita Kumar", nomineeRelation: "Mother", nomineeDob: "05 Apr 1970"
+  },
+  { 
+    id: 4, name: "Sneha Reddy", email: "sneha@email.com", mobile: "9876543213", status: "Active", pranCard: "1100345678904", tier: "Tier 1", riskProfile: "High", totalContribution: 450000, corpus: 535500, returns: 19.0, joinDate: "10 Aug 2019", kycStatus: "Verified", pfm: "HDFC Pension",
+    dob: "12 Feb 1988", gender: "Female", pan: "UVWXY3456I", aadhaar: "XXXX XXXX 5678",
+    address: "234, Banjara Hills, Hyderabad - 500034",
+    bankName: "Axis Bank", accountNo: "XXXX XXXX 7890", ifsc: "UTIB0004567",
+    contributionFrequency: "Monthly", contributionAmount: 15000,
+    nomineeName: "Vijay Reddy", nomineeRelation: "Husband", nomineeDob: "18 Sep 1985"
+  },
+  { 
+    id: 5, name: "Vikram Singh", email: "vikram@email.com", mobile: "9876543214", status: "Inactive", pranCard: "1100345678905", tier: "Tier 1 & 2", riskProfile: "Medium", totalContribution: 890000, corpus: 1023500, returns: 15.0, joinDate: "05 Feb 2018", kycStatus: "Verified", pfm: "UTI Retirement",
+    dob: "30 Jun 1982", gender: "Male", pan: "ZABCD7890J", aadhaar: "XXXX XXXX 9012",
+    address: "567, Civil Lines, Jaipur - 302006",
+    bankName: "Kotak Mahindra", accountNo: "XXXX XXXX 1234", ifsc: "KKBK0005678",
+    contributionFrequency: "Yearly", contributionAmount: 200000,
+    nomineeName: "Meera Singh", nomineeRelation: "Wife", nomineeDob: "25 Jan 1985"
+  },
+  { 
+    id: 6, name: "Neha Gupta", email: "neha@email.com", mobile: "9876543215", status: "Active", pranCard: "1100345678906", tier: "Tier 1", riskProfile: "Low", totalContribution: 280000, corpus: 308000, returns: 10.0, joinDate: "18 Jun 2022", kycStatus: "Verified", pfm: "Kotak Pension",
+    dob: "14 Sep 1992", gender: "Female", pan: "EFGHI1234K", aadhaar: "XXXX XXXX 3456",
+    address: "890, Koramangala, Bangalore - 560034",
+    bankName: "Yes Bank", accountNo: "XXXX XXXX 5678", ifsc: "YESB0006789",
+    contributionFrequency: "Monthly", contributionAmount: 8000,
+    nomineeName: "Rajesh Gupta", nomineeRelation: "Brother", nomineeDob: "03 Mar 1989"
+  },
+  { 
+    id: 7, name: "Arjun Nair", email: "arjun@email.com", mobile: "9876543216", status: "Pending KYC", pranCard: "1100345678907", tier: "Tier 1 & 2", riskProfile: "High", totalContribution: 0, corpus: 0, returns: 0, joinDate: "28 Oct 2025", kycStatus: "Under Review", pfm: "HDFC Pension",
+    dob: "28 Dec 1993", gender: "Male", pan: "JKLMN5678L", aadhaar: "XXXX XXXX 7890",
+    address: "123, Marine Drive, Kochi - 682001",
+    bankName: "Federal Bank", accountNo: "XXXX XXXX 9012", ifsc: "FDRL0007890",
+    contributionFrequency: "Monthly", contributionAmount: 12000,
+    nomineeName: "Lakshmi Nair", nomineeRelation: "Mother", nomineeDob: "17 Jul 1965"
+  },
+  { 
+    id: 8, name: "Kavita Joshi", email: "kavita@email.com", mobile: "9876543217", status: "Active", pranCard: "1100345678908", tier: "Tier 1", riskProfile: "Medium", totalContribution: 520000, corpus: 598000, returns: 15.0, joinDate: "12 Apr 2020", kycStatus: "Verified", pfm: "ICICI Prudential",
+    dob: "06 May 1987", gender: "Female", pan: "OPQRS9012M", aadhaar: "XXXX XXXX 1234",
+    address: "456, Shivaji Nagar, Pune - 411005",
+    bankName: "Bank of Baroda", accountNo: "XXXX XXXX 3456", ifsc: "BARB0008901",
+    contributionFrequency: "Quarterly", contributionAmount: 30000,
+    nomineeName: "Anil Joshi", nomineeRelation: "Husband", nomineeDob: "29 Oct 1984"
+  },
 ];
 
 const AdminNPSUsers = () => {
@@ -421,69 +478,191 @@ const AdminNPSUsers = () => {
                               <Eye className="w-4 h-4 text-primary" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-lg">
+                          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
                             <DialogHeader>
-                              <DialogTitle>User Details - {user.name}</DialogTitle>
+                              <DialogTitle className="flex items-center gap-2">
+                                <ScrollText className="w-5 h-5 text-primary" />
+                                NPS Registration Summary
+                              </DialogTitle>
+                              <p className="text-sm text-muted-foreground">Application ID: NPS-{user.id.toString().padStart(6, '0')}</p>
                             </DialogHeader>
                             {selectedUser && (
-                              <div className="space-y-6">
-                                {/* User Info */}
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div>
-                                    <Label className="text-xs text-muted-foreground">Full Name</Label>
-                                    <p className="font-medium">{selectedUser.name}</p>
+                              <div className="space-y-4">
+                                {/* Section 1: Personal Details */}
+                                <div className="border rounded-xl overflow-hidden">
+                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
+                                    <User className="w-4 h-4 text-primary" />
+                                    <h3 className="font-semibold text-secondary text-sm">Personal Details</h3>
                                   </div>
-                                  <div>
-                                    <Label className="text-xs text-muted-foreground">PRAN Number</Label>
-                                    <p className="font-medium font-mono">{selectedUser.pranCard}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-xs text-muted-foreground">Email</Label>
-                                    <p className="font-medium text-sm">{selectedUser.email}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-xs text-muted-foreground">Mobile</Label>
-                                    <p className="font-medium">{selectedUser.mobile}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-xs text-muted-foreground">PFM</Label>
-                                    <p className="font-medium">{selectedUser.pfm}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-xs text-muted-foreground">Join Date</Label>
-                                    <p className="font-medium">{selectedUser.joinDate}</p>
+                                  <div className="p-4 grid grid-cols-2 gap-4">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Full Name</p>
+                                      <p className="font-medium text-sm">{selectedUser.name}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Date of Birth</p>
+                                      <p className="font-medium text-sm">{selectedUser.dob}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Gender</p>
+                                      <p className="font-medium text-sm">{selectedUser.gender}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Mobile Number</p>
+                                      <p className="font-medium text-sm">{selectedUser.mobile}</p>
+                                    </div>
+                                    <div className="col-span-2">
+                                      <p className="text-xs text-muted-foreground">Email Address</p>
+                                      <p className="font-medium text-sm">{selectedUser.email}</p>
+                                    </div>
                                   </div>
                                 </div>
 
-                                {/* Financial Summary */}
+                                {/* Section 2: Address Details */}
+                                <div className="border rounded-xl overflow-hidden">
+                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
+                                    <MapPin className="w-4 h-4 text-primary" />
+                                    <h3 className="font-semibold text-secondary text-sm">Address Details</h3>
+                                  </div>
+                                  <div className="p-4">
+                                    <p className="text-xs text-muted-foreground">Residential Address</p>
+                                    <p className="font-medium text-sm">{selectedUser.address}</p>
+                                  </div>
+                                </div>
+
+                                {/* Section 3: KYC Documents */}
+                                <div className="border rounded-xl overflow-hidden">
+                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
+                                    <CreditCard className="w-4 h-4 text-primary" />
+                                    <h3 className="font-semibold text-secondary text-sm">KYC Documents</h3>
+                                    {getKYCBadge(selectedUser.kycStatus)}
+                                  </div>
+                                  <div className="p-4 grid grid-cols-2 gap-4">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">PAN Number</p>
+                                      <p className="font-medium text-sm font-mono">{selectedUser.pan}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Aadhaar Number</p>
+                                      <p className="font-medium text-sm font-mono">{selectedUser.aadhaar}</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Section 4: Bank Details */}
+                                <div className="border rounded-xl overflow-hidden">
+                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
+                                    <Building2 className="w-4 h-4 text-primary" />
+                                    <h3 className="font-semibold text-secondary text-sm">Bank Details</h3>
+                                  </div>
+                                  <div className="p-4 grid grid-cols-3 gap-4">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Bank Name</p>
+                                      <p className="font-medium text-sm">{selectedUser.bankName}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Account Number</p>
+                                      <p className="font-medium text-sm font-mono">{selectedUser.accountNo}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">IFSC Code</p>
+                                      <p className="font-medium text-sm font-mono">{selectedUser.ifsc}</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Section 5: Investment Preferences */}
+                                <div className="border rounded-xl overflow-hidden">
+                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
+                                    <Wallet className="w-4 h-4 text-primary" />
+                                    <h3 className="font-semibold text-secondary text-sm">Investment Preferences</h3>
+                                  </div>
+                                  <div className="p-4 grid grid-cols-2 gap-4">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">PRAN Number</p>
+                                      <p className="font-medium text-sm font-mono">{selectedUser.pranCard}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Account Tier</p>
+                                      <Badge variant="outline" className="text-xs">{selectedUser.tier}</Badge>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Risk Profile</p>
+                                      {getRiskBadge(selectedUser.riskProfile)}
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">PFM (Pension Fund Manager)</p>
+                                      <p className="font-medium text-sm">{selectedUser.pfm}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Contribution Frequency</p>
+                                      <p className="font-medium text-sm">{selectedUser.contributionFrequency}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Contribution Amount</p>
+                                      <p className="font-medium text-sm">₹{selectedUser.contributionAmount?.toLocaleString()}</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Section 6: Nominee Details */}
+                                <div className="border rounded-xl overflow-hidden">
+                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
+                                    <UserCheck className="w-4 h-4 text-primary" />
+                                    <h3 className="font-semibold text-secondary text-sm">Nominee Details</h3>
+                                  </div>
+                                  <div className="p-4 grid grid-cols-3 gap-4">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Nominee Name</p>
+                                      <p className="font-medium text-sm">{selectedUser.nomineeName}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Relationship</p>
+                                      <p className="font-medium text-sm">{selectedUser.nomineeRelation}</p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Nominee DOB</p>
+                                      <p className="font-medium text-sm">{selectedUser.nomineeDob}</p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Account Status Summary */}
                                 <div className="p-4 bg-muted/30 rounded-xl">
-                                  <p className="font-medium text-secondary mb-3">Financial Summary</p>
-                                  <div className="grid grid-cols-3 gap-4">
+                                  <div className="flex items-center justify-between mb-3">
+                                    <p className="font-semibold text-secondary">Account Summary</p>
+                                    {getStatusBadge(selectedUser.status)}
+                                  </div>
+                                  <div className="grid grid-cols-4 gap-4 text-center">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground">Join Date</p>
+                                      <p className="font-bold text-sm">{selectedUser.joinDate}</p>
+                                    </div>
                                     <div>
                                       <p className="text-xs text-muted-foreground">Total Corpus</p>
-                                      <p className="text-xl font-bold text-primary">₹{selectedUser.corpus.toLocaleString()}</p>
+                                      <p className="font-bold text-sm text-primary">₹{selectedUser.corpus.toLocaleString()}</p>
                                     </div>
                                     <div>
                                       <p className="text-xs text-muted-foreground">Contributions</p>
-                                      <p className="text-xl font-bold text-secondary">₹{selectedUser.totalContribution.toLocaleString()}</p>
+                                      <p className="font-bold text-sm">₹{selectedUser.totalContribution.toLocaleString()}</p>
                                     </div>
                                     <div>
                                       <p className="text-xs text-muted-foreground">Returns</p>
-                                      <p className="text-xl font-bold text-green-600">+{selectedUser.returns}%</p>
+                                      <p className="font-bold text-sm text-green-600">+{selectedUser.returns}%</p>
                                     </div>
                                   </div>
                                 </div>
 
                                 {/* KYC Actions */}
                                 {selectedUser.kycStatus !== "Verified" && (
-                                  <div className="flex gap-3">
+                                  <div className="flex gap-3 pt-2">
                                     <Button onClick={() => handleApproveKYC(selectedUser.id)} className="flex-1 bg-green-600 hover:bg-green-700">
                                       <CheckCircle className="w-4 h-4 mr-2" />
-                                      Approve KYC
+                                      Approve Application
                                     </Button>
                                     <Button variant="destructive" onClick={() => handleRejectKYC(selectedUser.id)} className="flex-1">
                                       <XCircle className="w-4 h-4 mr-2" />
-                                      Reject KYC
+                                      Reject Application
                                     </Button>
                                   </div>
                                 )}
