@@ -90,28 +90,16 @@ const AdminNPSUsers = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedUser, setSelectedUser] = useState<typeof npsUsers[0] | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
   const [viewMode, setViewMode] = useState<"list" | "detail">("list");
-
-  const steps = [
-    { id: 0, title: "Personal Details", icon: User },
-    { id: 1, title: "Address", icon: MapPin },
-    { id: 2, title: "KYC Documents", icon: CreditCard },
-    { id: 3, title: "Bank Details", icon: Building2 },
-    { id: 4, title: "Investment", icon: Wallet },
-    { id: 5, title: "Nominee", icon: UserCheck },
-  ];
 
   const handleViewUser = (user: typeof npsUsers[0]) => {
     setSelectedUser(user);
-    setCurrentStep(0);
     setViewMode("detail");
   };
 
   const handleBackToList = () => {
     setViewMode("list");
     setSelectedUser(null);
-    setCurrentStep(0);
   };
 
   const filteredUsers = npsUsers.filter((user) => {
@@ -209,296 +197,302 @@ const AdminNPSUsers = () => {
     toast({ title: "KYC Rejected", description: "User KYC has been rejected." });
   };
 
-  // Stepper Content Renderer
-  const renderStepContent = () => {
-    if (!selectedUser) return null;
-
-    switch (currentStep) {
-      case 0:
-        return (
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <User className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Personal Details</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-6">
-              <div>
-                <Label className="text-xs text-muted-foreground">Full Name</Label>
-                <p className="font-medium mt-1">{selectedUser.name}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Date of Birth</Label>
-                <p className="font-medium mt-1">{selectedUser.dob}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Gender</Label>
-                <p className="font-medium mt-1">{selectedUser.gender}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Mobile Number</Label>
-                <p className="font-medium mt-1">{selectedUser.mobile}</p>
-              </div>
-              <div className="col-span-2">
-                <Label className="text-xs text-muted-foreground">Email Address</Label>
-                <p className="font-medium mt-1">{selectedUser.email}</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      case 1:
-        return (
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Address Details</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div>
-                <Label className="text-xs text-muted-foreground">Residential Address</Label>
-                <p className="font-medium mt-1">{selectedUser.address}</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      case 2:
-        return (
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">KYC Documents</CardTitle>
-                <div className="ml-auto">{getKYCBadge(selectedUser.kycStatus)}</div>
-              </div>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-6">
-              <div>
-                <Label className="text-xs text-muted-foreground">PAN Number</Label>
-                <p className="font-medium font-mono mt-1">{selectedUser.pan}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Aadhaar Number</Label>
-                <p className="font-medium font-mono mt-1">{selectedUser.aadhaar}</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      case 3:
-        return (
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Bank Details</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="grid grid-cols-3 gap-6">
-              <div>
-                <Label className="text-xs text-muted-foreground">Bank Name</Label>
-                <p className="font-medium mt-1">{selectedUser.bankName}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Account Number</Label>
-                <p className="font-medium font-mono mt-1">{selectedUser.accountNo}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">IFSC Code</Label>
-                <p className="font-medium font-mono mt-1">{selectedUser.ifsc}</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      case 4:
-        return (
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <Wallet className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Investment Preferences</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-6">
-              <div>
-                <Label className="text-xs text-muted-foreground">PRAN Number</Label>
-                <p className="font-medium font-mono mt-1">{selectedUser.pranCard}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Account Tier</Label>
-                <div className="mt-1"><Badge variant="outline">{selectedUser.tier}</Badge></div>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Risk Profile</Label>
-                <div className="mt-1">{getRiskBadge(selectedUser.riskProfile)}</div>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">PFM (Pension Fund Manager)</Label>
-                <p className="font-medium mt-1">{selectedUser.pfm}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Contribution Frequency</Label>
-                <p className="font-medium mt-1">{selectedUser.contributionFrequency}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Contribution Amount</Label>
-                <p className="font-medium mt-1">₹{selectedUser.contributionAmount?.toLocaleString()}</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      case 5:
-        return (
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <UserCheck className="w-5 h-5 text-primary" />
-                <CardTitle className="text-lg">Nominee Details</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="grid grid-cols-3 gap-6">
-              <div>
-                <Label className="text-xs text-muted-foreground">Nominee Name</Label>
-                <p className="font-medium mt-1">{selectedUser.nomineeName}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Relationship</Label>
-                <p className="font-medium mt-1">{selectedUser.nomineeRelation}</p>
-              </div>
-              <div>
-                <Label className="text-xs text-muted-foreground">Nominee DOB</Label>
-                <p className="font-medium mt-1">{selectedUser.nomineeDob}</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      default:
-        return null;
-    }
-  };
-
-  // Detail View with Stepper
+  // Full Details View - Single Page
   if (viewMode === "detail" && selectedUser) {
     return (
       <div className="space-y-6">
         {/* Back Button & Header */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between">
           <Button variant="ghost" size="sm" onClick={handleBackToList} className="gap-2">
             <ArrowLeft className="w-4 h-4" />
             Back to List
           </Button>
+          <div className="flex gap-3">
+            <Button variant="outline" className="gap-2">
+              <Download className="w-4 h-4" /> Export
+            </Button>
+            <Button variant="outline" className="gap-2">
+              <Edit2 className="w-4 h-4" /> Edit
+            </Button>
+          </div>
         </div>
 
-        {/* User Info Header */}
-        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+        {/* User Info Header Card */}
+        <Card className="bg-gradient-to-r from-primary/5 via-primary/10 to-accent/5 border-primary/20">
           <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-                  <User className="w-8 h-8 text-primary" />
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center border-4 border-white shadow-lg">
+                  <User className="w-10 h-10 text-primary" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-secondary">{selectedUser.name}</h1>
+                  <h1 className="text-2xl font-bold text-secondary font-display">{selectedUser.name}</h1>
                   <p className="text-muted-foreground">Application ID: NPS-{selectedUser.id.toString().padStart(6, '0')}</p>
-                  <div className="flex items-center gap-2 mt-2">
+                  <div className="flex flex-wrap items-center gap-2 mt-2">
                     {getStatusBadge(selectedUser.status)}
                     {getKYCBadge(selectedUser.kycStatus)}
+                    {getRiskBadge(selectedUser.riskProfile)}
                   </div>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total Corpus</p>
-                <p className="text-2xl font-bold text-primary">₹{selectedUser.corpus.toLocaleString()}</p>
-                <p className="text-sm text-green-600 font-medium">+{selectedUser.returns}% Returns</p>
+              
+              {/* Quick Stats */}
+              <div className="grid grid-cols-3 gap-6 lg:gap-8">
+                <div className="text-center lg:text-right">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Total Contributed</p>
+                  <p className="text-xl font-bold text-secondary">₹{selectedUser.totalContribution.toLocaleString()}</p>
+                </div>
+                <div className="text-center lg:text-right">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Current Corpus</p>
+                  <p className="text-xl font-bold text-primary">₹{selectedUser.corpus.toLocaleString()}</p>
+                </div>
+                <div className="text-center lg:text-right">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Returns</p>
+                  <p className="text-xl font-bold text-green-600">+{selectedUser.returns}%</p>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Stepper Navigation */}
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              {steps.map((step, index) => {
-                const StepIcon = step.icon;
-                const isActive = currentStep === index;
-                const isCompleted = currentStep > index;
-                
-                return (
-                  <div key={step.id} className="flex items-center flex-1">
-                    <button
-                      onClick={() => setCurrentStep(index)}
-                      className={`flex flex-col items-center gap-2 p-3 rounded-xl transition-all w-full ${
-                        isActive 
-                          ? "bg-primary/10 text-primary" 
-                          : isCompleted 
-                            ? "text-green-600" 
-                            : "text-muted-foreground hover:bg-muted/50"
-                      }`}
-                    >
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                        isActive 
-                          ? "border-primary bg-primary text-white" 
-                          : isCompleted 
-                            ? "border-green-500 bg-green-500 text-white" 
-                            : "border-muted-foreground/30"
-                      }`}>
-                        {isCompleted ? <CheckCircle className="w-5 h-5" /> : <StepIcon className="w-5 h-5" />}
-                      </div>
-                      <span className={`text-xs font-medium ${isActive ? "text-primary" : ""}`}>{step.title}</span>
-                    </button>
-                    {index < steps.length - 1 && (
-                      <ChevronRight className={`w-5 h-5 mx-1 flex-shrink-0 ${isCompleted ? "text-green-500" : "text-muted-foreground/30"}`} />
-                    )}
+        {/* All Details Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Personal Details */}
+          <Card>
+            <CardHeader className="pb-4 border-b bg-muted/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <User className="w-5 h-5 text-primary" />
+                </div>
+                <CardTitle className="text-lg">Personal Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Full Name</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.name}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Date of Birth</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.dob}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Gender</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.gender}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Mobile Number</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.mobile}</p>
+                </div>
+                <div className="col-span-2">
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Email Address</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.email}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Address Details */}
+          <Card>
+            <CardHeader className="pb-4 border-b bg-muted/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <MapPin className="w-5 h-5 text-primary" />
+                </div>
+                <CardTitle className="text-lg">Address Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <div>
+                <Label className="text-xs text-muted-foreground uppercase tracking-wide">Residential Address</Label>
+                <p className="font-medium text-secondary mt-1 leading-relaxed">{selectedUser.address}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* KYC Documents */}
+          <Card>
+            <CardHeader className="pb-4 border-b bg-muted/30">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <CreditCard className="w-5 h-5 text-primary" />
                   </div>
-                );
-              })}
+                  <CardTitle className="text-lg">KYC Documents</CardTitle>
+                </div>
+                {getKYCBadge(selectedUser.kycStatus)}
+              </div>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">PAN Number</Label>
+                  <p className="font-medium font-mono text-secondary mt-1 bg-muted/50 px-3 py-2 rounded-lg">{selectedUser.pan}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Aadhaar Number</Label>
+                  <p className="font-medium font-mono text-secondary mt-1 bg-muted/50 px-3 py-2 rounded-lg">{selectedUser.aadhaar}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Bank Details */}
+          <Card>
+            <CardHeader className="pb-4 border-b bg-muted/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Building2 className="w-5 h-5 text-primary" />
+                </div>
+                <CardTitle className="text-lg">Bank Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <div className="grid grid-cols-3 gap-y-4 gap-x-4">
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Bank Name</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.bankName}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Account Number</Label>
+                  <p className="font-medium font-mono text-secondary mt-1">{selectedUser.accountNo}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">IFSC Code</Label>
+                  <p className="font-medium font-mono text-secondary mt-1">{selectedUser.ifsc}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Investment Preferences */}
+          <Card>
+            <CardHeader className="pb-4 border-b bg-muted/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Wallet className="w-5 h-5 text-primary" />
+                </div>
+                <CardTitle className="text-lg">Investment Preferences</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">PRAN Number</Label>
+                  <p className="font-medium font-mono text-secondary mt-1 bg-primary/5 px-3 py-2 rounded-lg border border-primary/20">{selectedUser.pranCard}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Account Tier</Label>
+                  <div className="mt-1"><Badge variant="outline" className="bg-background">{selectedUser.tier}</Badge></div>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Risk Profile</Label>
+                  <div className="mt-1">{getRiskBadge(selectedUser.riskProfile)}</div>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">PFM (Pension Fund Manager)</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.pfm}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Contribution Frequency</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.contributionFrequency}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Contribution Amount</Label>
+                  <p className="font-medium text-secondary mt-1">₹{selectedUser.contributionAmount?.toLocaleString()}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Nominee Details */}
+          <Card>
+            <CardHeader className="pb-4 border-b bg-muted/30">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <UserCheck className="w-5 h-5 text-primary" />
+                </div>
+                <CardTitle className="text-lg">Nominee Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-5">
+              <div className="grid grid-cols-3 gap-y-4 gap-x-4">
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Nominee Name</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.nomineeName}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Relationship</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.nomineeRelation}</p>
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">Nominee DOB</Label>
+                  <p className="font-medium text-secondary mt-1">{selectedUser.nomineeDob}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Account Summary Card */}
+        <Card className="border-primary/20">
+          <CardHeader className="pb-4 border-b bg-gradient-to-r from-primary/5 to-transparent">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <ScrollText className="w-5 h-5 text-primary" />
+              </div>
+              <CardTitle className="text-lg">Account Summary</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="p-4 rounded-xl bg-muted/50 text-center">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Member Since</p>
+                <p className="font-bold text-lg text-secondary mt-1">{selectedUser.joinDate}</p>
+              </div>
+              <div className="p-4 rounded-xl bg-primary/5 text-center border border-primary/10">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Total Contributed</p>
+                <p className="font-bold text-lg text-secondary mt-1">₹{selectedUser.totalContribution.toLocaleString()}</p>
+              </div>
+              <div className="p-4 rounded-xl bg-green-50 text-center border border-green-100">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Current Corpus</p>
+                <p className="font-bold text-lg text-green-600 mt-1">₹{selectedUser.corpus.toLocaleString()}</p>
+              </div>
+              <div className="p-4 rounded-xl bg-accent/5 text-center border border-accent/10">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Gains</p>
+                <p className="font-bold text-lg text-accent mt-1">₹{(selectedUser.corpus - selectedUser.totalContribution).toLocaleString()}</p>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Step Content */}
-        <div className="min-h-[300px]">
-          {renderStepContent()}
-        </div>
-
-        {/* Navigation & Actions */}
-        <div className="flex items-center justify-between">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
-            disabled={currentStep === 0}
-            className="gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Previous
-          </Button>
-
-          <div className="flex gap-3">
-            {selectedUser.kycStatus !== "Verified" && (
-              <>
-                <Button onClick={() => handleApproveKYC(selectedUser.id)} className="bg-green-600 hover:bg-green-700 gap-2">
-                  <CheckCircle className="w-4 h-4" />
-                  Approve Application
-                </Button>
-                <Button variant="destructive" onClick={() => handleRejectKYC(selectedUser.id)} className="gap-2">
-                  <XCircle className="w-4 h-4" />
-                  Reject
-                </Button>
-              </>
-            )}
-          </div>
-
-          <Button
-            onClick={() => setCurrentStep(prev => Math.min(steps.length - 1, prev + 1))}
-            disabled={currentStep === steps.length - 1}
-            className="gap-2"
-          >
-            Next
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
+        {/* Action Buttons */}
+        {selectedUser.kycStatus !== "Verified" && (
+          <Card className="border-amber-200 bg-amber-50/50">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="w-6 h-6 text-amber-600" />
+                  <div>
+                    <p className="font-semibold text-secondary">KYC Verification Required</p>
+                    <p className="text-sm text-muted-foreground">Review the documents and take action on this application</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Button onClick={() => handleApproveKYC(selectedUser.id)} className="bg-green-600 hover:bg-green-700 gap-2">
+                    <CheckCircle className="w-4 h-4" />
+                    Approve Application
+                  </Button>
+                  <Button variant="destructive" onClick={() => handleRejectKYC(selectedUser.id)} className="gap-2">
+                    <XCircle className="w-4 h-4" />
+                    Reject Application
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     );
   }
