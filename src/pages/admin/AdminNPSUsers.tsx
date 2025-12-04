@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
@@ -12,7 +11,8 @@ import {
   Search, Download, Eye, Edit2, Trash2, Users, UserPlus, 
   TrendingUp, IndianRupee, PieChart, CheckCircle, Clock, XCircle,
   FileText, AlertTriangle, MoreVertical, Filter, RefreshCw,
-  User, MapPin, CreditCard, Wallet, UserCheck, Building2, ScrollText
+  User, MapPin, CreditCard, Wallet, UserCheck, Building2, ScrollText,
+  ArrowLeft, ArrowRight, ChevronRight
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from "recharts";
@@ -90,6 +90,29 @@ const AdminNPSUsers = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedUser, setSelectedUser] = useState<typeof npsUsers[0] | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [viewMode, setViewMode] = useState<"list" | "detail">("list");
+
+  const steps = [
+    { id: 0, title: "Personal Details", icon: User },
+    { id: 1, title: "Address", icon: MapPin },
+    { id: 2, title: "KYC Documents", icon: CreditCard },
+    { id: 3, title: "Bank Details", icon: Building2 },
+    { id: 4, title: "Investment", icon: Wallet },
+    { id: 5, title: "Nominee", icon: UserCheck },
+  ];
+
+  const handleViewUser = (user: typeof npsUsers[0]) => {
+    setSelectedUser(user);
+    setCurrentStep(0);
+    setViewMode("detail");
+  };
+
+  const handleBackToList = () => {
+    setViewMode("list");
+    setSelectedUser(null);
+    setCurrentStep(0);
+  };
 
   const filteredUsers = npsUsers.filter((user) => {
     const matchesSearch =
@@ -186,6 +209,301 @@ const AdminNPSUsers = () => {
     toast({ title: "KYC Rejected", description: "User KYC has been rejected." });
   };
 
+  // Stepper Content Renderer
+  const renderStepContent = () => {
+    if (!selectedUser) return null;
+
+    switch (currentStep) {
+      case 0:
+        return (
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <User className="w-5 h-5 text-primary" />
+                <CardTitle className="text-lg">Personal Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-6">
+              <div>
+                <Label className="text-xs text-muted-foreground">Full Name</Label>
+                <p className="font-medium mt-1">{selectedUser.name}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Date of Birth</Label>
+                <p className="font-medium mt-1">{selectedUser.dob}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Gender</Label>
+                <p className="font-medium mt-1">{selectedUser.gender}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Mobile Number</Label>
+                <p className="font-medium mt-1">{selectedUser.mobile}</p>
+              </div>
+              <div className="col-span-2">
+                <Label className="text-xs text-muted-foreground">Email Address</Label>
+                <p className="font-medium mt-1">{selectedUser.email}</p>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 1:
+        return (
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-primary" />
+                <CardTitle className="text-lg">Address Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div>
+                <Label className="text-xs text-muted-foreground">Residential Address</Label>
+                <p className="font-medium mt-1">{selectedUser.address}</p>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 2:
+        return (
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-primary" />
+                <CardTitle className="text-lg">KYC Documents</CardTitle>
+                <div className="ml-auto">{getKYCBadge(selectedUser.kycStatus)}</div>
+              </div>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-6">
+              <div>
+                <Label className="text-xs text-muted-foreground">PAN Number</Label>
+                <p className="font-medium font-mono mt-1">{selectedUser.pan}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Aadhaar Number</Label>
+                <p className="font-medium font-mono mt-1">{selectedUser.aadhaar}</p>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 3:
+        return (
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-primary" />
+                <CardTitle className="text-lg">Bank Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="grid grid-cols-3 gap-6">
+              <div>
+                <Label className="text-xs text-muted-foreground">Bank Name</Label>
+                <p className="font-medium mt-1">{selectedUser.bankName}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Account Number</Label>
+                <p className="font-medium font-mono mt-1">{selectedUser.accountNo}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">IFSC Code</Label>
+                <p className="font-medium font-mono mt-1">{selectedUser.ifsc}</p>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 4:
+        return (
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <Wallet className="w-5 h-5 text-primary" />
+                <CardTitle className="text-lg">Investment Preferences</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-6">
+              <div>
+                <Label className="text-xs text-muted-foreground">PRAN Number</Label>
+                <p className="font-medium font-mono mt-1">{selectedUser.pranCard}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Account Tier</Label>
+                <div className="mt-1"><Badge variant="outline">{selectedUser.tier}</Badge></div>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Risk Profile</Label>
+                <div className="mt-1">{getRiskBadge(selectedUser.riskProfile)}</div>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">PFM (Pension Fund Manager)</Label>
+                <p className="font-medium mt-1">{selectedUser.pfm}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Contribution Frequency</Label>
+                <p className="font-medium mt-1">{selectedUser.contributionFrequency}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Contribution Amount</Label>
+                <p className="font-medium mt-1">₹{selectedUser.contributionAmount?.toLocaleString()}</p>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 5:
+        return (
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-2">
+                <UserCheck className="w-5 h-5 text-primary" />
+                <CardTitle className="text-lg">Nominee Details</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="grid grid-cols-3 gap-6">
+              <div>
+                <Label className="text-xs text-muted-foreground">Nominee Name</Label>
+                <p className="font-medium mt-1">{selectedUser.nomineeName}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Relationship</Label>
+                <p className="font-medium mt-1">{selectedUser.nomineeRelation}</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Nominee DOB</Label>
+                <p className="font-medium mt-1">{selectedUser.nomineeDob}</p>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      default:
+        return null;
+    }
+  };
+
+  // Detail View with Stepper
+  if (viewMode === "detail" && selectedUser) {
+    return (
+      <div className="space-y-6">
+        {/* Back Button & Header */}
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={handleBackToList} className="gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Back to List
+          </Button>
+        </div>
+
+        {/* User Info Header */}
+        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
+                  <User className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-secondary">{selectedUser.name}</h1>
+                  <p className="text-muted-foreground">Application ID: NPS-{selectedUser.id.toString().padStart(6, '0')}</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    {getStatusBadge(selectedUser.status)}
+                    {getKYCBadge(selectedUser.kycStatus)}
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-muted-foreground">Total Corpus</p>
+                <p className="text-2xl font-bold text-primary">₹{selectedUser.corpus.toLocaleString()}</p>
+                <p className="text-sm text-green-600 font-medium">+{selectedUser.returns}% Returns</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Stepper Navigation */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              {steps.map((step, index) => {
+                const StepIcon = step.icon;
+                const isActive = currentStep === index;
+                const isCompleted = currentStep > index;
+                
+                return (
+                  <div key={step.id} className="flex items-center flex-1">
+                    <button
+                      onClick={() => setCurrentStep(index)}
+                      className={`flex flex-col items-center gap-2 p-3 rounded-xl transition-all w-full ${
+                        isActive 
+                          ? "bg-primary/10 text-primary" 
+                          : isCompleted 
+                            ? "text-green-600" 
+                            : "text-muted-foreground hover:bg-muted/50"
+                      }`}
+                    >
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
+                        isActive 
+                          ? "border-primary bg-primary text-white" 
+                          : isCompleted 
+                            ? "border-green-500 bg-green-500 text-white" 
+                            : "border-muted-foreground/30"
+                      }`}>
+                        {isCompleted ? <CheckCircle className="w-5 h-5" /> : <StepIcon className="w-5 h-5" />}
+                      </div>
+                      <span className={`text-xs font-medium ${isActive ? "text-primary" : ""}`}>{step.title}</span>
+                    </button>
+                    {index < steps.length - 1 && (
+                      <ChevronRight className={`w-5 h-5 mx-1 flex-shrink-0 ${isCompleted ? "text-green-500" : "text-muted-foreground/30"}`} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Step Content */}
+        <div className="min-h-[300px]">
+          {renderStepContent()}
+        </div>
+
+        {/* Navigation & Actions */}
+        <div className="flex items-center justify-between">
+          <Button
+            variant="outline"
+            onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
+            disabled={currentStep === 0}
+            className="gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Previous
+          </Button>
+
+          <div className="flex gap-3">
+            {selectedUser.kycStatus !== "Verified" && (
+              <>
+                <Button onClick={() => handleApproveKYC(selectedUser.id)} className="bg-green-600 hover:bg-green-700 gap-2">
+                  <CheckCircle className="w-4 h-4" />
+                  Approve Application
+                </Button>
+                <Button variant="destructive" onClick={() => handleRejectKYC(selectedUser.id)} className="gap-2">
+                  <XCircle className="w-4 h-4" />
+                  Reject
+                </Button>
+              </>
+            )}
+          </div>
+
+          <Button
+            onClick={() => setCurrentStep(prev => Math.min(steps.length - 1, prev + 1))}
+            disabled={currentStep === steps.length - 1}
+            className="gap-2"
+          >
+            Next
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // List View
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -472,204 +790,9 @@ const AdminNPSUsers = () => {
                     <td className="p-4">{getStatusBadge(user.status)}</td>
                     <td className="p-4">
                       <div className="flex items-center justify-center gap-1">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setSelectedUser(user)}>
-                              <Eye className="w-4 h-4 text-primary" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-                            <DialogHeader>
-                              <DialogTitle className="flex items-center gap-2">
-                                <ScrollText className="w-5 h-5 text-primary" />
-                                NPS Registration Summary
-                              </DialogTitle>
-                              <p className="text-sm text-muted-foreground">Application ID: NPS-{user.id.toString().padStart(6, '0')}</p>
-                            </DialogHeader>
-                            {selectedUser && (
-                              <div className="space-y-4">
-                                {/* Section 1: Personal Details */}
-                                <div className="border rounded-xl overflow-hidden">
-                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
-                                    <User className="w-4 h-4 text-primary" />
-                                    <h3 className="font-semibold text-secondary text-sm">Personal Details</h3>
-                                  </div>
-                                  <div className="p-4 grid grid-cols-2 gap-4">
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Full Name</p>
-                                      <p className="font-medium text-sm">{selectedUser.name}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Date of Birth</p>
-                                      <p className="font-medium text-sm">{selectedUser.dob}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Gender</p>
-                                      <p className="font-medium text-sm">{selectedUser.gender}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Mobile Number</p>
-                                      <p className="font-medium text-sm">{selectedUser.mobile}</p>
-                                    </div>
-                                    <div className="col-span-2">
-                                      <p className="text-xs text-muted-foreground">Email Address</p>
-                                      <p className="font-medium text-sm">{selectedUser.email}</p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Section 2: Address Details */}
-                                <div className="border rounded-xl overflow-hidden">
-                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
-                                    <MapPin className="w-4 h-4 text-primary" />
-                                    <h3 className="font-semibold text-secondary text-sm">Address Details</h3>
-                                  </div>
-                                  <div className="p-4">
-                                    <p className="text-xs text-muted-foreground">Residential Address</p>
-                                    <p className="font-medium text-sm">{selectedUser.address}</p>
-                                  </div>
-                                </div>
-
-                                {/* Section 3: KYC Documents */}
-                                <div className="border rounded-xl overflow-hidden">
-                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
-                                    <CreditCard className="w-4 h-4 text-primary" />
-                                    <h3 className="font-semibold text-secondary text-sm">KYC Documents</h3>
-                                    {getKYCBadge(selectedUser.kycStatus)}
-                                  </div>
-                                  <div className="p-4 grid grid-cols-2 gap-4">
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">PAN Number</p>
-                                      <p className="font-medium text-sm font-mono">{selectedUser.pan}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Aadhaar Number</p>
-                                      <p className="font-medium text-sm font-mono">{selectedUser.aadhaar}</p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Section 4: Bank Details */}
-                                <div className="border rounded-xl overflow-hidden">
-                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
-                                    <Building2 className="w-4 h-4 text-primary" />
-                                    <h3 className="font-semibold text-secondary text-sm">Bank Details</h3>
-                                  </div>
-                                  <div className="p-4 grid grid-cols-3 gap-4">
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Bank Name</p>
-                                      <p className="font-medium text-sm">{selectedUser.bankName}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Account Number</p>
-                                      <p className="font-medium text-sm font-mono">{selectedUser.accountNo}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">IFSC Code</p>
-                                      <p className="font-medium text-sm font-mono">{selectedUser.ifsc}</p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Section 5: Investment Preferences */}
-                                <div className="border rounded-xl overflow-hidden">
-                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
-                                    <Wallet className="w-4 h-4 text-primary" />
-                                    <h3 className="font-semibold text-secondary text-sm">Investment Preferences</h3>
-                                  </div>
-                                  <div className="p-4 grid grid-cols-2 gap-4">
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">PRAN Number</p>
-                                      <p className="font-medium text-sm font-mono">{selectedUser.pranCard}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Account Tier</p>
-                                      <Badge variant="outline" className="text-xs">{selectedUser.tier}</Badge>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Risk Profile</p>
-                                      {getRiskBadge(selectedUser.riskProfile)}
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">PFM (Pension Fund Manager)</p>
-                                      <p className="font-medium text-sm">{selectedUser.pfm}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Contribution Frequency</p>
-                                      <p className="font-medium text-sm">{selectedUser.contributionFrequency}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Contribution Amount</p>
-                                      <p className="font-medium text-sm">₹{selectedUser.contributionAmount?.toLocaleString()}</p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Section 6: Nominee Details */}
-                                <div className="border rounded-xl overflow-hidden">
-                                  <div className="flex items-center gap-2 p-3 bg-primary/5 border-b">
-                                    <UserCheck className="w-4 h-4 text-primary" />
-                                    <h3 className="font-semibold text-secondary text-sm">Nominee Details</h3>
-                                  </div>
-                                  <div className="p-4 grid grid-cols-3 gap-4">
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Nominee Name</p>
-                                      <p className="font-medium text-sm">{selectedUser.nomineeName}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Relationship</p>
-                                      <p className="font-medium text-sm">{selectedUser.nomineeRelation}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Nominee DOB</p>
-                                      <p className="font-medium text-sm">{selectedUser.nomineeDob}</p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Account Status Summary */}
-                                <div className="p-4 bg-muted/30 rounded-xl">
-                                  <div className="flex items-center justify-between mb-3">
-                                    <p className="font-semibold text-secondary">Account Summary</p>
-                                    {getStatusBadge(selectedUser.status)}
-                                  </div>
-                                  <div className="grid grid-cols-4 gap-4 text-center">
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Join Date</p>
-                                      <p className="font-bold text-sm">{selectedUser.joinDate}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Total Corpus</p>
-                                      <p className="font-bold text-sm text-primary">₹{selectedUser.corpus.toLocaleString()}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Contributions</p>
-                                      <p className="font-bold text-sm">₹{selectedUser.totalContribution.toLocaleString()}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-muted-foreground">Returns</p>
-                                      <p className="font-bold text-sm text-green-600">+{selectedUser.returns}%</p>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* KYC Actions */}
-                                {selectedUser.kycStatus !== "Verified" && (
-                                  <div className="flex gap-3 pt-2">
-                                    <Button onClick={() => handleApproveKYC(selectedUser.id)} className="flex-1 bg-green-600 hover:bg-green-700">
-                                      <CheckCircle className="w-4 h-4 mr-2" />
-                                      Approve Application
-                                    </Button>
-                                    <Button variant="destructive" onClick={() => handleRejectKYC(selectedUser.id)} className="flex-1">
-                                      <XCircle className="w-4 h-4 mr-2" />
-                                      Reject Application
-                                    </Button>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </DialogContent>
-                        </Dialog>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewUser(user)}>
+                          <Eye className="w-4 h-4 text-primary" />
+                        </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setSelectedUser(user); setShowEditDialog(true); }}>
                           <Edit2 className="w-4 h-4 text-blue-600" />
                         </Button>
