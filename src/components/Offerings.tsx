@@ -56,20 +56,22 @@ const offerings = [
 
 const Offerings = () => {
   return (
-    <section className="py-16 md:py-24 bg-background relative">
-      {/* Subtle background decoration */}
+    <section className="py-20 md:py-28 bg-background relative overflow-hidden">
+      {/* Enhanced background decoration */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(168_40%_97%)_0%,transparent_50%)] pointer-events-none" />
+      <div className="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl pointer-events-none" />
       
       <div className="container mx-auto px-6 relative">
-        <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/10 text-secondary text-xs font-semibold mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
+        <div className="text-center mb-14 md:mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 text-secondary text-xs font-semibold mb-5 border border-primary/20">
+            <Sparkles className="w-4 h-4 text-primary" />
             Investment Options
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-secondary font-display mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-secondary font-display mb-5">
             Our Investment Offerings
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
             Access diverse investment options tailored to your financial goals. Start your wealth creation journey today.
           </p>
         </div>
@@ -79,32 +81,35 @@ const Offerings = () => {
             <Link
               key={offering.title}
               to={offering.href}
-              className="group relative p-6 md:p-8 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl animate-fade-in"
+              className="group relative p-7 md:p-8 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-fade-in overflow-hidden"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
+              {/* Background gradient on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
               {/* Badge */}
               {offering.badge && (
-                <span className="absolute top-4 right-4 text-[10px] font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary uppercase tracking-wide">
+                <span className="absolute top-4 right-4 text-[10px] font-bold px-3 py-1.5 rounded-full bg-gradient-to-r from-primary/20 to-primary/10 text-primary uppercase tracking-wide border border-primary/20">
                   {offering.badge}
                 </span>
               )}
               
               {/* Icon */}
-              <div className={`w-14 h-14 rounded-2xl ${offering.iconBg} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                <offering.icon className={`w-7 h-7 ${offering.iconColor}`} />
+              <div className={`relative w-16 h-16 rounded-2xl ${offering.iconBg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
+                <offering.icon className={`w-8 h-8 ${offering.iconColor}`} />
               </div>
               
               {/* Content */}
-              <h3 className="text-xl font-bold text-secondary mb-2 group-hover:text-primary transition-colors">
+              <h3 className="relative text-xl font-bold text-secondary mb-3 group-hover:text-primary transition-colors">
                 {offering.title}
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+              <p className="relative text-sm text-muted-foreground leading-relaxed mb-6">
                 {offering.description}
               </p>
               
               {/* Stats & CTA */}
-              <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-secondary/5 text-secondary">
+              <div className="relative flex items-center justify-between pt-5 border-t border-border/50">
+                <span className="text-xs font-bold px-4 py-2 rounded-full bg-gradient-to-r from-secondary/10 to-secondary/5 text-secondary">
                   {offering.stats}
                 </span>
                 <div className="flex items-center text-primary text-sm font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">

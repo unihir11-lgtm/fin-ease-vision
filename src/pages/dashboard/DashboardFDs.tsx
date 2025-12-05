@@ -101,95 +101,103 @@ const DashboardFDs = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-secondary font-display">My Fixed Deposits</h1>
-          <p className="text-muted-foreground mt-1">Track, manage, and grow your FD investments</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" />
-            Reports
-          </Button>
-          <Link to="/fds">
-            <Button className="gap-2">
-              <Plus className="w-4 h-4" />
-              Book New FD
+      {/* Enhanced Header with gradient */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-primary/95 to-secondary/20 p-6 md:p-8">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(197_77%_17%/0.3)_0%,transparent_60%)]" />
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="text-white">
+            <h1 className="text-2xl md:text-3xl font-bold font-display">My Fixed Deposits</h1>
+            <p className="text-white/70 mt-1">Track, manage, and grow your FD investments</p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Download className="w-4 h-4" />
+              Reports
             </Button>
-          </Link>
+            <Link to="/fds">
+              <Button className="gap-2 bg-white text-primary hover:bg-white/90">
+                <Plus className="w-4 h-4" />
+                Book New FD
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Summary Cards */}
+      {/* Enhanced Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-          <CardContent className="p-5">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 hover:shadow-lg transition-all duration-300">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <CardContent className="p-5 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Total Invested</p>
+                <p className="text-xs text-muted-foreground mb-1 font-medium">Total Invested</p>
                 <p className="text-2xl font-bold text-secondary">₹{totalPrincipal.toLocaleString()}</p>
               </div>
-              <div className="p-3 rounded-xl bg-primary/10">
+              <div className="p-3 rounded-xl bg-primary/10 shadow-sm">
                 <Wallet className="w-6 h-6 text-primary" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-5">
+        <Card className="relative overflow-hidden hover:shadow-lg transition-all duration-300">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-blue-100 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <CardContent className="p-5 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Maturity Value</p>
+                <p className="text-xs text-muted-foreground mb-1 font-medium">Maturity Value</p>
                 <p className="text-2xl font-bold text-secondary">₹{totalMaturityValue.toLocaleString()}</p>
               </div>
-              <div className="p-3 rounded-xl bg-blue-100">
+              <div className="p-3 rounded-xl bg-blue-100 shadow-sm">
                 <IndianRupee className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100/50 border-green-200">
-          <CardContent className="p-5">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100/50 border-green-200 hover:shadow-lg transition-all duration-300">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-green-200/50 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <CardContent className="p-5 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Interest Earned</p>
+                <p className="text-xs text-muted-foreground mb-1 font-medium">Interest Earned</p>
                 <p className="text-2xl font-bold text-green-600">₹{totalInterest.toLocaleString()}</p>
-                <p className="text-xs text-green-600 mt-1">+{((totalInterest / totalPrincipal) * 100).toFixed(1)}%</p>
+                <p className="text-xs text-green-600 mt-1 font-semibold">+{((totalInterest / totalPrincipal) * 100).toFixed(1)}%</p>
               </div>
-              <div className="p-3 rounded-xl bg-green-100">
+              <div className="p-3 rounded-xl bg-green-100 shadow-sm">
                 <TrendingUp className="w-6 h-6 text-green-600" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-5">
+        <Card className="relative overflow-hidden hover:shadow-lg transition-all duration-300">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-purple-100 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <CardContent className="p-5 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Active FDs</p>
+                <p className="text-xs text-muted-foreground mb-1 font-medium">Active FDs</p>
                 <p className="text-2xl font-bold text-secondary">{userPortfolio.fds.length}</p>
                 <p className="text-xs text-muted-foreground mt-1">Across {userPortfolio.fds.length} providers</p>
               </div>
-              <div className="p-3 rounded-xl bg-purple-100">
+              <div className="p-3 rounded-xl bg-purple-100 shadow-sm">
                 <PiggyBank className="w-6 h-6 text-purple-600" />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-5">
+        <Card className="relative overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100/50 border-amber-200 hover:shadow-lg transition-all duration-300">
+          <div className="absolute top-0 right-0 w-20 h-20 bg-amber-200/50 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <CardContent className="p-5 relative">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Avg. Interest</p>
-                <p className="text-2xl font-bold text-primary">8.2%</p>
+                <p className="text-xs text-muted-foreground mb-1 font-medium">Avg. Interest</p>
+                <p className="text-2xl font-bold text-amber-600">8.2%</p>
                 <p className="text-xs text-muted-foreground mt-1">p.a. weighted</p>
               </div>
-              <div className="p-3 rounded-xl bg-amber-100">
+              <div className="p-3 rounded-xl bg-amber-100 shadow-sm">
                 <BarChart3 className="w-6 h-6 text-amber-600" />
               </div>
             </div>

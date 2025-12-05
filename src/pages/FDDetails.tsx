@@ -136,16 +136,23 @@ const FDDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Hero Banner */}
-            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-primary/20 via-primary/10 to-accent/20 h-48 md:h-64">
+            {/* Enhanced Hero Banner */}
+            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-primary/20 via-primary/10 to-accent/20 h-52 md:h-72">
               <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20320%22%3E%3Cpath%20fill%3D%22%2323698e%22%20fill-opacity%3D%220.1%22%20d%3D%22M0%2C128L48%2C144C96%2C160%2C192%2C192%2C288%2C186.7C384%2C181%2C480%2C139%2C576%2C138.7C672%2C139%2C768%2C181%2C864%2C181.3C960%2C181%2C1056%2C139%2C1152%2C117.3C1248%2C96%2C1344%2C96%2C1392%2C96L1440%2C96L1440%2C320L1392%2C320C1344%2C320%2C1248%2C320%2C1152%2C320C1056%2C320%2C960%2C320%2C864%2C320C768%2C320%2C672%2C320%2C576%2C320C480%2C320%2C384%2C320%2C288%2C320C192%2C320%2C96%2C320%2C48%2C320L0%2C320Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E')] bg-cover bg-bottom opacity-50"></div>
-              <div className="absolute top-4 left-4 flex items-center gap-3">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${getIconColors(fd.type).bg}`}>
-                  <ProviderIcon iconType={fd.iconType} className={getIconColors(fd.type).text} size={24} />
+              <div className="absolute top-5 left-5 flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg ${getIconColors(fd.type).bg} border border-white/20`}>
+                  <ProviderIcon iconType={fd.iconType} className={getIconColors(fd.type).text} size={28} />
                 </div>
-                <span className="font-bold text-foreground text-lg">{fd.bankName}</span>
+                <div>
+                  <span className="font-bold text-foreground text-xl">{fd.bankName}</span>
+                  <p className="text-sm text-muted-foreground font-medium">Fixed Deposit</p>
+                </div>
               </div>
               <div className="absolute bottom-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/30 to-transparent"></div>
+              <div className="absolute bottom-5 right-5 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                <p className="text-xs text-muted-foreground font-medium">Interest Rate</p>
+                <p className="text-3xl font-bold text-primary">{fd.interestRate}%</p>
+              </div>
             </div>
 
             {/* Bank Name and Badges */}
@@ -162,33 +169,39 @@ const FDDetails = () => {
               </div>
             </div>
 
-            {/* Interest Rates Table */}
-            <Card className="finease-card overflow-hidden">
+            {/* Enhanced Interest Rates Table */}
+            <Card className="finease-card overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div className="p-4 border-b border-border bg-gradient-to-r from-secondary/5 to-transparent">
+                <h3 className="font-bold text-secondary flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-primary" />
+                  Interest Rates
+                </h3>
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left p-4 text-muted-foreground font-medium text-sm">Tenure</th>
-                      <th className="text-right p-4 text-muted-foreground font-medium text-sm">Regular</th>
-                      <th className="text-right p-4 text-muted-foreground font-medium text-sm">Sr. Citizen</th>
+                    <tr className="border-b border-border bg-muted/30">
+                      <th className="text-left p-4 text-muted-foreground font-semibold text-sm">Tenure</th>
+                      <th className="text-right p-4 text-muted-foreground font-semibold text-sm">Regular</th>
+                      <th className="text-right p-4 text-muted-foreground font-semibold text-sm">Sr. Citizen</th>
                     </tr>
                   </thead>
                   <tbody>
                     {fd.tenureOptions.map((option, index) => (
-                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                      <tr key={index} className="border-b border-border/50 hover:bg-primary/5 transition-colors">
                         <td className="p-4">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-foreground">{formatTenure(option.months)}</span>
+                            <span className="font-semibold text-foreground">{formatTenure(option.months)}</span>
                             {option.months === 60 && (
-                              <Badge className="bg-accent/20 text-accent-foreground text-xs">
+                              <Badge className="bg-gradient-to-r from-primary/20 to-primary/10 text-primary text-xs border border-primary/20">
                                 <TrendingUp className="w-3 h-3 mr-1" />
                                 POPULAR
                               </Badge>
                             )}
                           </div>
                         </td>
-                        <td className="p-4 text-right font-semibold text-foreground">{option.rate.toFixed(2)}%</td>
-                        <td className="p-4 text-right font-semibold text-foreground">{option.seniorRate.toFixed(2)}%</td>
+                        <td className="p-4 text-right font-bold text-foreground text-lg">{option.rate.toFixed(2)}%</td>
+                        <td className="p-4 text-right font-bold text-primary text-lg">{option.seniorRate.toFixed(2)}%</td>
                       </tr>
                     ))}
                   </tbody>
