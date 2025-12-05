@@ -6,7 +6,7 @@ export interface IPO {
   companyShortName: string;
   type: "Main Board" | "SME";
   status: "Open" | "Upcoming" | "Closed";
-  logo: string;
+  iconType: "globe" | "briefcase" | "factory" | "rocket" | "bolt" | "truck" | "cpu" | "building2" | "landmark";
   priceRange: { min: number; max: number };
   lotSize: number;
   minInvestment: number;
@@ -53,7 +53,7 @@ export const ipoData: IPO[] = [
     companyShortName: "Virtual Galaxy Infotech",
     type: "SME",
     status: "Open",
-    logo: "🌐",
+    iconType: "globe",
     priceRange: { min: 135, max: 142 },
     lotSize: 1000,
     minInvestment: 135000,
@@ -95,7 +95,7 @@ export const ipoData: IPO[] = [
     companyShortName: "Infonative Solutions",
     type: "SME",
     status: "Open",
-    logo: "💼",
+    iconType: "briefcase",
     priceRange: { min: 70, max: 80 },
     lotSize: 1600,
     minInvestment: 115000,
@@ -132,7 +132,7 @@ export const ipoData: IPO[] = [
     companyShortName: "Spinaroo Commercial",
     type: "SME",
     status: "Open",
-    logo: "🏢",
+    iconType: "building2",
     priceRange: { min: 70, max: 80 },
     lotSize: 1600,
     minInvestment: 117000,
@@ -169,7 +169,7 @@ export const ipoData: IPO[] = [
     companyShortName: "Retaggio Industries",
     type: "SME",
     status: "Upcoming",
-    logo: "🏭",
+    iconType: "factory",
     priceRange: { min: 70, max: 80 },
     lotSize: 1600,
     minInvestment: 114000,
@@ -206,7 +206,7 @@ export const ipoData: IPO[] = [
     companyShortName: "TechVision Enterprises",
     type: "Main Board",
     status: "Upcoming",
-    logo: "🚀",
+    iconType: "rocket",
     priceRange: { min: 450, max: 485 },
     lotSize: 30,
     minInvestment: 14550,
@@ -243,7 +243,7 @@ export const ipoData: IPO[] = [
     companyShortName: "Ather Energy",
     type: "Main Board",
     status: "Closed",
-    logo: "⚡",
+    iconType: "bolt",
     priceRange: { min: 304, max: 321 },
     lotSize: 46,
     minInvestment: 14766,

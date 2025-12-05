@@ -436,98 +436,94 @@ const Bonds = () => {
                 {/* Watchlist Button */}
                 <button
                   onClick={(e) => toggleWatchlist(bond.id, e)}
-                  className={`absolute top-4 right-4 z-10 p-2.5 rounded-full transition-all shadow-md ${
+                  className={`absolute top-4 right-4 z-10 p-2 rounded-lg transition-all ${
                     isInWatchlist(bond.id) 
-                      ? "bg-red-500 text-white hover:bg-red-600" 
-                      : "bg-white/90 text-muted-foreground hover:bg-white hover:text-red-500"
+                      ? "bg-red-500 text-white shadow-lg shadow-red-500/25 hover:bg-red-600" 
+                      : "bg-white text-muted-foreground shadow-md hover:text-red-500 hover:shadow-lg"
                   }`}
                   title={isInWatchlist(bond.id) ? "Remove from Watchlist" : "Add to Watchlist"}
                 >
                   <Heart className={`w-4 h-4 ${isInWatchlist(bond.id) ? "fill-current" : ""}`} />
                 </button>
                 
-                <Card className="h-full border-border/50 hover:border-[#1dab91]/50 hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <Card className="h-full bg-white border border-slate-200/60 hover:border-[#1dab91]/40 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 overflow-hidden">
                   <CardContent className="p-0">
                     {/* Card Header */}
-                    <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
-                      <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-center gap-4 pr-8">
-                          <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(bond.bondType).bg} overflow-hidden p-2`}>
-                            <ProviderIcon iconType={bond.iconType} logo={bond.logo} name={bond.issuer} className={getIconColors(bond.bondType).text} size={40} />
+                    <div className="bg-gradient-to-br from-slate-50 to-slate-100/80 p-5 border-b border-slate-100">
+                      <div className="flex items-center gap-4 pr-10">
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center border ${getIconColors(bond.bondType).bg} border-slate-200/50 group-hover:scale-105 transition-transform overflow-hidden`}>
+                          <ProviderIcon iconType={bond.iconType} logo={bond.logo} name={bond.issuer} className={getIconColors(bond.bondType).text} size={32} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide ${
+                              bond.rating.includes("AAA") || bond.rating === "Sovereign" ? "bg-emerald-500/10 text-emerald-700" :
+                              bond.rating.includes("AA") ? "bg-blue-500/10 text-blue-700" :
+                              "bg-amber-500/10 text-amber-700"
+                            }`}>
+                              <Shield className="w-3 h-3 mr-1" />
+                              {bond.rating}
+                            </span>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600">
+                              {bond.bondCategory}
+                            </span>
                           </div>
-                          <div>
-                            <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                              <Badge className={`text-xs font-bold ${
-                                bond.rating.includes("AAA") || bond.rating === "Sovereign" ? "bg-green-100 text-green-700" :
-                                bond.rating.includes("AA") ? "bg-blue-100 text-blue-700" :
-                                "bg-amber-100 text-amber-700"
-                              }`}>
-                                {bond.rating}
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
-                                {bond.bondType}
-                              </Badge>
-                              <Badge className={`text-xs border ${getInvestmentMethodColor(bond.investmentMethod)}`}>
-                                {bond.investmentMethod === "Lot Based" ? <Layers className="w-3 h-3 mr-1" /> : <BarChart3 className="w-3 h-3 mr-1" />}
-                                {bond.investmentMethod}
-                              </Badge>
-                            </div>
-                            <h3 className="font-bold text-lg text-[#0a344a] group-hover:text-[#1dab91] transition-colors line-clamp-1">{bond.issuer}</h3>
-                            <p className="text-sm text-muted-foreground">{bond.isin}</p>
-                          </div>
+                          <h3 className="font-semibold text-base text-slate-800 group-hover:text-[#1dab91] transition-colors truncate">{bond.issuer}</h3>
+                          <p className="text-xs text-slate-500 font-mono">{bond.isin}</p>
                         </div>
                       </div>
                     </div>
                     
                     {/* Card Body */}
                     <div className="p-5">
-                      <div className="grid grid-cols-3 gap-4 mb-5">
-                        <div className="text-center p-3 bg-muted/30 rounded-xl">
-                          <p className="text-xs text-muted-foreground mb-1">Coupon</p>
-                          <p className="text-lg font-bold text-[#0a344a]">{bond.couponRate}%</p>
+                      {/* Yield Stats */}
+                      <div className="grid grid-cols-3 gap-3 mb-5">
+                        <div className="text-center p-3 rounded-lg bg-slate-50 border border-slate-100">
+                          <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-0.5">Coupon</p>
+                          <p className="text-lg font-bold text-slate-800">{bond.couponRate}%</p>
                         </div>
-                        <div className="text-center p-3 bg-green-50 rounded-xl">
-                          <p className="text-xs text-muted-foreground mb-1">Yield</p>
-                          <p className="text-lg font-bold text-green-600">{bond.currentYield}%</p>
+                        <div className="text-center p-3 rounded-lg bg-emerald-50 border border-emerald-100">
+                          <p className="text-[10px] text-emerald-600 uppercase tracking-wide mb-0.5">Yield</p>
+                          <p className="text-lg font-bold text-emerald-600">{bond.currentYield}%</p>
                         </div>
-                        <div className="text-center p-3 bg-muted/30 rounded-xl">
-                          <p className="text-xs text-muted-foreground mb-1">YTM</p>
-                          <p className="text-lg font-bold text-[#0a344a]">{bond.ytm}%</p>
+                        <div className="text-center p-3 rounded-lg bg-blue-50 border border-blue-100">
+                          <p className="text-[10px] text-blue-600 uppercase tracking-wide mb-0.5">YTM</p>
+                          <p className="text-lg font-bold text-blue-700">{bond.ytm}%</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between mb-4">
+                      {/* Investment Info */}
+                      <div className="flex items-end justify-between mb-4 pb-4 border-b border-dashed border-slate-200">
                         <div>
-                          <p className="text-xs text-muted-foreground">Min Investment</p>
+                          <p className="text-[10px] text-slate-500 uppercase tracking-wide">Min Investment</p>
                           <p className="text-xl font-bold text-[#1dab91]">₹{bond.minInvestment.toLocaleString()}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-muted-foreground">Maturity</p>
-                          <p className="text-lg font-bold text-[#175d80]">{maturity.full}</p>
+                          <p className="text-[10px] text-slate-500 uppercase tracking-wide">Maturity</p>
+                          <p className="text-base font-semibold text-slate-700">{maturity.full}</p>
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2 mb-4">
-                        <Badge variant="outline" className="text-xs">
-                          <Calendar className="w-3 h-3 mr-1" />
+                      {/* Tags */}
+                      <div className="flex flex-wrap items-center gap-1.5 mb-4">
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium bg-slate-100 text-slate-600">
+                          <Clock className="w-3 h-3 mr-1" />
                           {bond.payoutFrequency}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {bond.ratingAgency}
-                        </Badge>
-                        {bond.lotSize > 1 && (
-                          <Badge variant="outline" className="text-xs bg-purple-50">
-                            <Layers className="w-3 h-3 mr-1" />
-                            {bond.lotSize} per lot
-                          </Badge>
-                        )}
-                        <Badge className={`text-xs border ${getMarketTypeColor(bond.marketType)}`}>
+                        </span>
+                        <span className={`inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium ${
+                          bond.investmentMethod === "Lot Based" ? "bg-purple-50 text-purple-700" : "bg-green-50 text-green-700"
+                        }`}>
+                          <Layers className="w-3 h-3 mr-1" />
+                          {bond.investmentMethod}
+                        </span>
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium bg-indigo-50 text-indigo-700">
                           {bond.marketType}
-                        </Badge>
+                        </span>
                       </div>
 
-                      <Button className="w-full gap-2" variant="outline">
-                        View Details <ChevronRight className="w-4 h-4" />
+                      <Button className="w-full h-10 bg-gradient-to-r from-[#175d80] to-[#1dab91] hover:from-[#0a344a] hover:to-[#175d80] text-white font-medium shadow-sm">
+                        View Details
+                        <ChevronRight className="w-4 h-4 ml-1" />
                       </Button>
                     </div>
                   </CardContent>

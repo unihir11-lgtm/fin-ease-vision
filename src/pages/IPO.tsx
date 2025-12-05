@@ -12,6 +12,7 @@ import {
   ArrowUpRight, Briefcase, Star, Eye, Percent, Sparkles, CheckCircle
 } from "lucide-react";
 import ProductLayout from "@/components/ProductLayout";
+import { ProviderIcon } from "@/components/icons/ProviderIcon";
 
 const IPO = () => {
   const [statusFilter, setStatusFilter] = useState("Open");
@@ -143,8 +144,8 @@ const IPO = () => {
                     </Badge>
                   </div>
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#175d80]/20 to-[#1dab91]/20 flex items-center justify-center text-4xl border border-border/50">
-                      {featuredIPO.logo}
+                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#175d80]/20 to-[#1dab91]/20 flex items-center justify-center border border-border/50">
+                      <ProviderIcon iconType={featuredIPO.iconType} size={40} className="text-[#175d80]" />
                     </div>
                     <div>
                       <h2 className="text-2xl lg:text-3xl font-bold text-[#0a344a] mb-1">{featuredIPO.companyShortName}</h2>
@@ -257,8 +258,8 @@ const IPO = () => {
                     <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-center gap-4">
-                          <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl border border-border/50 group-hover:scale-105 transition-transform">
-                            {ipo.logo}
+                          <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform">
+                            <ProviderIcon iconType={ipo.iconType} size={32} className="text-[#175d80]" />
                           </div>
                           <div>
                             <div className="flex items-center gap-2 mb-1">
@@ -390,7 +391,9 @@ const IPO = () => {
                       <TableRow key={ipo.id} className="hover:bg-muted/30">
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            <span className="text-xl">{ipo.logo}</span>
+                            <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center">
+                              <TrendingUp className="w-4 h-4 text-primary" />
+                            </div>
                             <div>
                               <p className="font-medium text-secondary">{ipo.companyShortName}</p>
                               <p className="text-xs text-muted-foreground">{ipo.type}</p>
@@ -464,7 +467,9 @@ const IPO = () => {
                     <TableRow key={ipo.id} className="hover:bg-muted/30">
                       <TableCell>
                         <Link to={`/ipo/${ipo.id}`} className="flex items-center gap-2 hover:text-primary">
-                          <span className="text-xl">{ipo.logo}</span>
+                          <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center">
+                            <TrendingUp className="w-4 h-4 text-primary" />
+                          </div>
                           <span className="font-medium text-secondary hover:text-[#1dab91]">{ipo.companyShortName}</span>
                         </Link>
                       </TableCell>
