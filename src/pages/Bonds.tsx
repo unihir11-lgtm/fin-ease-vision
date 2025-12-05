@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { bondsData } from "@/data/bondData";
 import { 
   ChevronRight, Landmark, AlertCircle, Search, Filter, 
   TrendingUp, Star, Shield, IndianRupee, ArrowUpDown, X, Calendar,
-  Percent, Clock, Award, Eye, Sparkles
+  Percent, Clock, Award, Eye, Sparkles, Heart, Bookmark, BookmarkCheck
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
@@ -17,6 +18,21 @@ import { Checkbox } from "@/components/ui/checkbox";
 import ProductLayout from "@/components/ProductLayout";
 import { ProviderIcon, getIconColors, getInvestmentMethodColor, getMarketTypeColor } from "@/components/icons/ProviderIcon";
 import { Layers, BarChart3 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+
+// Bond category tabs configuration
+const bondCategoryTabs = [
+  { id: "all", label: "All Bonds", icon: Landmark },
+  { id: "ncd", label: "NCDs", icon: Layers },
+  { id: "gsec", label: "G-Secs", icon: Shield },
+  { id: "taxfree", label: "Tax-Free", icon: Percent },
+  { id: "sgb", label: "SGBs", icon: Star },
+  { id: "psu", label: "PSU Bonds", icon: Award },
+  { id: "watchlist", label: "Watchlist", icon: Heart },
+];
+
+// Watchlist storage key
+const WATCHLIST_KEY = "finease_bond_watchlist";
 
 const Bonds = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,8 +42,57 @@ const Bonds = () => {
   const [sortBy, setSortBy] = useState("yield-high");
   const [showFilters, setShowFilters] = useState(false);
   const [showTaxFree, setShowTaxFree] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [watchlist, setWatchlist] = useState<string[]>([]);
+
+  // Load watchlist from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(WATCHLIST_KEY);
+    if (saved) {
+      try {
+        setWatchlist(JSON.parse(saved));
+      } catch (e) {
+        console.error("Error loading watchlist:", e);
+      }
+    }
+  }, []);
+
+  // Save watchlist to localStorage
+  const saveWatchlist = (newWatchlist: string[]) => {
+    setWatchlist(newWatchlist);
+    localStorage.setItem(WATCHLIST_KEY, JSON.stringify(newWatchlist));
+  };
+
+  const toggleWatchlist = (bondId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (watchlist.includes(bondId)) {
+      saveWatchlist(watchlist.filter(id => id !== bondId));
+      toast({ title: "Removed from Watchlist", description: "Bond removed from your watchlist" });
+    } else {
+      saveWatchlist([...watchlist, bondId]);
+      toast({ title: "Added to Watchlist", description: "Bond added to your watchlist" });
+    }
+  };
+
+  const isInWatchlist = (bondId: string) => watchlist.includes(bondId);
+
+  // Category filter based on bondCategory
+  const getCategoryFilter = (category: string) => {
+    switch (category) {
+      case "ncd": return (bond: typeof bondsData[0]) => bond.bondCategory === "NCD";
+      case "gsec": return (bond: typeof bondsData[0]) => bond.bondCategory === "G-Sec" || bond.bondCategory === "SDL" || bond.bondCategory === "T-Bill";
+      case "taxfree": return (bond: typeof bondsData[0]) => bond.bondCategory === "Tax-Free Bond" || bond.bondType === "Tax-Free";
+      case "sgb": return (bond: typeof bondsData[0]) => bond.bondCategory === "Sovereign Bond" || bond.bondType === "Sovereign Gold";
+      case "psu": return (bond: typeof bondsData[0]) => bond.bondType === "PSU";
+      case "watchlist": return (bond: typeof bondsData[0]) => watchlist.includes(bond.id);
+      default: return () => true;
+    }
+  };
 
   const filteredBonds = bondsData
+    .filter(getCategoryFilter(activeCategory))
     .filter((bond) => {
       const matchesSearch = bond.issuer.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            bond.isin.toLowerCase().includes(searchTerm.toLowerCase());
@@ -127,8 +192,47 @@ const Bonds = () => {
           </div>
         </div>
 
+        {/* Category Tabs */}
+        <div className="mb-6 overflow-x-auto pb-2">
+          <div className="flex gap-2 min-w-max">
+            {bondCategoryTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeCategory === tab.id;
+              const count = tab.id === "watchlist" 
+                ? watchlist.length 
+                : tab.id === "all" 
+                  ? bondsData.length 
+                  : bondsData.filter(getCategoryFilter(tab.id)).length;
+              
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveCategory(tab.id)}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm transition-all ${
+                    isActive 
+                      ? "bg-[#0a344a] text-white shadow-lg" 
+                      : "bg-white border border-border hover:border-[#1dab91] hover:bg-[#1dab91]/5 text-[#0a344a]"
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? "text-[#1dab91]" : ""}`} />
+                  {tab.label}
+                  <Badge className={`ml-1 text-xs ${
+                    isActive 
+                      ? "bg-white/20 text-white" 
+                      : tab.id === "watchlist" && count > 0 
+                        ? "bg-red-100 text-red-600" 
+                        : "bg-muted text-muted-foreground"
+                  }`}>
+                    {count}
+                  </Badge>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Featured Bond */}
-        {featuredBond && (
+        {activeCategory === "all" && featuredBond && (
           <Card className="mb-8 border-2 border-[#1dab91]/30 bg-gradient-to-r from-[#1dab91]/5 to-transparent overflow-hidden">
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row">
@@ -328,13 +432,26 @@ const Bonds = () => {
           {filteredBonds.map((bond) => {
             const maturity = formatDate(bond.maturityDate);
             return (
-              <Link key={bond.id} to={`/bonds/${bond.id}`} className="block group">
+              <Link key={bond.id} to={`/bonds/${bond.id}`} className="block group relative">
+                {/* Watchlist Button */}
+                <button
+                  onClick={(e) => toggleWatchlist(bond.id, e)}
+                  className={`absolute top-4 right-4 z-10 p-2.5 rounded-full transition-all shadow-md ${
+                    isInWatchlist(bond.id) 
+                      ? "bg-red-500 text-white hover:bg-red-600" 
+                      : "bg-white/90 text-muted-foreground hover:bg-white hover:text-red-500"
+                  }`}
+                  title={isInWatchlist(bond.id) ? "Remove from Watchlist" : "Add to Watchlist"}
+                >
+                  <Heart className={`w-4 h-4 ${isInWatchlist(bond.id) ? "fill-current" : ""}`} />
+                </button>
+                
                 <Card className="h-full border-border/50 hover:border-[#1dab91]/50 hover:shadow-xl transition-all duration-300 overflow-hidden">
                   <CardContent className="p-0">
                     {/* Card Header */}
                     <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
                       <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 pr-8">
                           <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(bond.bondType).bg} overflow-hidden p-2`}>
                             <ProviderIcon iconType={bond.iconType} logo={bond.logo} name={bond.issuer} className={getIconColors(bond.bondType).text} size={40} />
                           </div>
