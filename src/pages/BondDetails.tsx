@@ -24,7 +24,7 @@ const BondDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const bond = bondsData.find((b) => b.id === id);
-  const [amount, setAmount] = useState("");
+  const [units, setUnits] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Get similar bonds
@@ -52,10 +52,17 @@ const BondDetails = () => {
     );
   }
 
-  const units = amount ? Math.floor(Number(amount) / bond.faceValue) : 0;
-  const totalAmount = units * bond.faceValue;
-  const annualReturn = Math.round(totalAmount * bond.couponRate / 100);
-  const maturityReturn = Math.round(totalAmount * bond.ytm / 100 * parseInt(bond.tenure));
+  // Unit-based investment calculations (like GoldenPi)
+  const minUnits = bond.lotSize || 1;
+  const totalBonds = units * minUnits;
+  const cleanPriceTotal = totalBonds * bond.cleanPrice;
+  const accruedInterestTotal = totalBonds * bond.accruedInterest;
+  const dirtyPriceTotal = totalBonds * bond.dirtyPrice; // Total investment amount
+  const annualReturn = Math.round(totalBonds * bond.faceValue * bond.couponRate / 100);
+  const maturityReturn = Math.round(totalBonds * bond.faceValue * bond.ytm / 100 * parseInt(bond.tenure));
+  
+  const incrementUnits = () => setUnits(prev => prev + 1);
+  const decrementUnits = () => setUnits(prev => prev > 1 ? prev - 1 : 1);
 
   // Calculate payment schedule
   const getPaymentSchedule = () => {
@@ -63,7 +70,7 @@ const BondDetails = () => {
     const frequency = bond.payoutFrequency === "Monthly" ? 12 : 
                      bond.payoutFrequency === "Quarterly" ? 4 : 
                      bond.payoutFrequency === "Half-yearly" ? 2 : 1;
-    const couponPerPayment = (totalAmount * bond.couponRate / 100) / frequency;
+    const couponPerPayment = (totalBonds * bond.faceValue * bond.couponRate / 100) / frequency;
     const today = new Date();
     
     for (let i = 0; i < Math.min(frequency * 2, 8); i++) {
@@ -79,14 +86,14 @@ const BondDetails = () => {
   };
 
   const handleInvest = () => {
-    if (Number(amount) < bond.minInvestment) {
-      toast({ title: "Error", description: `Minimum investment is ₹${bond.minInvestment.toLocaleString()}`, variant: "destructive" });
+    if (units < 1) {
+      toast({ title: "Error", description: `Please select at least 1 unit`, variant: "destructive" });
       return;
     }
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      toast({ title: "Investment Successful!", description: `You've invested ₹${totalAmount.toLocaleString()} in ${bond.issuer}` });
+      toast({ title: "Investment Successful!", description: `You've invested ₹${dirtyPriceTotal.toLocaleString()} in ${totalBonds} units of ${bond.issuer}` });
       navigate("/dashboard/bonds");
     }, 2000);
   };
@@ -606,48 +613,112 @@ const BondDetails = () => {
           {/* Investment Panel */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-4">
-              <Card className="finease-card border-primary/20">
-                <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-t-lg">
+              <Card className="finease-card border-primary/20 overflow-hidden">
+                <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 to-primary/10">
                   <CardTitle className="flex items-center gap-2 text-lg">
                     <Calculator className="w-5 h-5 text-primary" />
-                    Investment Calculator
+                    Invest in {minUnits > 1 ? "Lots" : "Units"}
                   </CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    {minUnits > 1 ? `${minUnits} bonds per lot` : "Direct unit investment"}
+                  </p>
                 </CardHeader>
                 <CardContent className="pt-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="amount" className="text-secondary font-medium">Investment Amount</Label>
-                      <div className="relative">
-                        <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <Input 
-                          id="amount"
-                          type="number"
-                          placeholder="Enter amount"
-                          className="pl-10 h-12 text-lg"
-                          value={amount}
-                          onChange={(e) => setAmount(e.target.value)}
-                        />
+                  <div className="space-y-5">
+                    {/* Unit Selector */}
+                    <div className="space-y-3">
+                      <Label className="text-secondary font-medium">
+                        Select {minUnits > 1 ? "Lots" : "Units"}
+                      </Label>
+                      <div className="flex items-center justify-center gap-4 p-4 bg-secondary/5 rounded-xl">
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          className="h-12 w-12 rounded-full text-xl font-bold"
+                          onClick={decrementUnits}
+                          disabled={units <= 1}
+                        >
+                          −
+                        </Button>
+                        <div className="text-center min-w-[100px]">
+                          <Input
+                            type="number"
+                            min="1"
+                            value={units}
+                            onChange={(e) => setUnits(Math.max(1, parseInt(e.target.value) || 1))}
+                            className="text-3xl font-bold text-center h-14 border-0 bg-transparent"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {minUnits > 1 ? `${totalBonds} bonds` : "bonds"}
+                          </p>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="icon" 
+                          className="h-12 w-12 rounded-full text-xl font-bold"
+                          onClick={incrementUnits}
+                        >
+                          +
+                        </Button>
                       </div>
-                      <p className="text-xs text-muted-foreground">Minimum: ₹{bond.minInvestment.toLocaleString()}</p>
                     </div>
 
-                    {amount && Number(amount) >= bond.minInvestment && (
-                      <div className="space-y-3 pt-4 border-t border-border">
+                    {/* Price Breakdown */}
+                    <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                      <h4 className="font-semibold text-secondary text-sm flex items-center gap-2">
+                        <PieChart className="w-4 h-4 text-primary" />
+                        Price Breakdown
+                      </h4>
+                      <div className="space-y-2 text-sm">
                         <div className="flex justify-between items-center">
-                          <span className="text-muted-foreground">Units</span>
-                          <span className="font-bold text-secondary">{units}</span>
+                          <span className="text-muted-foreground">Clean Price</span>
+                          <span className="font-medium text-secondary">₹{bond.cleanPrice.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-muted-foreground">Total Investment</span>
-                          <span className="font-bold text-secondary">₹{totalAmount.toLocaleString()}</span>
+                          <span className="text-muted-foreground">+ Accrued Interest</span>
+                          <span className="font-medium text-secondary">₹{bond.accruedInterest.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center pt-2 border-t border-slate-300">
+                          <span className="text-muted-foreground font-medium">Dirty Price (per unit)</span>
+                          <span className="font-bold text-primary">₹{bond.dirtyPrice.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Investment Summary */}
+                    <div className="space-y-3 pt-4 border-t border-border">
+                      <h4 className="font-semibold text-secondary text-sm">Your Investment</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">Total Bonds</span>
+                          <span className="font-bold text-secondary">{totalBonds}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-muted-foreground">Annual Interest</span>
-                          <span className="font-bold text-green-600">₹{annualReturn.toLocaleString()}</span>
+                          <span className="text-muted-foreground">Clean Price Total</span>
+                          <span className="font-medium text-secondary">₹{cleanPriceTotal.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-muted-foreground">Interest ({bond.payoutFrequency})</span>
-                          <span className="font-bold text-green-600">
+                          <span className="text-muted-foreground">Accrued Interest Total</span>
+                          <span className="font-medium text-secondary">₹{accruedInterestTotal.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg -mx-1">
+                          <span className="text-secondary font-semibold">Total Investment</span>
+                          <span className="font-bold text-primary text-lg">₹{dirtyPriceTotal.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Returns Section */}
+                    <div className="p-4 bg-green-50 rounded-xl border border-green-200 space-y-2">
+                      <h4 className="font-semibold text-green-800 text-sm">Expected Returns</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between items-center">
+                          <span className="text-green-700">Annual Interest</span>
+                          <span className="font-bold text-green-700">₹{annualReturn.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-green-700">{bond.payoutFrequency} Payout</span>
+                          <span className="font-bold text-green-700">
                             ₹{Math.round(annualReturn / (
                               bond.payoutFrequency === "Monthly" ? 12 :
                               bond.payoutFrequency === "Quarterly" ? 4 :
@@ -655,23 +726,21 @@ const BondDetails = () => {
                             )).toLocaleString()}
                           </span>
                         </div>
-                        <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                          <div className="flex justify-between items-center">
-                            <span className="text-green-800 font-medium">Total Return (Est.)</span>
-                            <span className="font-bold text-green-700">₹{(totalAmount + maturityReturn).toLocaleString()}</span>
-                          </div>
-                          <p className="text-xs text-green-600 mt-1">Over {bond.tenure} tenure</p>
+                        <div className="flex justify-between items-center pt-2 border-t border-green-300">
+                          <span className="text-green-800 font-medium">Est. Total Return</span>
+                          <span className="font-bold text-green-800">₹{(dirtyPriceTotal + maturityReturn).toLocaleString()}</span>
                         </div>
+                        <p className="text-xs text-green-600">Over {bond.tenure} tenure</p>
                       </div>
-                    )}
+                    </div>
 
                     <Button 
-                      className="w-full h-12 text-base" 
+                      className="w-full h-12 text-base font-semibold" 
                       size="lg"
                       onClick={handleInvest}
-                      disabled={!amount || Number(amount) < bond.minInvestment || isProcessing}
+                      disabled={isProcessing}
                     >
-                      {isProcessing ? "Processing..." : "Invest Now"}
+                      {isProcessing ? "Processing..." : `Invest ₹${dirtyPriceTotal.toLocaleString()}`}
                     </Button>
 
                     <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
