@@ -284,7 +284,9 @@ const DashboardIPO = () => {
                       <TableRow key={ipo.id} className="hover:bg-muted/30">
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <span className="text-xl">{ipo.logo}</span>
+                            <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center">
+                              <TrendingUp className="w-4 h-4 text-primary" />
+                            </div>
                             <div>
                               <p className="font-semibold text-secondary">{ipo.companyShortName}</p>
                               <p className="text-xs text-muted-foreground">{ipo.type}</p>
@@ -337,8 +339,8 @@ const DashboardIPO = () => {
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#175d80]/10 to-[#1dab91]/10 flex items-center justify-center text-2xl border">
-                        {ipo.logo}
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#175d80]/10 to-[#1dab91]/10 flex items-center justify-center border">
+                        <TrendingUp className="w-6 h-6 text-[#175d80]" />
                       </div>
                       <div>
                         <h3 className="font-bold text-secondary">{ipo.companyShortName}</h3>
@@ -424,7 +426,9 @@ const DashboardIPO = () => {
                       <TableRow key={ipo.id} className="hover:bg-muted/30">
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <span className="text-xl">{ipo.logo}</span>
+                            <div className="w-8 h-8 rounded bg-blue-100 flex items-center justify-center">
+                              <Calendar className="w-4 h-4 text-blue-600" />
+                            </div>
                             <div>
                               <p className="font-semibold text-secondary">{ipo.companyShortName}</p>
                               <p className="text-xs text-muted-foreground">{ipo.type}</p>
@@ -470,8 +474,8 @@ const DashboardIPO = () => {
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#175d80]/10 to-[#1dab91]/10 flex items-center justify-center text-2xl border">
-                        {ipo.logo}
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#175d80]/10 to-[#1dab91]/10 flex items-center justify-center border">
+                        <Calendar className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="font-bold text-secondary">{ipo.companyShortName}</h3>

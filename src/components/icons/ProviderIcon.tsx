@@ -1,22 +1,24 @@
 import { 
   Wallet, Building, BookOpen, Zap, Map, Train, 
   Building2, Landmark, Mountain, Trees, Banknote,
+  Globe, Briefcase, Factory, Rocket, Bolt, Truck, Cpu,
   LucideIcon
 } from "lucide-react";
 import { useState } from "react";
 
 type BondIconType = "wallet" | "building" | "book" | "zap" | "map" | "train";
 type FDIconType = "building2" | "landmark" | "mountain" | "trees" | "building" | "banknote";
+type IPOIconType = "globe" | "briefcase" | "factory" | "rocket" | "bolt" | "truck" | "cpu" | "building2" | "landmark";
 
 interface ProviderIconProps {
-  iconType: BondIconType | FDIconType;
+  iconType: BondIconType | FDIconType | IPOIconType;
   logo?: string;
   name?: string;
   className?: string;
   size?: number;
 }
 
-const iconMap: Record<BondIconType | FDIconType, LucideIcon> = {
+const iconMap: Record<BondIconType | FDIconType | IPOIconType, LucideIcon> = {
   wallet: Wallet,
   building: Building,
   book: BookOpen,
@@ -28,6 +30,13 @@ const iconMap: Record<BondIconType | FDIconType, LucideIcon> = {
   mountain: Mountain,
   trees: Trees,
   banknote: Banknote,
+  globe: Globe,
+  briefcase: Briefcase,
+  factory: Factory,
+  rocket: Rocket,
+  bolt: Bolt,
+  truck: Truck,
+  cpu: Cpu,
 };
 
 export const ProviderIcon = ({ iconType, logo, name, className = "", size = 24 }: ProviderIconProps) => {

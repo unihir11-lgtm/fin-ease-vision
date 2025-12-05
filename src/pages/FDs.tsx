@@ -309,94 +309,88 @@ const FDs = () => {
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           {filteredFDs.map((fd) => (
             <Link key={fd.id} to={`/fds/${fd.id}`} className="block group">
-              <Card className="h-full border-border/50 hover:border-[#1dab91]/50 hover:shadow-xl transition-all duration-300 overflow-hidden">
+              <Card className="h-full bg-white border border-slate-200/60 hover:border-[#1dab91]/40 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 overflow-hidden">
                 <CardContent className="p-0">
                   {/* Card Header */}
-                  <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(fd.type).bg} overflow-hidden p-2`}>
-                          <ProviderIcon iconType={fd.iconType} logo={fd.logo} name={fd.bankName} className={getIconColors(fd.type).text} size={40} />
+                  <div className="bg-gradient-to-br from-slate-50 to-slate-100/80 p-5 border-b border-slate-100">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-14 h-14 rounded-xl flex items-center justify-center border ${getIconColors(fd.type).bg} border-slate-200/50 group-hover:scale-105 transition-transform overflow-hidden`}>
+                        <ProviderIcon iconType={fd.iconType} logo={fd.logo} name={fd.bankName} className={getIconColors(fd.type).text} size={32} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-emerald-500/10 text-emerald-700">
+                            <Shield className="w-3 h-3 mr-1" />
+                            DICGC Insured
+                          </span>
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600">
+                            {fd.type}
+                          </span>
                         </div>
-                        <div>
-                          <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                            <Badge className="bg-green-100 text-green-700 text-xs gap-1">
-                              <Shield className="w-3 h-3" />
-                              DICGC
-                            </Badge>
-                            <Badge variant="outline" className="text-xs">
-                              {fd.type}
-                            </Badge>
-                            {!fd.accountRequired && (
-                              <Badge className="bg-blue-100 text-blue-700 text-xs border border-blue-200">
-                                <Wallet2 className="w-3 h-3 mr-1" />
-                                No Account
-                              </Badge>
-                            )}
-                          </div>
-                          <h3 className="font-bold text-lg text-[#0a344a] group-hover:text-[#1dab91] transition-colors line-clamp-1">{fd.bankName}</h3>
-                          <p className="text-sm text-muted-foreground">{fd.regulatedBy}</p>
-                        </div>
+                        <h3 className="font-semibold text-base text-slate-800 group-hover:text-[#1dab91] transition-colors truncate">{fd.bankName}</h3>
+                        <p className="text-xs text-slate-500">{fd.regulatedBy}</p>
                       </div>
                     </div>
                   </div>
                   
                   {/* Card Body */}
                   <div className="p-5">
-                    <div className="grid grid-cols-2 gap-4 mb-5">
-                      <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
-                        <p className="text-xs text-muted-foreground mb-1">Interest Rate</p>
-                        <p className="text-2xl font-bold text-green-600">
+                    {/* Rate Display */}
+                    <div className="grid grid-cols-2 gap-3 mb-5">
+                      <div className="text-center p-4 rounded-lg bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-100">
+                        <p className="text-[10px] text-emerald-600 uppercase tracking-wide mb-0.5">
+                          {showSeniorRates ? "Sr. Citizen Rate" : "Interest Rate"}
+                        </p>
+                        <p className="text-2xl font-bold text-emerald-600">
                           {showSeniorRates ? fd.seniorCitizenRate : fd.interestRate}%
                         </p>
-                        <p className="text-xs text-muted-foreground">p.a.</p>
+                        <p className="text-[10px] text-slate-500">per annum</p>
                       </div>
-                      {!showSeniorRates && (
-                        <div className="text-center p-4 bg-[#1dab91]/10 rounded-xl">
-                          <p className="text-xs text-muted-foreground mb-1">Sr. Citizen</p>
-                          <p className="text-2xl font-bold text-[#1dab91]">{fd.seniorCitizenRate}%</p>
-                          <p className="text-xs text-muted-foreground">p.a.</p>
-                        </div>
-                      )}
-                      {showSeniorRates && (
-                        <div className="text-center p-4 bg-muted/30 rounded-xl">
-                          <p className="text-xs text-muted-foreground mb-1">Regular Rate</p>
-                          <p className="text-2xl font-bold text-[#175d80]">{fd.interestRate}%</p>
-                          <p className="text-xs text-muted-foreground">p.a.</p>
-                        </div>
-                      )}
+                      <div className="text-center p-4 rounded-lg bg-slate-50 border border-slate-100">
+                        <p className="text-[10px] text-slate-500 uppercase tracking-wide mb-0.5">
+                          {showSeniorRates ? "Regular Rate" : "Sr. Citizen"}
+                        </p>
+                        <p className="text-2xl font-bold text-[#1dab91]">
+                          {showSeniorRates ? fd.interestRate : fd.seniorCitizenRate}%
+                        </p>
+                        <p className="text-[10px] text-slate-500">per annum</p>
+                      </div>
                     </div>
                     
-                    <div className="flex items-center justify-between mb-4">
+                    {/* Investment Info */}
+                    <div className="flex items-end justify-between mb-4 pb-4 border-b border-dashed border-slate-200">
                       <div>
-                        <p className="text-xs text-muted-foreground">Min Deposit</p>
-                        <p className="text-xl font-bold text-[#0a344a]">₹{fd.minDeposit.toLocaleString()}</p>
+                        <p className="text-[10px] text-slate-500 uppercase tracking-wide">Min Deposit</p>
+                        <p className="text-xl font-bold text-slate-800">₹{fd.minDeposit.toLocaleString()}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-muted-foreground">Max Tenure</p>
-                        <p className="text-lg font-bold text-[#175d80]">{fd.maxTenure}</p>
+                        <p className="text-[10px] text-slate-500 uppercase tracking-wide">Max Tenure</p>
+                        <p className="text-base font-semibold text-slate-700">{fd.maxTenure}</p>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      <Badge variant="outline" className="text-xs bg-muted/50">
-                        <Video className="w-3 h-3 mr-1" />
-                        {fd.kycRequired}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs bg-muted/50">
+                    {/* Tags */}
+                    <div className="flex flex-wrap items-center gap-1.5 mb-4">
+                      {!fd.accountRequired && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium bg-blue-50 text-blue-700">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          No Account Needed
+                        </span>
+                      )}
+                      <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium bg-slate-100 text-slate-600">
                         <Clock className="w-3 h-3 mr-1" />
                         {fd.processingTime}
-                      </Badge>
+                      </span>
                       {fd.loanAgainstFD && (
-                        <Badge variant="outline" className="text-xs bg-amber-50 text-amber-700">
-                          <CreditCard className="w-3 h-3 mr-1" />
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium bg-amber-50 text-amber-700">
                           {fd.loanPercentage}% Loan
-                        </Badge>
+                        </span>
                       )}
                     </div>
 
-                    <Button className="w-full gap-2" variant="outline">
-                      View Details <ChevronRight className="w-4 h-4" />
+                    <Button className="w-full h-10 bg-gradient-to-r from-[#175d80] to-[#1dab91] hover:from-[#0a344a] hover:to-[#175d80] text-white font-medium shadow-sm">
+                      View Details
+                      <ChevronRight className="w-4 h-4 ml-1" />
                     </Button>
                   </div>
                 </CardContent>

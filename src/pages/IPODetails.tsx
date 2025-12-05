@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ipoData, ipoMarketLots } from "@/data/ipoData";
-import { ExternalLink, FileText, ArrowLeft, Plus, Minus } from "lucide-react";
+import { ExternalLink, FileText, ArrowLeft, Plus, Minus, TrendingUp } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -103,8 +103,8 @@ const IPODetails = () => {
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-3xl">
-                  {ipo.logo}
+                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <TrendingUp className="w-8 h-8 text-primary" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
