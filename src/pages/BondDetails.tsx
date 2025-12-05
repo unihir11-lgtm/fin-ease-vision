@@ -120,32 +120,32 @@ const BondDetails = () => {
 
   return (
     <ProductLayout>
-      <div className="bg-gradient-to-b from-secondary/5 to-background">
+      <div className="bg-gradient-to-b from-secondary/5 via-secondary/3 to-background">
         {/* Breadcrumb */}
         <div className="container mx-auto px-4 py-4">
           <nav className="flex items-center gap-2 text-sm">
-            <Link to="/" className="text-muted-foreground hover:text-primary">Home</Link>
+            <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            <Link to="/bonds" className="text-muted-foreground hover:text-primary">Bonds</Link>
+            <Link to="/bonds" className="text-muted-foreground hover:text-primary transition-colors">Bonds</Link>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
             <span className="text-secondary font-medium">{bond.issuer}</span>
           </nav>
         </div>
 
-        {/* Bond Header */}
+        {/* Enhanced Bond Header */}
         <div className="container mx-auto px-4 pb-8">
-          <div className="bg-white rounded-2xl p-6 border border-border shadow-sm">
+          <div className="bg-white rounded-2xl p-6 md:p-8 border border-border shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
-              <div className="flex items-start gap-4">
-              <div className={`w-16 h-16 rounded-xl flex items-center justify-center border border-primary/20 ${getIconColors(bond.bondType).bg} overflow-hidden p-2`}>
-                  <ProviderIcon iconType={bond.iconType} logo={bond.logo} name={bond.issuer} className={getIconColors(bond.bondType).text} size={44} />
+              <div className="flex items-start gap-5">
+              <div className={`w-18 h-18 rounded-2xl flex items-center justify-center border border-primary/20 ${getIconColors(bond.bondType).bg} overflow-hidden p-3 shadow-sm`}>
+                  <ProviderIcon iconType={bond.iconType} logo={bond.logo} name={bond.issuer} className={getIconColors(bond.bondType).text} size={48} />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge className={`${getRatingColor(bond.rating)} border px-3 py-1 font-semibold`}>
+                    <Badge className={`${getRatingColor(bond.rating)} border px-3 py-1.5 font-bold text-sm`}>
                       {bond.rating} ({bond.ratingAgency})
                     </Badge>
-                    <Badge variant="outline" className="capitalize">
+                    <Badge variant="outline" className="capitalize bg-muted/50">
                       {bond.bondType}
                     </Badge>
                     {bond.bondCategory && (
@@ -165,7 +165,7 @@ const BondDetails = () => {
                     )}
                   </div>
                   <h1 className="text-2xl lg:text-3xl font-bold text-secondary font-['Raleway']">{bond.issuer}</h1>
-                  <p className="text-muted-foreground">ISIN: <span className="font-mono font-medium text-secondary">{bond.isin}</span></p>
+                  <p className="text-muted-foreground">ISIN: <span className="font-mono font-semibold text-secondary bg-muted/50 px-2 py-0.5 rounded">{bond.isin}</span></p>
                   <div className="flex flex-wrap items-center gap-2 text-sm">
                     {bond.listingExchange?.length > 0 && (
                       <span className="text-muted-foreground">
@@ -189,19 +189,19 @@ const BondDetails = () => {
                 </div>
               </div>
               
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex flex-col items-end gap-3 bg-gradient-to-br from-primary/5 to-primary/10 p-5 rounded-2xl">
                 <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Yield to Maturity</p>
-                  <p className="text-4xl font-bold text-primary">{bond.ytm}%</p>
+                  <p className="text-sm text-muted-foreground font-medium">Yield to Maturity</p>
+                  <p className="text-5xl font-bold text-primary">{bond.ytm}%</p>
                 </div>
-                <div className="flex gap-4 mt-2">
+                <div className="flex gap-6 mt-2">
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Coupon</p>
-                    <p className="text-lg font-bold text-secondary">{bond.couponRate}%</p>
+                    <p className="text-xl font-bold text-secondary">{bond.couponRate}%</p>
                   </div>
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Current Yield</p>
-                    <p className="text-lg font-bold text-secondary">{bond.currentYield}%</p>
+                    <p className="text-xl font-bold text-secondary">{bond.currentYield}%</p>
                   </div>
                 </div>
               </div>
@@ -210,12 +210,12 @@ const BondDetails = () => {
         </div>
       </div>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Key Metrics */}
-            <Card className="finease-card">
+            <Card className="finease-card hover:shadow-xl transition-shadow duration-300">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <TrendingUp className="w-5 h-5 text-primary" />
@@ -224,28 +224,28 @@ const BondDetails = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Calendar className="w-4 h-4" />
                       <span>Maturity Date</span>
                     </div>
                     <p className="text-lg font-bold text-secondary">{formatDate(bond.maturityDate)}</p>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Clock className="w-4 h-4" />
                       <span>Tenure</span>
                     </div>
                     <p className="text-lg font-bold text-secondary">{bond.tenure}</p>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Receipt className="w-4 h-4" />
                       <span>Face Value</span>
                     </div>
                     <p className="text-lg font-bold text-secondary">₹{bond.faceValue.toLocaleString()}</p>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Wallet className="w-4 h-4" />
                       <span>Min Investment</span>

@@ -75,39 +75,45 @@ const quickActions = [
 const AdminDashboard = () => {
   return (
     <div className="space-y-6">
-      {/* Welcome Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-secondary">Welcome back, Admin</h1>
-          <p className="text-muted-foreground mt-1">Here's what's happening with your platform today</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Calendar className="w-4 h-4" />
-            Last 30 Days
-          </Button>
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" /> Export Report
-          </Button>
+      {/* Enhanced Welcome Section with gradient */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-secondary via-secondary/95 to-primary/30 p-6 md:p-8">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(168_72%_40%/0.2)_0%,transparent_60%)]" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="text-white">
+            <p className="text-white/60 text-sm font-medium mb-1">Admin Dashboard</p>
+            <h1 className="text-2xl md:text-3xl font-bold">Welcome back, Admin</h1>
+            <p className="text-white/70 mt-1">Here's what's happening with your platform today</p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Calendar className="w-4 h-4" />
+              Last 30 Days
+            </Button>
+            <Button className="gap-2 bg-white text-secondary hover:bg-white/90">
+              <Download className="w-4 h-4" /> Export Report
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Enhanced Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {statsCards.map((stat, index) => (
-          <Card key={index} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
+          <Card key={index} className="relative overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-muted/30 rounded-full translate-x-1/3 -translate-y-1/3" />
+            <CardContent className="p-4 relative">
               <div className="flex items-start justify-between mb-3">
-                <div className={`p-2.5 rounded-xl ${stat.color}`}>
+                <div className={`p-2.5 rounded-xl ${stat.color} shadow-sm`}>
                   <stat.icon className="w-5 h-5" />
                 </div>
-                <span className={`text-xs font-medium flex items-center gap-0.5 ${stat.positive ? "text-green-600" : "text-red-500"}`}>
+                <span className={`text-xs font-semibold flex items-center gap-0.5 px-2 py-1 rounded-full ${stat.positive ? "text-green-600 bg-green-50" : "text-red-500 bg-red-50"}`}>
                   {stat.positive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                   {stat.change}
                 </span>
               </div>
               <p className="text-2xl font-bold text-secondary">{stat.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{stat.title}</p>
+              <p className="text-xs text-muted-foreground mt-1 font-medium">{stat.title}</p>
             </CardContent>
           </Card>
         ))}
