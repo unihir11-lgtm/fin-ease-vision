@@ -15,7 +15,8 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import ProductLayout from "@/components/ProductLayout";
-import { ProviderIcon, getIconColors } from "@/components/icons/ProviderIcon";
+import { ProviderIcon, getIconColors, getInvestmentMethodColor, getMarketTypeColor } from "@/components/icons/ProviderIcon";
+import { Layers, BarChart3 } from "lucide-react";
 
 const Bonds = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -333,14 +334,14 @@ const Bonds = () => {
                     {/* Card Header */}
                     <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
                       <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(bond.bondType).bg}`}>
-                            <ProviderIcon iconType={bond.iconType} className={getIconColors(bond.bondType).text} size={28} />
+                      <div className="flex items-center gap-4">
+                          <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(bond.bondType).bg} overflow-hidden p-2`}>
+                            <ProviderIcon iconType={bond.iconType} logo={bond.logo} name={bond.issuer} className={getIconColors(bond.bondType).text} size={40} />
                           </div>
                           <div>
-                            <div className="flex items-center gap-2 mb-1">
+                            <div className="flex flex-wrap items-center gap-1.5 mb-1">
                               <Badge className={`text-xs font-bold ${
-                                bond.rating.includes("AAA") ? "bg-green-100 text-green-700" :
+                                bond.rating.includes("AAA") || bond.rating === "Sovereign" ? "bg-green-100 text-green-700" :
                                 bond.rating.includes("AA") ? "bg-blue-100 text-blue-700" :
                                 "bg-amber-100 text-amber-700"
                               }`}>
@@ -349,8 +350,12 @@ const Bonds = () => {
                               <Badge variant="outline" className="text-xs">
                                 {bond.bondType}
                               </Badge>
+                              <Badge className={`text-xs border ${getInvestmentMethodColor(bond.investmentMethod)}`}>
+                                {bond.investmentMethod === "Lot Based" ? <Layers className="w-3 h-3 mr-1" /> : <BarChart3 className="w-3 h-3 mr-1" />}
+                                {bond.investmentMethod}
+                              </Badge>
                             </div>
-                            <h3 className="font-bold text-lg text-[#0a344a] group-hover:text-[#1dab91] transition-colors">{bond.issuer}</h3>
+                            <h3 className="font-bold text-lg text-[#0a344a] group-hover:text-[#1dab91] transition-colors line-clamp-1">{bond.issuer}</h3>
                             <p className="text-sm text-muted-foreground">{bond.isin}</p>
                           </div>
                         </div>
@@ -385,13 +390,22 @@ const Bonds = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 mb-4">
+                      <div className="flex flex-wrap items-center gap-2 mb-4">
                         <Badge variant="outline" className="text-xs">
                           <Calendar className="w-3 h-3 mr-1" />
                           {bond.payoutFrequency}
                         </Badge>
                         <Badge variant="outline" className="text-xs">
                           {bond.ratingAgency}
+                        </Badge>
+                        {bond.lotSize > 1 && (
+                          <Badge variant="outline" className="text-xs bg-purple-50">
+                            <Layers className="w-3 h-3 mr-1" />
+                            {bond.lotSize} per lot
+                          </Badge>
+                        )}
+                        <Badge className={`text-xs border ${getMarketTypeColor(bond.marketType)}`}>
+                          {bond.marketType}
                         </Badge>
                       </div>
 

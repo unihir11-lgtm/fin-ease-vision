@@ -1,9 +1,10 @@
-// Bond Mock Data with SEBI compliance information
+// Bond Mock Data with SEBI compliance information and real investment workflow
 
 export interface Bond {
   id: string;
   issuer: string;
   isin: string;
+  logo: string; // Public logo URL
   iconType: "wallet" | "building" | "book" | "zap" | "map" | "train";
   rating: string;
   ratingAgency: string;
@@ -14,8 +15,14 @@ export interface Bond {
   tenure: string;
   faceValue: number;
   minInvestment: number;
-  payoutFrequency: "Monthly" | "Quarterly" | "Half-yearly" | "Annually";
-  bondType: "Corporate" | "Government" | "Tax-Free" | "PSU";
+  lotSize: number; // Number of bonds per lot
+  investmentMode: "Primary" | "Secondary" | "Both";
+  investmentMethod: "Lot Based" | "Direct" | "Both"; // How to invest
+  marketType: "Exchange Traded" | "OTC" | "Both";
+  tradingUnit: string; // e.g., "1 Bond" or "10 Bonds"
+  payoutFrequency: "Monthly" | "Quarterly" | "Half-yearly" | "Annually" | "At Maturity";
+  bondType: "Corporate" | "Government" | "Tax-Free" | "PSU" | "Sovereign Gold" | "RBI Savings";
+  bondCategory: "NCD" | "G-Sec" | "SDL" | "T-Bill" | "Sovereign Bond" | "Tax-Free Bond";
   riskLevel: "Low" | "Medium" | "High";
   issueDate: string;
   nextCouponDate: string;
@@ -27,13 +34,18 @@ export interface Bond {
   secured: boolean;
   listed: boolean;
   listingExchange: string[];
+  settlementType: "T+1" | "T+2" | "T+3";
+  cleanPrice: number; // Price without accrued interest
+  dirtyPrice: number; // Price including accrued interest
+  accruedInterest: number;
 }
 
 export const bondsData: Bond[] = [
   {
     id: "bond-1",
-    issuer: "MoneyBoxx March'27",
+    issuer: "MoneyBoxx Finance Ltd",
     isin: "INE0DXQ07017",
+    logo: "https://www.moneyboxx.in/assets/images/logo.png",
     iconType: "wallet",
     rating: "AA",
     ratingAgency: "CRISIL",
@@ -44,29 +56,41 @@ export const bondsData: Bond[] = [
     tenure: "3 Years",
     faceValue: 1000,
     minInvestment: 10000,
+    lotSize: 10,
+    investmentMode: "Secondary",
+    investmentMethod: "Lot Based",
+    marketType: "Exchange Traded",
+    tradingUnit: "10 Bonds",
     payoutFrequency: "Quarterly",
     bondType: "Corporate",
+    bondCategory: "NCD",
     riskLevel: "Medium",
     issueDate: "2024-03-20",
     nextCouponDate: "2025-06-20",
-    description: "MoneyBoxx Finance is a leading NBFC focused on small business loans. This bond offers attractive yields with quarterly interest payments.",
+    description: "MoneyBoxx Finance is a leading NBFC focused on small business loans. This Non-Convertible Debenture (NCD) offers attractive yields with quarterly interest payments through exchange trading.",
     features: [
-      "Listed on BSE",
+      "Listed on BSE - Exchange Traded",
       "Quarterly interest payout",
       "CRISIL AA rated",
       "Secured against loan portfolio",
+      "Lot-based investment (10 bonds per lot)",
     ],
-    taxBenefits: "Interest income taxable as per income tax slab. TDS applicable at 10%.",
+    taxBenefits: "Interest income taxable as per income tax slab. TDS applicable at 10%. Capital gains as per holding period.",
     callOption: false,
     putOption: false,
     secured: true,
     listed: true,
     listingExchange: ["BSE"],
+    settlementType: "T+2",
+    cleanPrice: 980,
+    dirtyPrice: 1005,
+    accruedInterest: 25,
   },
   {
     id: "bond-2",
-    issuer: "Indel Money Aug'26",
+    issuer: "Indel Money Ltd",
     isin: "INE0F3407018",
+    logo: "https://www.indelmoney.com/images/logo.png",
     iconType: "building",
     rating: "AA",
     ratingAgency: "ICRA",
@@ -77,17 +101,24 @@ export const bondsData: Bond[] = [
     tenure: "2 Years",
     faceValue: 1000,
     minInvestment: 10000,
+    lotSize: 10,
+    investmentMode: "Secondary",
+    investmentMethod: "Lot Based",
+    marketType: "Exchange Traded",
+    tradingUnit: "10 Bonds",
     payoutFrequency: "Quarterly",
     bondType: "Corporate",
+    bondCategory: "NCD",
     riskLevel: "Medium",
     issueDate: "2024-08-15",
     nextCouponDate: "2025-05-15",
-    description: "Indel Money is a gold loan NBFC with a strong presence in South India. This bond provides steady returns backed by gold loan portfolio.",
+    description: "Indel Money is a gold loan NBFC with a strong presence in South India. This NCD provides steady returns backed by gold loan portfolio, tradable on NSE.",
     features: [
-      "Listed on NSE",
+      "Listed on NSE - Exchange Traded",
       "Backed by gold loan portfolio",
       "ICRA AA rated",
       "Regular interest payouts",
+      "Secondary market liquidity",
     ],
     taxBenefits: "Interest income taxable as per income tax slab. TDS applicable at 10%.",
     callOption: true,
@@ -95,11 +126,16 @@ export const bondsData: Bond[] = [
     secured: true,
     listed: true,
     listingExchange: ["NSE"],
+    settlementType: "T+2",
+    cleanPrice: 985,
+    dirtyPrice: 1000,
+    accruedInterest: 15,
   },
   {
     id: "bond-3",
-    issuer: "Varthana Aug'27",
+    issuer: "Varthana Finance Pvt Ltd",
     isin: "INE0H5G07012",
+    logo: "https://vfrw.varthana.com/varthana_new_logo.png",
     iconType: "book",
     rating: "AA",
     ratingAgency: "CARE",
@@ -110,17 +146,24 @@ export const bondsData: Bond[] = [
     tenure: "3 Years",
     faceValue: 1000,
     minInvestment: 10000,
+    lotSize: 10,
+    investmentMode: "Secondary",
+    investmentMethod: "Lot Based",
+    marketType: "Exchange Traded",
+    tradingUnit: "10 Bonds",
     payoutFrequency: "Half-yearly",
     bondType: "Corporate",
+    bondCategory: "NCD",
     riskLevel: "Medium",
     issueDate: "2024-08-25",
     nextCouponDate: "2025-08-25",
-    description: "Varthana Finance is focused on affordable private school financing. Impact investing opportunity with competitive returns.",
+    description: "Varthana Finance is focused on affordable private school financing. This is an impact investing opportunity with competitive returns, supporting education infrastructure.",
     features: [
       "Impact investment opportunity",
       "Education sector focus",
       "CARE AA rated",
       "Half-yearly interest payout",
+      "ESG compliant investment",
     ],
     taxBenefits: "Interest income taxable as per income tax slab. TDS applicable at 10%.",
     callOption: false,
@@ -128,11 +171,16 @@ export const bondsData: Bond[] = [
     secured: true,
     listed: true,
     listingExchange: ["BSE"],
+    settlementType: "T+2",
+    cleanPrice: 990,
+    dirtyPrice: 1010,
+    accruedInterest: 20,
   },
   {
     id: "bond-4",
     issuer: "REC Limited",
     isin: "INE020B07HM8",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/REC_Limited_Logo.svg/200px-REC_Limited_Logo.svg.png",
     iconType: "zap",
     rating: "AAA",
     ratingAgency: "CRISIL",
@@ -143,16 +191,23 @@ export const bondsData: Bond[] = [
     tenure: "5 Years",
     faceValue: 10000,
     minInvestment: 10000,
+    lotSize: 1,
+    investmentMode: "Both",
+    investmentMethod: "Direct",
+    marketType: "Both",
+    tradingUnit: "1 Bond",
     payoutFrequency: "Annually",
     bondType: "PSU",
+    bondCategory: "NCD",
     riskLevel: "Low",
     issueDate: "2024-06-15",
     nextCouponDate: "2025-06-15",
-    description: "REC Limited is a Maharatna PSU under the Ministry of Power. Sovereign-backed bonds with highest safety rating.",
+    description: "REC Limited is a Maharatna PSU under the Ministry of Power. These sovereign-backed bonds offer the highest safety rating with direct investment option.",
     features: [
-      "Government of India owned",
+      "Government of India owned (Maharatna)",
       "AAA rated - Highest safety",
       "Listed on both NSE & BSE",
+      "Direct investment available",
       "Tax-efficient for HNIs",
     ],
     taxBenefits: "Interest income taxable as per income tax slab. Capital gains tax benefits if held till maturity.",
@@ -161,11 +216,16 @@ export const bondsData: Bond[] = [
     secured: false,
     listed: true,
     listingExchange: ["NSE", "BSE"],
+    settlementType: "T+1",
+    cleanPrice: 10000,
+    dirtyPrice: 10200,
+    accruedInterest: 200,
   },
   {
     id: "bond-5",
-    issuer: "NHAI",
+    issuer: "NHAI Tax-Free Bonds",
     isin: "INE906B07GP7",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/8/87/National_Highways_Authority_of_India_logo.svg/200px-National_Highways_Authority_of_India_logo.svg.png",
     iconType: "map",
     rating: "AAA",
     ratingAgency: "ICRA",
@@ -176,29 +236,41 @@ export const bondsData: Bond[] = [
     tenure: "6 Years",
     faceValue: 1000,
     minInvestment: 10000,
+    lotSize: 10,
+    investmentMode: "Secondary",
+    investmentMethod: "Both",
+    marketType: "Exchange Traded",
+    tradingUnit: "10 Bonds",
     payoutFrequency: "Annually",
-    bondType: "Government",
+    bondType: "Tax-Free",
+    bondCategory: "Tax-Free Bond",
     riskLevel: "Low",
     issueDate: "2024-03-31",
     nextCouponDate: "2025-03-31",
-    description: "National Highways Authority of India bonds are backed by Government of India. Tax-free interest for investors.",
+    description: "National Highways Authority of India tax-free bonds backed by Government of India. Interest earned is completely tax-free under Section 10(15)(iv)(h).",
     features: [
       "Government guaranteed",
       "Tax-free interest (Section 10)",
-      "AAA rated",
-      "Long-term investment",
+      "AAA rated by ICRA",
+      "Long-term wealth creation",
+      "Exchange tradable",
     ],
-    taxBenefits: "Interest is tax-free under Section 10(15)(iv)(h) of Income Tax Act.",
+    taxBenefits: "Interest is completely TAX-FREE under Section 10(15)(iv)(h) of Income Tax Act. No TDS on interest.",
     callOption: false,
     putOption: false,
     secured: false,
     listed: true,
     listingExchange: ["NSE", "BSE"],
+    settlementType: "T+2",
+    cleanPrice: 1020,
+    dirtyPrice: 1040,
+    accruedInterest: 20,
   },
   {
     id: "bond-6",
-    issuer: "IRFC",
+    issuer: "IRFC (Indian Railway Finance)",
     isin: "INE053F07AE8",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Indian_Railway_Finance_Corporation_logo.svg/200px-Indian_Railway_Finance_Corporation_logo.svg.png",
     iconType: "train",
     rating: "AAA",
     ratingAgency: "CRISIL",
@@ -209,17 +281,24 @@ export const bondsData: Bond[] = [
     tenure: "4 Years",
     faceValue: 1000,
     minInvestment: 10000,
+    lotSize: 10,
+    investmentMode: "Both",
+    investmentMethod: "Both",
+    marketType: "Both",
+    tradingUnit: "10 Bonds",
     payoutFrequency: "Half-yearly",
     bondType: "PSU",
+    bondCategory: "NCD",
     riskLevel: "Low",
     issueDate: "2024-09-15",
     nextCouponDate: "2025-03-15",
-    description: "Indian Railway Finance Corporation is a Navratna PSU. Safe investment backed by Indian Railways revenue.",
+    description: "Indian Railway Finance Corporation is a Navratna PSU. Safe investment backed by Indian Railways revenue with both primary subscription and secondary market options.",
     features: [
-      "Government of India owned",
-      "Navratna status",
+      "Government of India owned (Navratna)",
       "Backed by Railways revenue",
       "Half-yearly interest payout",
+      "Primary & Secondary market access",
+      "High liquidity",
     ],
     taxBenefits: "Interest income taxable as per income tax slab. TDS applicable at 10%.",
     callOption: false,
@@ -227,6 +306,143 @@ export const bondsData: Bond[] = [
     secured: false,
     listed: true,
     listingExchange: ["NSE", "BSE"],
+    settlementType: "T+1",
+    cleanPrice: 995,
+    dirtyPrice: 1015,
+    accruedInterest: 20,
+  },
+  {
+    id: "bond-7",
+    issuer: "Government of India 7.26% 2033",
+    isin: "IN0020230067",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/200px-Emblem_of_India.svg.png",
+    iconType: "building",
+    rating: "Sovereign",
+    ratingAgency: "RBI",
+    couponRate: 7.26,
+    currentYield: 7.30,
+    ytm: 7.26,
+    maturityDate: "2033-01-22",
+    tenure: "8 Years",
+    faceValue: 100,
+    minInvestment: 10000,
+    lotSize: 100,
+    investmentMode: "Both",
+    investmentMethod: "Direct",
+    marketType: "Both",
+    tradingUnit: "₹10,000 Face Value",
+    payoutFrequency: "Half-yearly",
+    bondType: "Government",
+    bondCategory: "G-Sec",
+    riskLevel: "Low",
+    issueDate: "2023-01-22",
+    nextCouponDate: "2025-07-22",
+    description: "Government Securities (G-Sec) issued by Reserve Bank of India on behalf of Government of India. Zero credit risk with sovereign guarantee.",
+    features: [
+      "Sovereign guarantee - Zero credit risk",
+      "Direct investment via RBI Retail Direct",
+      "Tradable on NDS-OM",
+      "Half-yearly interest payout",
+      "Eligible for SLR",
+    ],
+    taxBenefits: "Interest income taxable. No TDS for resident individuals investing via RBI Retail Direct.",
+    callOption: false,
+    putOption: false,
+    secured: false,
+    listed: true,
+    listingExchange: ["NDS-OM", "NSE", "BSE"],
+    settlementType: "T+1",
+    cleanPrice: 98.50,
+    dirtyPrice: 100.20,
+    accruedInterest: 1.70,
+  },
+  {
+    id: "bond-8",
+    issuer: "Sovereign Gold Bond 2024-25 Series III",
+    isin: "IN0020240SGB3",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/200px-Emblem_of_India.svg.png",
+    iconType: "wallet",
+    rating: "Sovereign",
+    ratingAgency: "RBI",
+    couponRate: 2.50,
+    currentYield: 2.50,
+    ytm: 8.50,
+    maturityDate: "2032-09-30",
+    tenure: "8 Years",
+    faceValue: 7200,
+    minInvestment: 7200,
+    lotSize: 1,
+    investmentMode: "Primary",
+    investmentMethod: "Direct",
+    marketType: "OTC",
+    tradingUnit: "1 gram of gold",
+    payoutFrequency: "Half-yearly",
+    bondType: "Sovereign Gold",
+    bondCategory: "Sovereign Bond",
+    riskLevel: "Low",
+    issueDate: "2024-09-30",
+    nextCouponDate: "2025-03-30",
+    description: "Sovereign Gold Bonds (SGBs) issued by RBI offer 2.5% p.a. fixed interest plus gold price appreciation. Tax-free capital gains on maturity.",
+    features: [
+      "2.5% p.a. fixed interest",
+      "Gold price appreciation benefit",
+      "Tax-free capital gains on maturity",
+      "No storage costs or risks",
+      "Sovereign guarantee on principal",
+    ],
+    taxBenefits: "Capital gains are TAX-FREE if held till maturity. Interest taxable as per slab.",
+    callOption: false,
+    putOption: true,
+    secured: false,
+    listed: true,
+    listingExchange: ["NSE", "BSE"],
+    settlementType: "T+1",
+    cleanPrice: 7200,
+    dirtyPrice: 7290,
+    accruedInterest: 90,
+  },
+];
+
+export const bondCategories = [
+  {
+    id: "ncd",
+    name: "Non-Convertible Debentures (NCDs)",
+    description: "Corporate bonds with fixed returns, tradable on exchanges",
+    investmentMethod: "Lot-based trading on NSE/BSE",
+    minInvestment: "₹10,000",
+    typicalYield: "9-13% p.a.",
+  },
+  {
+    id: "gsec",
+    name: "Government Securities (G-Sec)",
+    description: "Sovereign bonds with zero credit risk",
+    investmentMethod: "Direct via RBI Retail Direct or exchanges",
+    minInvestment: "₹10,000",
+    typicalYield: "7-7.5% p.a.",
+  },
+  {
+    id: "psu",
+    name: "PSU Bonds",
+    description: "Bonds from Public Sector Undertakings backed by Government",
+    investmentMethod: "Direct or lot-based",
+    minInvestment: "₹10,000",
+    typicalYield: "7.5-8.5% p.a.",
+  },
+  {
+    id: "taxfree",
+    name: "Tax-Free Bonds",
+    description: "Government enterprise bonds with tax-free interest",
+    investmentMethod: "Secondary market (lot-based)",
+    minInvestment: "₹10,000",
+    typicalYield: "5-6% tax-free (effective 8-9%)",
+  },
+  {
+    id: "sgb",
+    name: "Sovereign Gold Bonds",
+    description: "Government bonds linked to gold price",
+    investmentMethod: "Direct subscription or secondary market",
+    minInvestment: "1 gram gold equivalent",
+    typicalYield: "2.5% + gold appreciation",
   },
 ];
 
@@ -238,6 +454,11 @@ export const bondRiskDisclaimer = `
 - Investors should read all scheme related documents carefully before investing.
 - The ratings mentioned are current ratings and may change over time.
 
+**Investment Methods:**
+- **Lot-Based Trading**: Bonds traded on exchanges in lots (e.g., 10 bonds per lot). Place orders through your broker.
+- **Direct Investment**: Some bonds allow direct investment starting from ₹10,000 face value.
+- **RBI Retail Direct**: Government securities can be purchased directly via RBI Retail Direct platform.
+
 **SEBI Registration:**
 - All bonds listed on this platform are SEBI compliant.
 - Investment in bonds is regulated by SEBI (Issue and Listing of Non-Convertible Securities) Regulations, 2021.
@@ -246,4 +467,6 @@ export const bondRiskDisclaimer = `
 - Interest income from bonds is generally taxable as per the investor's income tax slab.
 - TDS is applicable at 10% if PAN is provided, else 20%.
 - Capital gains taxation depends on holding period.
+- Tax-free bonds: Interest is exempt under Section 10(15)(iv)(h).
+- Sovereign Gold Bonds: Capital gains tax-free if held till maturity.
 `;

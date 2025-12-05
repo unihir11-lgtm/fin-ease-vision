@@ -13,7 +13,7 @@ import {
   Calendar, TrendingUp, Shield, Building2, Clock, Percent, 
   BadgeCheck, Info, ChevronRight, Calculator, PieChart, 
   Wallet, Receipt, Scale, Lock, Unlock, ExternalLink,
-  Star, Award, Briefcase, Target
+  Star, Award, Briefcase, Target, Layers, BarChart3
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import logo from "@/assets/finease-logo.png";
@@ -130,8 +130,8 @@ const BondDetails = () => {
           <div className="bg-white rounded-2xl p-6 border border-border shadow-sm">
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
               <div className="flex items-start gap-4">
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center border border-primary/20 ${getIconColors(bond.bondType).bg}`}>
-                  <ProviderIcon iconType={bond.iconType} className={getIconColors(bond.bondType).text} size={28} />
+              <div className={`w-16 h-16 rounded-xl flex items-center justify-center border border-primary/20 ${getIconColors(bond.bondType).bg} overflow-hidden p-2`}>
+                  <ProviderIcon iconType={bond.iconType} logo={bond.logo} name={bond.issuer} className={getIconColors(bond.bondType).text} size={44} />
                 </div>
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
@@ -141,6 +141,11 @@ const BondDetails = () => {
                     <Badge variant="outline" className="capitalize">
                       {bond.bondType}
                     </Badge>
+                    {bond.bondCategory && (
+                      <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">
+                        {bond.bondCategory}
+                      </Badge>
+                    )}
                     {bond.secured && (
                       <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                         <Lock className="w-3 h-3 mr-1" /> Secured
@@ -154,11 +159,26 @@ const BondDetails = () => {
                   </div>
                   <h1 className="text-2xl lg:text-3xl font-bold text-secondary font-['Raleway']">{bond.issuer}</h1>
                   <p className="text-muted-foreground">ISIN: <span className="font-mono font-medium text-secondary">{bond.isin}</span></p>
-                  {bond.listingExchange.length > 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      Listed on: {bond.listingExchange.join(" & ")}
-                    </p>
-                  )}
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
+                    {bond.listingExchange?.length > 0 && (
+                      <span className="text-muted-foreground">
+                        Listed on: {bond.listingExchange.join(" & ")}
+                      </span>
+                    )}
+                    <span className="text-muted-foreground">•</span>
+                    <Badge className={`text-xs ${bond.investmentMethod === "Lot Based" ? "bg-purple-100 text-purple-700" : bond.investmentMethod === "Direct" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"}`}>
+                      {bond.investmentMethod === "Lot Based" ? <Layers className="w-3 h-3 mr-1" /> : <BarChart3 className="w-3 h-3 mr-1" />}
+                      {bond.investmentMethod}
+                    </Badge>
+                    {bond.lotSize > 1 && (
+                      <Badge variant="outline" className="text-xs bg-purple-50">
+                        {bond.lotSize} bonds/lot
+                      </Badge>
+                    )}
+                    <Badge variant="outline" className="text-xs">
+                      {bond.marketType}
+                    </Badge>
+                  </div>
                 </div>
               </div>
               
