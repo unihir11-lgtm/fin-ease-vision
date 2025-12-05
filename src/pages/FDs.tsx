@@ -16,6 +16,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import ProductLayout from "@/components/ProductLayout";
 import { ProviderIcon, getIconColors } from "@/components/icons/ProviderIcon";
+import { CreditCard, UserCheck, Video, Wallet2 } from "lucide-react";
 
 const FDs = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -314,11 +315,11 @@ const FDs = () => {
                   <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-4">
-                        <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(fd.type).bg}`}>
-                          <ProviderIcon iconType={fd.iconType} className={getIconColors(fd.type).text} size={28} />
+                        <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(fd.type).bg} overflow-hidden p-2`}>
+                          <ProviderIcon iconType={fd.iconType} logo={fd.logo} name={fd.bankName} className={getIconColors(fd.type).text} size={40} />
                         </div>
                         <div>
-                          <div className="flex items-center gap-2 mb-1">
+                          <div className="flex flex-wrap items-center gap-1.5 mb-1">
                             <Badge className="bg-green-100 text-green-700 text-xs gap-1">
                               <Shield className="w-3 h-3" />
                               DICGC
@@ -326,8 +327,14 @@ const FDs = () => {
                             <Badge variant="outline" className="text-xs">
                               {fd.type}
                             </Badge>
+                            {!fd.accountRequired && (
+                              <Badge className="bg-blue-100 text-blue-700 text-xs border border-blue-200">
+                                <Wallet2 className="w-3 h-3 mr-1" />
+                                No Account
+                              </Badge>
+                            )}
                           </div>
-                          <h3 className="font-bold text-lg text-[#0a344a] group-hover:text-[#1dab91] transition-colors">{fd.bankName}</h3>
+                          <h3 className="font-bold text-lg text-[#0a344a] group-hover:text-[#1dab91] transition-colors line-clamp-1">{fd.bankName}</h3>
                           <p className="text-sm text-muted-foreground">{fd.regulatedBy}</p>
                         </div>
                       </div>
@@ -372,11 +379,20 @@ const FDs = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {fd.features.slice(0, 2).map((feature, i) => (
-                        <Badge key={i} variant="outline" className="text-xs bg-muted/50">
-                          {feature.length > 30 ? feature.slice(0, 30) + "..." : feature}
+                      <Badge variant="outline" className="text-xs bg-muted/50">
+                        <Video className="w-3 h-3 mr-1" />
+                        {fd.kycRequired}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs bg-muted/50">
+                        <Clock className="w-3 h-3 mr-1" />
+                        {fd.processingTime}
+                      </Badge>
+                      {fd.loanAgainstFD && (
+                        <Badge variant="outline" className="text-xs bg-amber-50 text-amber-700">
+                          <CreditCard className="w-3 h-3 mr-1" />
+                          {fd.loanPercentage}% Loan
                         </Badge>
-                      ))}
+                      )}
                     </div>
 
                     <Button className="w-full gap-2" variant="outline">
