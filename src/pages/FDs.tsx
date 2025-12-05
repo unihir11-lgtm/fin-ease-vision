@@ -15,6 +15,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import ProductLayout from "@/components/ProductLayout";
+import { ProviderIcon, getIconColors } from "@/components/icons/ProviderIcon";
 
 const FDs = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -133,8 +134,8 @@ const FDs = () => {
                     </Badge>
                   </div>
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#175d80]/20 to-[#1dab91]/20 flex items-center justify-center text-4xl border border-border/50">
-                      {featuredFD.logo}
+                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center border border-border/50 ${getIconColors(featuredFD.type).bg}`}>
+                      <ProviderIcon iconType={featuredFD.iconType} className={getIconColors(featuredFD.type).text} size={36} />
                     </div>
                     <div>
                       <h2 className="text-2xl lg:text-3xl font-bold text-[#0a344a] mb-1">{featuredFD.bankName}</h2>
@@ -313,8 +314,8 @@ const FDs = () => {
                   <div className="bg-gradient-to-r from-muted/50 to-muted/30 p-5 border-b border-border/50">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl border border-border/50 group-hover:scale-105 transition-transform">
-                          {fd.logo}
+                        <div className={`w-16 h-16 rounded-2xl shadow-sm flex items-center justify-center border border-border/50 group-hover:scale-105 transition-transform ${getIconColors(fd.type).bg}`}>
+                          <ProviderIcon iconType={fd.iconType} className={getIconColors(fd.type).text} size={28} />
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">

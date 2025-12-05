@@ -3,7 +3,7 @@
 export interface FDProvider {
   id: string;
   bankName: string;
-  logo: string;
+  iconType: "building2" | "landmark" | "mountain" | "trees" | "building" | "banknote";
   type: "Scheduled Commercial Bank" | "Small Finance Bank" | "NBFC" | "Co-operative Bank";
   regulatedBy: string;
   interestRate: number;
@@ -25,7 +25,7 @@ export const fdProviders: FDProvider[] = [
   {
     id: "fd-1",
     bankName: "Bajaj Finance Limited",
-    logo: "🅱️",
+    iconType: "building2",
     type: "NBFC",
     regulatedBy: "Reserve Bank of India",
     interestRate: 9.10,
@@ -58,7 +58,7 @@ export const fdProviders: FDProvider[] = [
   {
     id: "fd-2",
     bankName: "Utkarsh Small Finance Bank",
-    logo: "🏦",
+    iconType: "landmark",
     type: "Small Finance Bank",
     regulatedBy: "Reserve Bank of India",
     interestRate: 8.10,
@@ -91,7 +91,7 @@ export const fdProviders: FDProvider[] = [
   {
     id: "fd-3",
     bankName: "Shivalik Small Finance Bank",
-    logo: "🏔️",
+    iconType: "mountain",
     type: "Small Finance Bank",
     regulatedBy: "Reserve Bank of India",
     interestRate: 6.10,
@@ -121,7 +121,7 @@ export const fdProviders: FDProvider[] = [
   {
     id: "fd-4",
     bankName: "North East Small Finance Bank",
-    logo: "🌲",
+    iconType: "trees",
     type: "Small Finance Bank",
     regulatedBy: "Reserve Bank of India",
     interestRate: 6.80,
@@ -151,7 +151,7 @@ export const fdProviders: FDProvider[] = [
   {
     id: "fd-5",
     bankName: "Shriram Finance Ltd",
-    logo: "🏛️",
+    iconType: "building",
     type: "NBFC",
     regulatedBy: "Reserve Bank of India",
     interestRate: 8.10,
@@ -182,7 +182,7 @@ export const fdProviders: FDProvider[] = [
   {
     id: "fd-6",
     bankName: "HDFC Bank",
-    logo: "🔵",
+    iconType: "banknote",
     type: "Scheduled Commercial Bank",
     regulatedBy: "Reserve Bank of India",
     interestRate: 7.25,

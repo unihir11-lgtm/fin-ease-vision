@@ -18,6 +18,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import logo from "@/assets/finease-logo.png";
 import ProductLayout from "@/components/ProductLayout";
+import { ProviderIcon, getIconColors } from "@/components/icons/ProviderIcon";
 
 const BondDetails = () => {
   const { id } = useParams();
@@ -129,8 +130,8 @@ const BondDetails = () => {
           <div className="bg-white rounded-2xl p-6 border border-border shadow-sm">
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-3xl border border-primary/20">
-                  {bond.logo}
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center border border-primary/20 ${getIconColors(bond.bondType).bg}`}>
+                  <ProviderIcon iconType={bond.iconType} className={getIconColors(bond.bondType).text} size={28} />
                 </div>
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
@@ -556,7 +557,9 @@ const BondDetails = () => {
                         className="block p-4 bg-secondary/5 rounded-lg hover:bg-secondary/10 transition-colors"
                       >
                         <div className="flex items-center gap-3 mb-3">
-                          <span className="text-2xl">{b.logo}</span>
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getIconColors(b.bondType).bg}`}>
+                            <ProviderIcon iconType={b.iconType} className={getIconColors(b.bondType).text} size={20} />
+                          </div>
                           <div>
                             <p className="font-medium text-secondary text-sm">{b.issuer}</p>
                             <Badge className={`${getRatingColor(b.rating)} text-xs`}>{b.rating}</Badge>
