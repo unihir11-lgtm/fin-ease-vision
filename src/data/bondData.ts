@@ -4,7 +4,7 @@ export interface Bond {
   id: string;
   issuer: string;
   isin: string;
-  logo: string;
+  iconType: "wallet" | "building" | "book" | "zap" | "map" | "train";
   rating: string;
   ratingAgency: string;
   couponRate: number;
@@ -34,7 +34,7 @@ export const bondsData: Bond[] = [
     id: "bond-1",
     issuer: "MoneyBoxx March'27",
     isin: "INE0DXQ07017",
-    logo: "💰",
+    iconType: "wallet",
     rating: "AA",
     ratingAgency: "CRISIL",
     couponRate: 8.5,
@@ -67,7 +67,7 @@ export const bondsData: Bond[] = [
     id: "bond-2",
     issuer: "Indel Money Aug'26",
     isin: "INE0F3407018",
-    logo: "🏦",
+    iconType: "building",
     rating: "AA",
     ratingAgency: "ICRA",
     couponRate: 7.5,
@@ -100,7 +100,7 @@ export const bondsData: Bond[] = [
     id: "bond-3",
     issuer: "Varthana Aug'27",
     isin: "INE0H5G07012",
-    logo: "📚",
+    iconType: "book",
     rating: "AA",
     ratingAgency: "CARE",
     couponRate: 7.5,
@@ -133,7 +133,7 @@ export const bondsData: Bond[] = [
     id: "bond-4",
     issuer: "REC Limited",
     isin: "INE020B07HM8",
-    logo: "⚡",
+    iconType: "zap",
     rating: "AAA",
     ratingAgency: "CRISIL",
     couponRate: 7.85,
@@ -166,7 +166,7 @@ export const bondsData: Bond[] = [
     id: "bond-5",
     issuer: "NHAI",
     isin: "INE906B07GP7",
-    logo: "🛣️",
+    iconType: "map",
     rating: "AAA",
     ratingAgency: "ICRA",
     couponRate: 7.35,
@@ -199,7 +199,7 @@ export const bondsData: Bond[] = [
     id: "bond-6",
     issuer: "IRFC",
     isin: "INE053F07AE8",
-    logo: "🚂",
+    iconType: "train",
     rating: "AAA",
     ratingAgency: "CRISIL",
     couponRate: 7.65,

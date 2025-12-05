@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { bondsData } from "@/data/bondData";
 import { toast } from "@/hooks/use-toast";
+import { ProviderIcon, getIconColors } from "@/components/icons/ProviderIcon";
 
 interface CouponSchedule {
   frequency: string;
@@ -1360,11 +1361,11 @@ const AdminBondManagement = () => {
             <CardContent className="p-0">
               {/* Header */}
               <div className="p-4 border-b bg-gradient-to-r from-secondary/5 to-primary/5">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-2xl border">
-                      {bond.logo}
-                    </div>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-12 h-12 rounded-xl shadow-sm flex items-center justify-center border ${getIconColors(bond.bondType).bg}`}>
+                        <ProviderIcon iconType={bond.iconType} className={getIconColors(bond.bondType).text} size={24} />
+                      </div>
                     <div>
                       <h3 className="font-bold text-secondary text-sm line-clamp-1">{bond.issuer}</h3>
                       <p className="text-xs text-muted-foreground">{bond.isin || "INE001A07XY8"}</p>

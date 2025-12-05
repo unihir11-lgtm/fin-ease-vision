@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { fdProviders } from "@/data/fdData";
 import { useToast } from "@/hooks/use-toast";
+import { ProviderIcon, getIconColors } from "@/components/icons/ProviderIcon";
 
 interface TenureRate {
   months: number;
@@ -913,8 +914,8 @@ const AdminFDManagement = () => {
             <CardContent className="p-5">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl">
-                    {fd.logo}
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${getIconColors(fd.type).bg}`}>
+                    <ProviderIcon iconType={fd.iconType} className={getIconColors(fd.type).text} size={24} />
                   </div>
                   <div>
                     <h3 className="font-bold text-secondary">{fd.bankName}</h3>

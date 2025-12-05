@@ -17,6 +17,7 @@ import { ArrowLeft, Shield, CheckCircle, User, Search, Building2, Users, Calenda
 import { toast } from "@/hooks/use-toast";
 import logo from "@/assets/finease-logo.png";
 import Footer from "@/components/Footer";
+import { ProviderIcon, getIconColors } from "@/components/icons/ProviderIcon";
 
 const FDDetails = () => {
   const { id } = useParams();
@@ -85,9 +86,9 @@ const FDDetails = () => {
 
   // Mock comparison banks
   const comparisonBanks = [
-    { name: "SBI", rate: 6.95, logo: "🏦" },
-    { name: "HDFC Bank", rate: 7.1, logo: "🏛️" },
-    { name: fd.bankName, rate: fd.interestRate, logo: fd.logo, highlight: true },
+    { name: "SBI", rate: 6.95, iconType: "landmark" as const },
+    { name: "HDFC Bank", rate: 7.1, iconType: "banknote" as const },
+    { name: fd.bankName, rate: fd.interestRate, iconType: fd.iconType, highlight: true },
   ];
 
   // Bank info
@@ -139,8 +140,8 @@ const FDDetails = () => {
             <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-primary/20 via-primary/10 to-accent/20 h-48 md:h-64">
               <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20320%22%3E%3Cpath%20fill%3D%22%2323698e%22%20fill-opacity%3D%220.1%22%20d%3D%22M0%2C128L48%2C144C96%2C160%2C192%2C192%2C288%2C186.7C384%2C181%2C480%2C139%2C576%2C138.7C672%2C139%2C768%2C181%2C864%2C181.3C960%2C181%2C1056%2C139%2C1152%2C117.3C1248%2C96%2C1344%2C96%2C1392%2C96L1440%2C96L1440%2C320L1392%2C320C1344%2C320%2C1248%2C320%2C1152%2C320C1056%2C320%2C960%2C320%2C864%2C320C768%2C320%2C672%2C320%2C576%2C320C480%2C320%2C384%2C320%2C288%2C320C192%2C320%2C96%2C320%2C48%2C320L0%2C320Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E')] bg-cover bg-bottom opacity-50"></div>
               <div className="absolute top-4 left-4 flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-card flex items-center justify-center text-2xl shadow-lg">
-                  {fd.logo}
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${getIconColors(fd.type).bg}`}>
+                  <ProviderIcon iconType={fd.iconType} className={getIconColors(fd.type).text} size={24} />
                 </div>
                 <span className="font-bold text-foreground text-lg">{fd.bankName}</span>
               </div>
@@ -236,7 +237,9 @@ const FDDetails = () => {
                 <div className="grid grid-cols-3 gap-4">
                   {comparisonBanks.map((bank, index) => (
                     <div key={index} className={`text-center p-4 rounded-xl ${bank.highlight ? 'bg-primary/10 border-2 border-primary' : 'bg-muted/30'}`}>
-                      <div className="text-2xl mb-2">{bank.logo}</div>
+                      <div className={`w-10 h-10 mx-auto mb-2 rounded-lg flex items-center justify-center ${getIconColors(fd.type).bg}`}>
+                        <ProviderIcon iconType={bank.iconType} className={getIconColors(fd.type).text} size={20} />
+                      </div>
                       <p className={`text-xl font-bold ${bank.highlight ? 'text-primary' : 'text-foreground'}`}>{bank.rate}%</p>
                       <p className="text-sm text-muted-foreground mt-1">{bank.name}</p>
                     </div>
