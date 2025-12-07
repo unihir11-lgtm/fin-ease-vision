@@ -14,7 +14,7 @@ import { ipoData, ipoMarketLots } from "@/data/ipoData";
 import { 
   ExternalLink, FileText, ArrowLeft, Plus, Minus, TrendingUp, 
   Calendar, IndianRupee, Users, Target, Clock, Building2,
-  Shield, Award, BarChart3, CheckCircle2, AlertCircle
+  Shield, Award, BarChart3, CheckCircle2, AlertCircle, LineChart
 } from "lucide-react";
 import {
   BarChart,
@@ -31,6 +31,13 @@ import {
 import logo from "@/assets/finease-logo.png";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
+
+// New Components
+import GMPTrendChart from "@/components/ipo/GMPTrendChart";
+import PeerComparisonTable from "@/components/ipo/PeerComparisonTable";
+import FinancialCharts from "@/components/ipo/FinancialCharts";
+import IPOPerformanceTracker from "@/components/ipo/IPOPerformanceTracker";
+import CompanyAnalysis from "@/components/ipo/CompanyAnalysis";
 
 const IPODetails = () => {
   const { id } = useParams();
@@ -121,20 +128,26 @@ const IPODetails = () => {
                 <TrendingUp className="w-10 h-10 text-white" />
               </div>
               <div>
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <Badge className="bg-white/20 text-white border-0 backdrop-blur-sm">{ipo.type}</Badge>
                   <Badge className={`border-0 ${
                     ipo.status === "Open" ? "bg-green-500/90 text-white" :
                     ipo.status === "Upcoming" ? "bg-amber-500/90 text-white" :
+                    ipo.status === "Listed" ? "bg-blue-500/90 text-white" :
                     "bg-gray-500/90 text-white"
                   }`}>
                     {ipo.status}
                   </Badge>
+                  {ipo.gmp > 0 && (
+                    <Badge className="bg-green-500/90 text-white border-0">
+                      GMP: +₹{ipo.gmp}
+                    </Badge>
+                  )}
                 </div>
                 <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">{ipo.companyName}</h1>
                 <p className="text-white/70 flex items-center gap-2">
                   <Building2 className="w-4 h-4" />
-                  {ipo.parentOrganization}
+                  {ipo.parentOrganization} • {ipo.industry}
                 </p>
               </div>
             </div>
@@ -311,7 +324,7 @@ const IPODetails = () => {
         </div>
 
         {/* Key Metrics Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-8">
           {[
             { icon: IndianRupee, label: "Min Investment", value: `₹${ipo.minInvestment.toLocaleString()}`, color: "bg-primary/10 text-primary" },
             { icon: Users, label: "Lot Size", value: `${ipo.lotSize} shares`, color: "bg-blue-100 text-blue-600" },
@@ -319,6 +332,8 @@ const IPODetails = () => {
             { icon: BarChart3, label: "Issue Size", value: ipo.issueSize, color: "bg-amber-100 text-amber-600" },
             { icon: Calendar, label: "Bid Starts", value: formatDate(ipo.bidDates.start), color: "bg-purple-100 text-purple-600" },
             { icon: Clock, label: "Bid Ends", value: formatDate(ipo.bidDates.end), color: "bg-teal-100 text-teal-600" },
+            { icon: TrendingUp, label: "GMP", value: ipo.gmp > 0 ? `+₹${ipo.gmp}` : "₹0", color: ipo.gmp > 0 ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-600" },
+            { icon: LineChart, label: "Expected Listing", value: ipo.expectedListing ? `₹${ipo.expectedListing}` : "-", color: "bg-indigo-100 text-indigo-600" },
           ].map((item, i) => (
             <Card key={i} className="hover-lift border-0 shadow-sm">
               <CardContent className="p-4">
@@ -326,7 +341,7 @@ const IPODetails = () => {
                   <item.icon className="w-5 h-5" />
                 </div>
                 <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
-                <p className="font-bold text-secondary">{item.value}</p>
+                <p className="font-bold text-secondary text-sm">{item.value}</p>
               </CardContent>
             </Card>
           ))}
@@ -409,10 +424,10 @@ const IPODetails = () => {
               <div className="space-y-4">
                 {[
                   { label: "Open Date", date: formatDate(ipo.bidDates.start), status: "completed" },
-                  { label: "Close Date", date: formatDate(ipo.bidDates.end), status: ipo.status === "Closed" ? "completed" : "active" },
-                  { label: "Allotment", date: "Dec 25, 2024", status: "pending" },
-                  { label: "Refund", date: "Dec 26, 2024", status: "pending" },
-                  { label: "Listing", date: "Dec 27, 2024", status: "pending" },
+                  { label: "Close Date", date: formatDate(ipo.bidDates.end), status: ipo.status === "Closed" || ipo.status === "Listed" ? "completed" : "active" },
+                  { label: "Allotment", date: formatDate(ipo.allotmentDate), status: ipo.status === "Listed" ? "completed" : "pending" },
+                  { label: "Refund", date: formatDate(ipo.refundDate), status: ipo.status === "Listed" ? "completed" : "pending" },
+                  { label: "Listing", date: formatDate(ipo.listingDate), status: ipo.status === "Listed" ? "completed" : "pending" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <div className={`w-3 h-3 rounded-full ${
@@ -431,14 +446,75 @@ const IPODetails = () => {
           </Card>
         </div>
 
+        {/* GMP Trend Chart */}
+        <div className="mb-8">
+          <GMPTrendChart 
+            companyName={ipo.companyShortName}
+            currentGMP={ipo.gmp}
+            priceMax={ipo.priceRange.max}
+          />
+        </div>
+
+        {/* Peer Comparison Table */}
+        {ipo.peerComparison && ipo.peerComparison.length > 0 && (
+          <div className="mb-8">
+            <PeerComparisonTable 
+              companyName={ipo.companyShortName}
+              priceMax={ipo.priceRange.max}
+              peers={ipo.peerComparison}
+            />
+          </div>
+        )}
+
         {/* Tabs Section */}
-        <Tabs defaultValue="details" className="mb-8">
-          <TabsList className="bg-muted/50 p-1 mb-6">
-            <TabsTrigger value="details" className="data-[state=active]:bg-white">IPO Details</TabsTrigger>
-            <TabsTrigger value="lotsize" className="data-[state=active]:bg-white">Market Lot</TabsTrigger>
-            <TabsTrigger value="about" className="data-[state=active]:bg-white">About Company</TabsTrigger>
-            <TabsTrigger value="documents" className="data-[state=active]:bg-white">Documents</TabsTrigger>
+        <Tabs defaultValue="financials" className="mb-8">
+          <TabsList className="bg-muted/50 p-1 mb-6 flex-wrap h-auto">
+            <TabsTrigger value="financials" className="data-[state=active]:bg-white">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Financials
+            </TabsTrigger>
+            <TabsTrigger value="company" className="data-[state=active]:bg-white">
+              <Building2 className="w-4 h-4 mr-2" />
+              Company Analysis
+            </TabsTrigger>
+            <TabsTrigger value="details" className="data-[state=active]:bg-white">
+              <FileText className="w-4 h-4 mr-2" />
+              IPO Details
+            </TabsTrigger>
+            <TabsTrigger value="lotsize" className="data-[state=active]:bg-white">
+              <Target className="w-4 h-4 mr-2" />
+              Market Lot
+            </TabsTrigger>
+            <TabsTrigger value="documents" className="data-[state=active]:bg-white">
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Documents
+            </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="financials">
+            <FinancialCharts 
+              companyName={ipo.companyShortName}
+              financials={ipo.financials}
+            />
+          </TabsContent>
+
+          <TabsContent value="company">
+            <CompanyAnalysis 
+              companyName={ipo.companyShortName}
+              aboutCompany={ipo.aboutCompany}
+              industry={ipo.industry}
+              headquarters={ipo.headquarters}
+              foundedYear={ipo.foundedYear}
+              employees={ipo.employees}
+              website={ipo.website}
+              managingDirector={ipo.managingDirector}
+              objectives={ipo.objectives}
+              strengths={ipo.strengths}
+              risks={ipo.risks}
+              promoterHolding={ipo.promoterHolding}
+              reservations={ipo.reservations}
+            />
+          </TabsContent>
 
           <TabsContent value="details">
             <div className="grid md:grid-cols-2 gap-6">
@@ -452,16 +528,18 @@ const IPODetails = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {[
-                      { label: "Issue Type", value: ipo.type },
-                      { label: "Face Value", value: "₹10 per share" },
+                      { label: "Issue Type", value: ipo.issueType },
+                      { label: "Face Value", value: `₹${ipo.faceValue} per share` },
                       { label: "Issue Size", value: ipo.issueSize },
-                      { label: "Fresh Issue", value: "₹250 Cr" },
-                      { label: "OFS", value: "₹150 Cr" },
-                      { label: "Listing At", value: "BSE, NSE" },
+                      { label: "Fresh Issue", value: ipo.freshIssue || "N/A" },
+                      { label: "OFS", value: ipo.ofs || "N/A" },
+                      { label: "Listing At", value: ipo.listingAt.join(", ") },
+                      { label: "Registrar", value: ipo.registrar },
+                      { label: "Lead Manager", value: ipo.leadManager },
                     ].map((item, i) => (
                       <div key={i} className="flex justify-between items-center py-2 border-b last:border-0">
                         <span className="text-muted-foreground">{item.label}</span>
-                        <span className="font-semibold text-secondary">{item.value}</span>
+                        <span className="font-semibold text-secondary text-right max-w-[60%]">{item.value}</span>
                       </div>
                     ))}
                   </div>
@@ -478,12 +556,12 @@ const IPODetails = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {[
-                      { label: "Promoter Holding (Pre)", value: "75.00%" },
-                      { label: "Promoter Holding (Post)", value: "62.50%" },
-                      { label: "Public Holding", value: "37.50%" },
-                      { label: "Employee Reservation", value: "₹2 Cr" },
-                      { label: "Market Maker", value: "Yes" },
-                      { label: "Anchor Portion", value: "30%" },
+                      { label: "Promoter Holding (Pre)", value: ipo.promoterHolding ? `${ipo.promoterHolding.preIssue}%` : "N/A" },
+                      { label: "Promoter Holding (Post)", value: ipo.promoterHolding ? `${ipo.promoterHolding.postIssue}%` : "N/A" },
+                      { label: "Public Holding (Post)", value: ipo.promoterHolding ? `${100 - ipo.promoterHolding.postIssue}%` : "N/A" },
+                      { label: "QIB Reservation", value: ipo.reservations ? `${ipo.reservations.qib}%` : "N/A" },
+                      { label: "NII Reservation", value: ipo.reservations ? `${ipo.reservations.nii}%` : "N/A" },
+                      { label: "Retail Reservation", value: ipo.reservations ? `${ipo.reservations.retail}%` : "N/A" },
                     ].map((item, i) => (
                       <div key={i} className="flex justify-between items-center py-2 border-b last:border-0">
                         <span className="text-muted-foreground">{item.label}</span>
@@ -531,37 +609,6 @@ const IPODetails = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="about">
-            <Card className="hover-lift">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-primary" />
-                  About {ipo.companyName}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {ipo.companyName} is a leading player in its industry sector, known for innovation and growth. 
-                  The company has demonstrated strong financial performance over the past few years with consistent 
-                  revenue growth and improving profit margins. With a focus on expanding market share and 
-                  diversifying product offerings, the company is well-positioned for future growth.
-                </p>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {[
-                    { label: "Industry", value: "Technology" },
-                    { label: "Founded", value: "2010" },
-                    { label: "Headquarters", value: "Mumbai, India" },
-                  ].map((item, i) => (
-                    <div key={i} className="p-4 bg-muted/30 rounded-xl">
-                      <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
-                      <p className="font-semibold text-secondary">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           <TabsContent value="documents">
             <Card className="hover-lift">
               <CardHeader>
@@ -574,7 +621,7 @@ const IPODetails = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   {[
                     { name: "Red Herring Prospectus (RHP)", link: ipo.rhpLink },
-                    { name: "Draft RHP (DRHP)", link: "#" },
+                    { name: "Draft RHP (DRHP)", link: ipo.drhpLink },
                     { name: "Financial Statements", link: "#" },
                     { name: "Anchor Investor Details", link: "#" },
                   ].map((doc, i) => (
@@ -598,6 +645,11 @@ const IPODetails = () => {
           </TabsContent>
         </Tabs>
 
+        {/* IPO Performance Tracker */}
+        <div className="mb-8">
+          <IPOPerformanceTracker />
+        </div>
+
         {/* Risk Disclaimer */}
         <Card className="bg-amber-50 border-amber-200 mb-8">
           <CardContent className="p-6">
@@ -609,7 +661,7 @@ const IPODetails = () => {
                   Investment in IPOs involves risk. There is no assurance of allotment or listing gains. 
                   Please read all offer-related documents carefully before investing. Past performance is 
                   not indicative of future returns. Investment decisions should be based on individual 
-                  risk appetite and financial goals.
+                  risk appetite and financial goals. Grey Market Premium (GMP) is unofficial and indicative only.
                 </p>
               </div>
             </div>
