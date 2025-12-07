@@ -67,12 +67,14 @@ const AdminBondAnalytics = () => {
   const [timeRange, setTimeRange] = useState("6m");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-secondary flex items-center gap-2">
-            <Landmark className="w-7 h-7 text-primary" />
+          <h1 className="text-2xl md:text-3xl font-bold text-secondary flex items-center gap-3 font-['Raleway']">
+            <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center shadow-sm">
+              <Landmark className="w-6 h-6 text-primary" />
+            </div>
             Bond Analytics
           </h1>
           <p className="text-muted-foreground mt-1">Investment metrics, yield trends, and portfolio insights</p>
