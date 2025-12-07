@@ -122,35 +122,77 @@ const NPS = () => {
 
   return (
     <ProductLayout>
-      {/* Hero Section */}
-      <section className="relative min-h-[500px] bg-gradient-to-r from-[#0a344a] to-[#175d80] overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center opacity-30" />
+      {/* Enhanced Hero Section */}
+      <section className="relative min-h-[550px] bg-gradient-to-r from-secondary via-secondary/95 to-primary/80 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+        
         <div className="relative container mx-auto px-4 py-16 lg:py-24">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-display leading-tight">
-              Invest To Secure Your Retirement & Save Taxes
-            </h1>
-            <p className="text-lg text-white/80 mb-8 leading-relaxed">
-              Seamlessly manage and track all your investments with cutting-edge technology and smart tools - empowering you to make informed decisions for a secure and prosperous financial future.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Button 
-                size="lg" 
-                className="bg-[#1dab91] hover:bg-[#18937c] text-white font-semibold px-8 py-6 text-lg"
-                onClick={() => navigate("/nps/register")}
-              >
-                <UserPlus className="mr-2 h-5 w-5" />
-                Register Now
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="border-white text-white hover:bg-white/10 font-semibold px-8 py-6 text-lg"
-                onClick={() => navigate("/dashboard/nps")}
-              >
-                <LayoutDashboard className="mr-2 h-5 w-5" />
-                Go to Dashboard
-              </Button>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="max-w-xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium mb-6">
+                <Shield className="w-4 h-4" />
+                Government Backed Pension Scheme
+              </div>
+              <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6 font-display leading-tight">
+                Invest To Secure Your Retirement & Save Taxes
+              </h1>
+              <p className="text-lg text-white/80 mb-8 leading-relaxed">
+                Seamlessly manage and track all your NPS investments with cutting-edge technology - empowering you to make informed decisions for a secure financial future.
+              </p>
+              
+              <div className="flex flex-wrap gap-4 mb-8">
+                <Button 
+                  size="lg" 
+                  className="bg-white text-secondary hover:bg-white/90 font-bold px-8 py-6 text-lg shadow-xl"
+                  onClick={() => navigate("/nps/register")}
+                >
+                  <UserPlus className="mr-2 h-5 w-5" />
+                  Register Now
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="border-white/30 bg-white/10 text-white hover:bg-white/20 font-semibold px-8 py-6 text-lg backdrop-blur-sm"
+                  onClick={() => navigate("/dashboard/nps")}
+                >
+                  <LayoutDashboard className="mr-2 h-5 w-5" />
+                  Go to Dashboard
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap gap-6">
+                {[
+                  { value: "₹2L", label: "Tax Savings" },
+                  { value: "10%+", label: "Returns" },
+                  { value: "0.01%", label: "Fund Charges" },
+                ].map((stat, i) => (
+                  <div key={i} className="text-center">
+                    <p className="text-2xl font-bold text-white">{stat.value}</p>
+                    <p className="text-sm text-white/60">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="hidden lg:flex justify-center">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/30 to-accent/30 rounded-3xl blur-3xl" />
+                <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20">
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { icon: Shield, label: "Govt Backed", color: "bg-green-500/20" },
+                      { icon: TrendingUp, label: "Market Returns", color: "bg-blue-500/20" },
+                      { icon: PiggyBank, label: "Tax Benefits", color: "bg-amber-500/20" },
+                      { icon: Wallet, label: "Low Cost", color: "bg-purple-500/20" },
+                    ].map((item, i) => (
+                      <div key={i} className={`${item.color} p-4 rounded-2xl text-center`}>
+                        <item.icon className="w-8 h-8 text-white mx-auto mb-2" />
+                        <p className="text-white text-sm font-medium">{item.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
