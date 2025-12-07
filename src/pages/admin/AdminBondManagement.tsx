@@ -272,37 +272,44 @@ const AdminBondManagement = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-secondary flex items-center gap-2">
-            <Landmark className="w-7 h-7 text-primary" />
-            Bond Management
-          </h1>
-          <p className="text-muted-foreground mt-1">Manage corporate, government, and municipal bonds</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" /> Export Data
-          </Button>
-          <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2 bg-primary hover:bg-primary/90">
-                <Plus className="w-4 h-4" /> Add New Bond
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2 text-xl">
-                  <Landmark className="w-5 h-5 text-primary" />
-                  Add New Bond Issue
-                </DialogTitle>
-                <DialogDescription>
-                  Configure all bond parameters including rates, eligibility, tax benefits, and call/put options
-                </DialogDescription>
-              </DialogHeader>
-              
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden flex flex-col">
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-secondary via-secondary/95 to-primary/80 p-6 md:p-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+        <svg className="absolute right-0 top-0 h-full w-1/3 text-white/5" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon fill="currentColor" points="50,0 100,0 100,100 0,100" />
+        </svg>
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+              <Landmark className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white font-display">Bond Management</h1>
+              <p className="text-white/70">Manage corporate, government, and municipal bonds</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Download className="w-4 h-4" /> Export Data
+            </Button>
+            <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+              <DialogTrigger asChild>
+                <Button className="gap-2 bg-white text-secondary hover:bg-white/90">
+                  <Plus className="w-4 h-4" /> Add New Bond
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-xl">
+                    <Landmark className="w-5 h-5 text-primary" />
+                    Add New Bond Issue
+                  </DialogTitle>
+                  <DialogDescription>
+                    Configure all bond parameters including rates, eligibility, tax benefits, and call/put options
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden flex flex-col">
                 <TabsList className="grid grid-cols-6 w-full">
                   <TabsTrigger value="basic" className="text-xs">
                     <Building2 className="w-3 h-3 mr-1" /> Basic
@@ -1277,6 +1284,7 @@ const AdminBondManagement = () => {
               </Tabs>
             </DialogContent>
           </Dialog>
+        </div>
         </div>
       </div>
 
