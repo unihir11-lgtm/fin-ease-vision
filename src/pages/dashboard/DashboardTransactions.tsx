@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -33,6 +34,9 @@ import {
   Receipt,
   IndianRupee,
   ArrowDownRight,
+  ReceiptText,
+  CreditCard,
+  Wallet
 } from "lucide-react";
 import {
   AreaChart,
@@ -42,6 +46,10 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
 
 const transactions = [
@@ -63,16 +71,25 @@ const monthlyData = [
   { month: "Jan", invested: 164850, credits: 6250 },
 ];
 
+const productDistribution = [
+  { name: "Bonds", value: 45, color: "#14b8a6" },
+  { name: "FDs", value: 35, color: "#3b82f6" },
+  { name: "IPO", value: 12, color: "#f59e0b" },
+  { name: "NPS", value: 8, color: "#8b5cf6" },
+];
+
 const DashboardTransactions = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState("all");
+  const [filterProduct, setFilterProduct] = useState("all");
 
   const filteredTransactions = transactions.filter((txn) => {
     const matchesSearch =
       txn.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       txn.id.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filterType === "all" || txn.type === filterType;
-    return matchesSearch && matchesType;
+    const matchesProduct = filterProduct === "all" || txn.product === filterProduct;
+    return matchesSearch && matchesType && matchesProduct;
   });
 
   const totalInvested = transactions.filter((t) => t.type === "buy").reduce((sum, t) => sum + t.amount, 0);
@@ -80,10 +97,10 @@ const DashboardTransactions = () => {
   const totalSold = transactions.filter((t) => t.type === "sell").reduce((sum, t) => sum + t.amount, 0);
 
   const stats = [
-    { label: "Total Invested", value: `₹${totalInvested.toLocaleString()}`, change: "+18.5%", positive: true, icon: ArrowUpRight, color: "bg-blue-100 text-blue-600" },
+    { label: "Total Invested", value: `₹${totalInvested.toLocaleString()}`, change: "+18.5%", positive: true, icon: Wallet, color: "bg-primary/10 text-primary" },
     { label: "Credits Received", value: `₹${totalCredits.toLocaleString()}`, change: "+12.3%", positive: true, icon: ArrowDownLeft, color: "bg-green-100 text-green-600" },
-    { label: "Total Sold", value: `₹${totalSold.toLocaleString()}`, icon: Receipt, color: "bg-amber-100 text-amber-600" },
-    { label: "Total Transactions", value: transactions.length.toString(), icon: Calendar, color: "bg-purple-100 text-purple-600" },
+    { label: "Total Sold", value: `₹${totalSold.toLocaleString()}`, icon: ReceiptText, color: "bg-amber-100 text-amber-600" },
+    { label: "Total Transactions", value: transactions.length.toString(), icon: Receipt, color: "bg-purple-100 text-purple-600" },
   ];
 
   const getProductIcon = (product: string) => {
@@ -98,9 +115,9 @@ const DashboardTransactions = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed": return <Badge className="bg-green-100 text-green-700">Completed</Badge>;
-      case "pending": return <Badge className="bg-amber-100 text-amber-700">Pending</Badge>;
-      case "failed": return <Badge className="bg-red-100 text-red-700">Failed</Badge>;
+      case "completed": return <Badge className="bg-green-100 text-green-700 border-green-200">Completed</Badge>;
+      case "pending": return <Badge className="bg-amber-100 text-amber-700 border-amber-200">Pending</Badge>;
+      case "failed": return <Badge className="bg-red-100 text-red-700 border-red-200">Failed</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
   };
@@ -110,91 +127,146 @@ const DashboardTransactions = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-secondary">Transactions</h1>
-          <p className="text-gray-500">View and manage all your transactions</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-secondary font-['Raleway'] flex items-center gap-3">
+            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+              <CreditCard className="w-6 h-6 text-primary" />
+            </div>
+            Transactions
+          </h1>
+          <p className="text-muted-foreground mt-1">View and manage all your investment transactions</p>
         </div>
         <Button variant="outline" className="gap-2">
-          <Download className="w-4 h-4" /> Export
+          <Download className="w-4 h-4" /> Export Statement
         </Button>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <Card key={i} className="border border-gray-200">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className={`p-2.5 rounded-xl ${stat.color}`}>
+          <Card key={i} className="hover:shadow-lg transition-shadow border-border">
+            <CardContent className="p-5">
+              <div className="flex items-start justify-between">
+                <div className={`p-3 rounded-xl ${stat.color}`}>
                   <stat.icon className="w-5 h-5" />
                 </div>
-                <div className="flex-1">
-                  <p className="text-2xl font-bold text-secondary">{stat.value}</p>
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm text-gray-500">{stat.label}</p>
-                    {stat.change && (
-                      <span className={`text-xs flex items-center ${stat.positive ? "text-green-600" : "text-red-500"}`}>
-                        {stat.positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                        {stat.change}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                {stat.change && (
+                  <span className={`text-xs font-medium flex items-center gap-0.5 ${stat.positive ? "text-green-600" : "text-red-500"}`}>
+                    {stat.positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                    {stat.change}
+                  </span>
+                )}
               </div>
+              <p className="text-2xl font-bold text-secondary mt-3">{stat.value}</p>
+              <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Transaction Trend Chart */}
-      <Card className="border border-gray-200">
-        <CardHeader>
-          <CardTitle className="text-lg">Transaction Trend</CardTitle>
-          <p className="text-sm text-gray-500">Monthly investment and credits overview</p>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[250px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={monthlyData}>
-                <defs>
-                  <linearGradient id="colorInvested" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#1dab91" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#1dab91" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="colorCredits" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#23698e" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#23698e" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} tickFormatter={(v) => `₹${v/1000}k`} />
-                <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
-                <Area type="monotone" dataKey="invested" stroke="#1dab91" fillOpacity={1} fill="url(#colorInvested)" name="Invested" />
-                <Area type="monotone" dataKey="credits" stroke="#23698e" fillOpacity={1} fill="url(#colorCredits)" name="Credits" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Transaction Trend Chart */}
+        <Card className="lg:col-span-2 border-border">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-primary" />
+              Transaction Trend
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">Monthly investment and credits overview</p>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[250px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={monthlyData}>
+                  <defs>
+                    <linearGradient id="colorInvested" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#14b8a6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#14b8a6" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorCredits" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+                  <YAxis axisLine={false} tickLine={false} tickFormatter={(v) => `₹${v/1000}k`} tick={{ fill: '#6b7280', fontSize: 12 }} />
+                  <Tooltip 
+                    formatter={(value: number) => `₹${value.toLocaleString()}`}
+                    contentStyle={{ borderRadius: '12px', border: '1px solid #e5e7eb' }}
+                  />
+                  <Legend />
+                  <Area type="monotone" dataKey="invested" stroke="#14b8a6" strokeWidth={2} fillOpacity={1} fill="url(#colorInvested)" name="Invested" />
+                  <Area type="monotone" dataKey="credits" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorCredits)" name="Credits" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Product Distribution */}
+        <Card className="border-border">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Receipt className="w-5 h-5 text-primary" />
+              By Product
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">Transaction distribution</p>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[160px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={productDistribution}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={45}
+                    outerRadius={70}
+                    paddingAngle={3}
+                    dataKey="value"
+                  >
+                    {productDistribution.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value: number) => [`${value}%`, '']} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="space-y-2 mt-4">
+              {productDistribution.map((item) => (
+                <div key={item.name} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-muted-foreground">{item.name}</span>
+                  </div>
+                  <span className="font-bold text-secondary">{item.value}%</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Filters */}
-      <Card className="border border-gray-200">
+      <Card className="border-border">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
-                placeholder="Search transactions..."
+                placeholder="Search by transaction name or ID..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
               />
             </div>
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-400" />
+            <div className="flex items-center gap-3">
+              <Filter className="w-4 h-4 text-muted-foreground" />
               <Select value={filterType} onValueChange={setFilterType}>
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Filter by type" />
+                <SelectTrigger className="w-[130px]">
+                  <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
@@ -203,40 +275,55 @@ const DashboardTransactions = () => {
                   <SelectItem value="credit">Credit</SelectItem>
                 </SelectContent>
               </Select>
+              <Select value={filterProduct} onValueChange={setFilterProduct}>
+                <SelectTrigger className="w-[130px]">
+                  <SelectValue placeholder="Product" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Products</SelectItem>
+                  <SelectItem value="Bond">Bonds</SelectItem>
+                  <SelectItem value="FD">FDs</SelectItem>
+                  <SelectItem value="IPO">IPO</SelectItem>
+                  <SelectItem value="NPS">NPS</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Transactions Table */}
-      <Card className="border border-gray-200">
-        <CardHeader className="border-b">
-          <CardTitle className="text-lg">Transaction History</CardTitle>
+      <Card className="border-border overflow-hidden">
+        <CardHeader className="border-b bg-muted/30">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Receipt className="w-5 h-5 text-primary" />
+            Transaction History ({filteredTransactions.length})
+          </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead>Transaction</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="bg-muted/20">
+                <TableHead className="font-semibold">Transaction</TableHead>
+                <TableHead className="font-semibold">Type</TableHead>
+                <TableHead className="font-semibold">Product</TableHead>
+                <TableHead className="text-right font-semibold">Amount</TableHead>
+                <TableHead className="font-semibold">Date</TableHead>
+                <TableHead className="font-semibold">Status</TableHead>
+                <TableHead className="text-right font-semibold">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredTransactions.map((txn) => (
-                <TableRow key={txn.id} className="hover:bg-gray-50">
+                <TableRow key={txn.id} className="hover:bg-muted/10">
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-xl ${
+                      <div className={`p-2.5 rounded-xl ${
                         txn.type === "buy" ? "bg-blue-100" :
                         txn.type === "sell" ? "bg-amber-100" : "bg-green-100"
                       }`}>
                         {txn.type === "buy" ? (
-                          <ArrowUpRight className={`w-4 h-4 ${txn.type === "buy" ? "text-blue-600" : "text-amber-600"}`} />
+                          <ArrowUpRight className={`w-4 h-4 text-blue-600`} />
                         ) : txn.type === "sell" ? (
                           <ArrowDownLeft className="w-4 h-4 text-amber-600" />
                         ) : (
@@ -245,35 +332,35 @@ const DashboardTransactions = () => {
                       </div>
                       <div>
                         <p className="font-medium text-secondary">{txn.name}</p>
-                        <p className="text-xs text-gray-500">{txn.id}</p>
+                        <p className="text-xs text-muted-foreground font-mono">{txn.id}</p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className={`capitalize ${
-                      txn.type === "buy" ? "border-blue-200 text-blue-700" :
-                      txn.type === "sell" ? "border-amber-200 text-amber-700" : "border-green-200 text-green-700"
+                      txn.type === "buy" ? "border-blue-200 text-blue-700 bg-blue-50" :
+                      txn.type === "sell" ? "border-amber-200 text-amber-700 bg-amber-50" : "border-green-200 text-green-700 bg-green-50"
                     }`}>
                       {txn.type}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="gap-1">
+                    <Badge variant="outline" className="gap-1.5">
                       {getProductIcon(txn.product)}
                       {txn.product}
                     </Badge>
                   </TableCell>
-                  <TableCell className={`text-right font-semibold ${
+                  <TableCell className={`text-right font-bold ${
                     txn.type === "credit" || txn.type === "sell" ? "text-green-600" : "text-secondary"
                   }`}>
                     {txn.type === "credit" || txn.type === "sell" ? "+" : "-"}₹{txn.amount.toLocaleString()}
                   </TableCell>
-                  <TableCell className="text-gray-500">
+                  <TableCell className="text-muted-foreground">
                     {new Date(txn.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                   </TableCell>
                   <TableCell>{getStatusBadge(txn.status)}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary/10">
                       <Eye className="w-4 h-4" />
                     </Button>
                   </TableCell>
@@ -285,10 +372,13 @@ const DashboardTransactions = () => {
       </Card>
 
       {filteredTransactions.length === 0 && (
-        <Card className="border border-gray-200">
+        <Card className="border-border">
           <CardContent className="p-12 text-center">
-            <Receipt className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">No transactions found matching your criteria.</p>
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <Receipt className="w-8 h-8 text-muted-foreground" />
+            </div>
+            <p className="text-lg font-medium text-secondary mb-2">No transactions found</p>
+            <p className="text-muted-foreground">Try adjusting your filters or search criteria.</p>
           </CardContent>
         </Card>
       )}
