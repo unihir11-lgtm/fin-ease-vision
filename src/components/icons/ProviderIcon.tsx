@@ -2,13 +2,14 @@ import {
   Wallet, Building, BookOpen, Zap, Map, Train, 
   Building2, Landmark, Mountain, Trees, Banknote,
   Globe, Briefcase, Factory, Rocket, Bolt, Truck, Cpu,
+  Heart, Shield, Package, Leaf, ShoppingCart,
   LucideIcon
 } from "lucide-react";
 import { useState } from "react";
 
 type BondIconType = "wallet" | "building" | "book" | "zap" | "map" | "train";
 type FDIconType = "building2" | "landmark" | "mountain" | "trees" | "building" | "banknote";
-type IPOIconType = "globe" | "briefcase" | "factory" | "rocket" | "bolt" | "truck" | "cpu" | "building2" | "landmark";
+type IPOIconType = "globe" | "briefcase" | "factory" | "rocket" | "bolt" | "truck" | "cpu" | "building2" | "landmark" | "heart" | "shield" | "package" | "leaf" | "shopping-cart" | "zap";
 
 interface ProviderIconProps {
   iconType: BondIconType | FDIconType | IPOIconType;
@@ -18,7 +19,7 @@ interface ProviderIconProps {
   size?: number;
 }
 
-const iconMap: Record<BondIconType | FDIconType | IPOIconType, LucideIcon> = {
+const iconMap: Record<string, LucideIcon> = {
   wallet: Wallet,
   building: Building,
   book: BookOpen,
@@ -37,6 +38,11 @@ const iconMap: Record<BondIconType | FDIconType | IPOIconType, LucideIcon> = {
   bolt: Bolt,
   truck: Truck,
   cpu: Cpu,
+  heart: Heart,
+  shield: Shield,
+  package: Package,
+  leaf: Leaf,
+  "shopping-cart": ShoppingCart,
 };
 
 export const ProviderIcon = ({ iconType, logo, name, className = "", size = 24 }: ProviderIconProps) => {
