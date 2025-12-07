@@ -207,27 +207,37 @@ const AdminFDManagement = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-secondary">FD Provider Management</h1>
-          <p className="text-muted-foreground">Manage Fixed Deposit providers, rates, and configurations</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" /> Export
-          </Button>
-          <Dialog open={isAddModalOpen} onOpenChange={(open) => { setIsAddModalOpen(open); if (!open) resetForm(); }}>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Plus className="w-4 h-4" /> Add FD Provider
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh]">
-              <DialogHeader>
-                <DialogTitle>Add New FD Provider</DialogTitle>
-              </DialogHeader>
-              <Tabs value={activeFormTab} onValueChange={setActiveFormTab} className="w-full">
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-secondary via-secondary/95 to-primary/80 p-6 md:p-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+        <svg className="absolute right-0 top-0 h-full w-1/3 text-white/5" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon fill="currentColor" points="50,0 100,0 100,100 0,100" />
+        </svg>
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+              <PiggyBank className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white font-display">FD Provider Management</h1>
+              <p className="text-white/70">Manage Fixed Deposit providers, rates, and configurations</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Download className="w-4 h-4" /> Export
+            </Button>
+            <Dialog open={isAddModalOpen} onOpenChange={(open) => { setIsAddModalOpen(open); if (!open) resetForm(); }}>
+              <DialogTrigger asChild>
+                <Button className="gap-2 bg-white text-secondary hover:bg-white/90">
+                  <Plus className="w-4 h-4" /> Add FD Provider
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh]">
+                <DialogHeader>
+                  <DialogTitle>Add New FD Provider</DialogTitle>
+                </DialogHeader>
+                <Tabs value={activeFormTab} onValueChange={setActiveFormTab} className="w-full">
                 <TabsList className="grid grid-cols-5 w-full">
                   <TabsTrigger value="basic">Basic Info</TabsTrigger>
                   <TabsTrigger value="rates">Rates & Tenure</TabsTrigger>
@@ -870,6 +880,7 @@ const AdminFDManagement = () => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+        </div>
         </div>
       </div>
 
