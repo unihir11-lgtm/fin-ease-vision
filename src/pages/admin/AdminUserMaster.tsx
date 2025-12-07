@@ -13,7 +13,7 @@ import {
   Search, Download, Eye, Edit2, Trash2, Users, UserPlus, 
   Filter, Mail, Phone, Calendar, MapPin, Shield, TrendingUp,
   Wallet, CheckCircle, Clock, XCircle, IndianRupee, PieChart,
-  BarChart3, ChevronRight, MoreVertical
+  BarChart3, ChevronRight, MoreVertical, Sparkles
 } from "lucide-react";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { toast } from "@/hooks/use-toast";
@@ -109,28 +109,33 @@ const AdminUserMaster = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-secondary flex items-center gap-2">
-            <Users className="w-7 h-7 text-primary" />
-            User Management
-          </h1>
-          <p className="text-muted-foreground mt-1">Manage all platform users and their KYC status</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" /> Export
-          </Button>
-          <Button className="gap-2 bg-primary hover:bg-primary/90">
-            <UserPlus className="w-4 h-4" /> Add User
-          </Button>
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-secondary via-secondary/95 to-primary/20 p-6 md:p-8">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-50" />
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm">
+              <Users className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white font-['Raleway']">User Management</h1>
+              <p className="text-white/70 mt-1">Manage all platform users and their KYC status</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="secondary" className="gap-2">
+              <Download className="w-4 h-4" /> Export
+            </Button>
+            <Button className="gap-2 bg-white text-primary hover:bg-white/90">
+              <UserPlus className="w-4 h-4" /> Add User
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+        <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 hover:shadow-lg transition-all duration-300">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-primary/10">
@@ -143,7 +148,7 @@ const AdminUserMaster = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-all duration-300">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-green-100">
@@ -156,7 +161,7 @@ const AdminUserMaster = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-all duration-300">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-blue-100">
@@ -169,7 +174,7 @@ const AdminUserMaster = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-all duration-300">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-amber-100">
@@ -182,7 +187,7 @@ const AdminUserMaster = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-all duration-300">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-purple-100">
@@ -195,7 +200,7 @@ const AdminUserMaster = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:shadow-lg transition-all duration-300">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-teal-100">
@@ -212,19 +217,21 @@ const AdminUserMaster = () => {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card>
+        <Card className="hover:shadow-lg transition-all duration-300">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <PieChart className="w-4 h-4 text-primary" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <PieChart className="w-4 h-4 text-primary" />
+              </div>
               User Status Distribution
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-4">
-              <div className="w-24 h-24">
+              <div className="w-28 h-28">
                 <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
-                    <Pie data={statusDistribution} cx="50%" cy="50%" innerRadius={25} outerRadius={40} paddingAngle={3} dataKey="value">
+                    <Pie data={statusDistribution} cx="50%" cy="50%" innerRadius={30} outerRadius={50} paddingAngle={3} dataKey="value">
                       {statusDistribution.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
@@ -248,22 +255,24 @@ const AdminUserMaster = () => {
           </CardContent>
         </Card>
 
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 hover:shadow-lg transition-all duration-300">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <BarChart3 className="w-4 h-4 text-primary" />
+              </div>
               Monthly User Signups
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-28">
+            <div className="h-32">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlySignups}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                   <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#6b7280' }} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#6b7280' }} />
                   <Tooltip />
-                  <Bar dataKey="users" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="users" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -272,21 +281,21 @@ const AdminUserMaster = () => {
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="hover:shadow-lg transition-all duration-300">
         <CardContent className="p-4">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
             <div className="relative flex-1 w-full lg:max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Search by name, email, or mobile..."
-                className="pl-10"
+                className="pl-10 h-11"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[130px]">
+                <SelectTrigger className="w-[130px] h-11">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -297,7 +306,7 @@ const AdminUserMaster = () => {
                 </SelectContent>
               </Select>
               <Select value={kycFilter} onValueChange={setKycFilter}>
-                <SelectTrigger className="w-[140px]">
+                <SelectTrigger className="w-[140px] h-11">
                   <SelectValue placeholder="KYC Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -313,11 +322,13 @@ const AdminUserMaster = () => {
       </Card>
 
       {/* Users Table */}
-      <Card>
-        <CardHeader className="pb-3">
+      <Card className="hover:shadow-lg transition-all duration-300">
+        <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 to-transparent">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <Users className="w-4 h-4 text-primary" />
+              </div>
               All Users ({filteredUsers.length})
             </CardTitle>
           </div>
@@ -342,7 +353,7 @@ const AdminUserMaster = () => {
                   <tr key={user.id} className="border-b hover:bg-muted/20 transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center font-bold text-primary">
                           {user.name.charAt(0)}
                         </div>
                         <div>
@@ -367,31 +378,37 @@ const AdminUserMaster = () => {
                     <td className="p-4">{getKYCBadge(user.kycStatus)}</td>
                     <td className="p-4">
                       <div className="flex flex-wrap gap-1">
-                        {user.products.length > 0 ? user.products.slice(0, 2).map((p, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">{p}</Badge>
-                        )) : <span className="text-muted-foreground text-xs">None</span>}
+                        {user.products.length > 0 ? (
+                          user.products.slice(0, 2).map((product) => (
+                            <Badge key={product} variant="outline" className="text-xs bg-muted/50">
+                              {product}
+                            </Badge>
+                          ))
+                        ) : (
+                          <span className="text-xs text-muted-foreground">No products</span>
+                        )}
                         {user.products.length > 2 && (
                           <Badge variant="outline" className="text-xs">+{user.products.length - 2}</Badge>
                         )}
                       </div>
                     </td>
-                    <td className="p-4 text-right">
-                      <p className="font-bold text-primary">{user.investments}</p>
-                      <p className="text-xs text-muted-foreground">{user.totalTransactions} txns</p>
-                    </td>
-                    <td className="p-4 text-sm text-muted-foreground">
-                      {new Date(user.joinedDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    <td className="p-4 text-right font-bold text-secondary">{user.investments}</td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Calendar className="w-3 h-3" />
+                        {user.joinedDate}
+                      </div>
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-center gap-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewUser(user)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleViewUser(user)} className="h-8 w-8 hover:bg-primary/10">
                           <Eye className="w-4 h-4 text-primary" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Edit2 className="w-4 h-4 text-blue-600" />
+                        <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-amber-100">
+                          <Edit2 className="w-4 h-4 text-amber-600" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDeleteUser(user.id)}>
-                          <Trash2 className="w-4 h-4 text-red-500" />
+                        <Button variant="ghost" size="icon" onClick={() => handleDeleteUser(user.id)} className="h-8 w-8 hover:bg-red-100">
+                          <Trash2 className="w-4 h-4 text-red-600" />
                         </Button>
                       </div>
                     </td>
@@ -408,83 +425,67 @@ const AdminUserMaster = () => {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-xl text-primary">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center font-bold text-primary text-lg">
                 {selectedUser?.name.charAt(0)}
               </div>
-              {selectedUser?.name}
+              <div>
+                <span className="text-xl">{selectedUser?.name}</span>
+                <p className="text-sm text-muted-foreground font-normal">{selectedUser?.email}</p>
+              </div>
             </DialogTitle>
-            <DialogDescription>User ID: #{selectedUser?.id} • Member since {selectedUser?.joinedDate}</DialogDescription>
           </DialogHeader>
-          
           {selectedUser && (
-            <div className="space-y-6 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
-                  <p className="text-sm text-muted-foreground">Account Status</p>
-                  <div className="mt-1">{getStatusBadge(selectedUser.status)}</div>
+            <div className="grid grid-cols-2 gap-6 mt-4">
+              <div className="space-y-4">
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Phone</p>
+                  <p className="font-medium flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-primary" />
+                    {selectedUser.mobile}
+                  </p>
                 </div>
-                <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
-                  <p className="text-sm text-muted-foreground">KYC Status</p>
-                  <div className="mt-1">{getKYCBadge(selectedUser.kycStatus)}</div>
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Location</p>
+                  <p className="font-medium flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-primary" />
+                    {selectedUser.city}
+                  </p>
+                </div>
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Joined Date</p>
+                  <p className="font-medium flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-primary" />
+                    {selectedUser.joinedDate}
+                  </p>
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <Card>
-                  <CardContent className="p-4 space-y-3">
-                    <h4 className="font-semibold text-secondary flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-primary" /> Contact Information
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      <p className="flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-muted-foreground" />
-                        {selectedUser.email}
-                      </p>
-                      <p className="flex items-center gap-2">
-                        <Phone className="w-4 h-4 text-muted-foreground" />
-                        {selectedUser.mobile}
-                      </p>
-                      <p className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-muted-foreground" />
-                        {selectedUser.city}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-4 space-y-3">
-                    <h4 className="font-semibold text-secondary flex items-center gap-2">
-                      <Wallet className="w-4 h-4 text-primary" /> Investment Summary
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Total Invested</span>
-                        <span className="font-bold text-primary">{selectedUser.investments}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Transactions</span>
-                        <span className="font-bold text-secondary">{selectedUser.totalTransactions}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div className="space-y-4">
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Status</p>
+                  {getStatusBadge(selectedUser.status)}
+                </div>
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">KYC Status</p>
+                  {getKYCBadge(selectedUser.kycStatus)}
+                </div>
+                <div className="p-4 bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Total Investments</p>
+                  <p className="font-bold text-primary text-xl">{selectedUser.investments}</p>
+                </div>
               </div>
-
-              <Card>
-                <CardContent className="p-4">
-                  <h4 className="font-semibold text-secondary mb-3">Active Products</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedUser.products.length > 0 ? selectedUser.products.map((p, i) => (
-                      <Badge key={i} className="bg-primary/10 text-primary border-primary/20">{p}</Badge>
-                    )) : <p className="text-muted-foreground text-sm">No active products</p>}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>Close</Button>
-                <Button>Edit User</Button>
+              <div className="col-span-2 p-4 bg-muted/30 rounded-xl">
+                <p className="text-sm text-muted-foreground mb-2">Active Products</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedUser.products.length > 0 ? (
+                    selectedUser.products.map((product) => (
+                      <Badge key={product} className="bg-primary/10 text-primary border-primary/20">
+                        {product}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-muted-foreground">No active products</span>
+                  )}
+                </div>
               </div>
             </div>
           )}
