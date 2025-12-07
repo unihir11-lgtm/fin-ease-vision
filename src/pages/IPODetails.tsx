@@ -518,7 +518,7 @@ const IPODetails = () => {
                     <tbody>
                       {ipoMarketLots.map((lot, index) => (
                         <tr key={index} className="border-b hover:bg-muted/20 transition-colors">
-                          <td className="p-4 text-muted-foreground">{lot.application}</td>
+                          <td className="p-4 text-muted-foreground">{lot.category}</td>
                           <td className="p-4 text-center text-secondary font-medium">{lot.lotSize}</td>
                           <td className="p-4 text-center text-secondary font-medium">{lot.shares.toLocaleString()}</td>
                           <td className="p-4 text-right font-bold text-primary">₹{lot.amount.toLocaleString()}</td>
