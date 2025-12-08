@@ -105,10 +105,12 @@ const AdminFDManagement = () => {
   );
 
   const stats = [
-    { label: "Total Providers", value: fdProviders.length, icon: Building2, color: "bg-blue-100 text-blue-600" },
-    { label: "Highest Rate", value: `${Math.max(...fdProviders.map(f => f.interestRate))}%`, icon: TrendingUp, color: "bg-green-100 text-green-600" },
-    { label: "DICGC Insured", value: fdProviders.length, icon: Shield, color: "bg-amber-100 text-amber-600" },
-    { label: "Active Users", value: "5,234", icon: Users, color: "bg-purple-100 text-purple-600" },
+    { label: "Total Providers", value: fdProviders.length, icon: Building2, color: "bg-blue-100 text-blue-600", bgGlow: "from-blue-500/20" },
+    { label: "Highest Rate", value: `${Math.max(...fdProviders.map(f => f.interestRate))}%`, icon: TrendingUp, color: "bg-green-100 text-green-600", bgGlow: "from-green-500/20" },
+    { label: "DICGC Insured", value: fdProviders.length, icon: Shield, color: "bg-amber-100 text-amber-600", bgGlow: "from-amber-500/20" },
+    { label: "Active Users", value: "5,234", icon: Users, color: "bg-purple-100 text-purple-600", bgGlow: "from-purple-500/20" },
+    { label: "Total Deposits", value: "₹240 Cr", icon: IndianRupee, color: "bg-teal-100 text-teal-600", bgGlow: "from-teal-500/20" },
+    { label: "This Month", value: "+₹18 Cr", icon: Calendar, color: "bg-rose-100 text-rose-600", bgGlow: "from-rose-500/20" },
   ];
 
   const handleDelete = (id: string) => {

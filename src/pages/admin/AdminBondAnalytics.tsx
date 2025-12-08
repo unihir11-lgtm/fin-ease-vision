@@ -5,7 +5,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Download, Landmark, Users, IndianRupee, TrendingUp,
   ArrowUpRight, ArrowDownRight, BarChart3, PieChart as PieChartIcon,
-  Shield, Calendar, ChevronRight, Award, Percent
+  Shield, Calendar, ChevronRight, Award, Percent, FileText, Target,
+  Wallet, Activity, Clock, RefreshCw
 } from "lucide-react";
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
@@ -54,13 +55,23 @@ const maturitySchedule = [
   { year: "2030+", bonds: 2, amount: 8 },
 ];
 
+const dailyActivity = [
+  { day: "Mon", orders: 45, value: 4.5 },
+  { day: "Tue", orders: 52, value: 5.8 },
+  { day: "Wed", orders: 38, value: 3.2 },
+  { day: "Thu", orders: 61, value: 7.2 },
+  { day: "Fri", orders: 55, value: 6.1 },
+  { day: "Sat", orders: 28, value: 2.4 },
+  { day: "Sun", orders: 15, value: 1.2 },
+];
+
 const stats = [
-  { label: "Total Investment", value: "₹85 Cr", change: "+22.4%", positive: true, icon: IndianRupee, color: "bg-primary/10 text-primary" },
-  { label: "Active Bonds", value: "24", change: "+4", positive: true, icon: Landmark, color: "bg-blue-100 text-blue-600" },
-  { label: "Unique Investors", value: "3,456", change: "+15.2%", positive: true, icon: Users, color: "bg-green-100 text-green-600" },
-  { label: "Avg. Yield", value: "8.8%", change: "+0.3%", positive: true, icon: Percent, color: "bg-amber-100 text-amber-600" },
-  { label: "AAA Rated", value: "68%", change: "+5%", positive: true, icon: Shield, color: "bg-purple-100 text-purple-600" },
-  { label: "Monthly Orders", value: "380", change: "+18%", positive: true, icon: TrendingUp, color: "bg-teal-100 text-teal-600" },
+  { label: "Total Investment", value: "₹85 Cr", change: "+22.4%", positive: true, icon: IndianRupee, color: "bg-primary/10 text-primary", bgGlow: "from-primary/20" },
+  { label: "Active Bonds", value: "24", change: "+4", positive: true, icon: Landmark, color: "bg-blue-100 text-blue-600", bgGlow: "from-blue-500/20" },
+  { label: "Unique Investors", value: "3,456", change: "+15.2%", positive: true, icon: Users, color: "bg-green-100 text-green-600", bgGlow: "from-green-500/20" },
+  { label: "Avg. Yield", value: "8.8%", change: "+0.3%", positive: true, icon: Percent, color: "bg-amber-100 text-amber-600", bgGlow: "from-amber-500/20" },
+  { label: "AAA Rated", value: "68%", change: "+5%", positive: true, icon: Shield, color: "bg-purple-100 text-purple-600", bgGlow: "from-purple-500/20" },
+  { label: "Monthly Orders", value: "380", change: "+18%", positive: true, icon: TrendingUp, color: "bg-teal-100 text-teal-600", bgGlow: "from-teal-500/20" },
 ];
 
 const AdminBondAnalytics = () => {
@@ -68,37 +79,44 @@ const AdminBondAnalytics = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-secondary flex items-center gap-3 font-['Raleway']">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center shadow-sm">
-              <Landmark className="w-6 h-6 text-primary" />
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-secondary via-secondary/95 to-primary/80 p-6 md:p-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+        <svg className="absolute right-0 top-0 h-full w-1/3 text-white/5" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon fill="currentColor" points="50,0 100,0 100,100 0,100" />
+        </svg>
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+              <BarChart3 className="w-7 h-7 text-white" />
             </div>
-            Bond Analytics
-          </h1>
-          <p className="text-muted-foreground mt-1">Investment metrics, yield trends, and portfolio insights</p>
-        </div>
-        <div className="flex gap-3">
-          <Tabs value={timeRange} onValueChange={setTimeRange}>
-            <TabsList className="bg-muted/50">
-              <TabsTrigger value="7d" className="text-xs">7 Days</TabsTrigger>
-              <TabsTrigger value="1m" className="text-xs">1 Month</TabsTrigger>
-              <TabsTrigger value="6m" className="text-xs">6 Months</TabsTrigger>
-              <TabsTrigger value="1y" className="text-xs">1 Year</TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" /> Export Report
-          </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-white font-display">Bond Analytics Dashboard</h1>
+              <p className="text-white/70">Investment metrics, yield trends, and portfolio insights</p>
+            </div>
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            <Tabs value={timeRange} onValueChange={setTimeRange}>
+              <TabsList className="bg-white/10 border-white/20">
+                <TabsTrigger value="7d" className="text-xs text-white/70 data-[state=active]:text-secondary data-[state=active]:bg-white">7D</TabsTrigger>
+                <TabsTrigger value="1m" className="text-xs text-white/70 data-[state=active]:text-secondary data-[state=active]:bg-white">1M</TabsTrigger>
+                <TabsTrigger value="6m" className="text-xs text-white/70 data-[state=active]:text-secondary data-[state=active]:bg-white">6M</TabsTrigger>
+                <TabsTrigger value="1y" className="text-xs text-white/70 data-[state=active]:text-secondary data-[state=active]:bg-white">1Y</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Download className="w-4 h-4" /> Export Report
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Enhanced Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map((stat, i) => (
-          <Card key={i} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
+          <Card key={i} className="relative overflow-hidden hover:shadow-lg transition-shadow group">
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGlow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
+            <CardContent className="p-4 relative">
               <div className="flex items-start justify-between mb-3">
                 <div className={`p-2.5 rounded-xl ${stat.color}`}>
                   <stat.icon className="w-5 h-5" />
