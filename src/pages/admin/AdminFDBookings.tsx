@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   Search, Download, Eye, CheckCircle, Clock, XCircle,
   Filter, PiggyBank, User, Calendar, FileText, AlertCircle,
-  IndianRupee, TrendingUp, ArrowUpRight, RefreshCw
+  IndianRupee, TrendingUp, ArrowUpRight, RefreshCw, Building2,
+  Percent, Users, Mail, Phone, CreditCard, CalendarDays
 } from "lucide-react";
 import {
   Table,
@@ -24,33 +25,41 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
 const mockBookings = [
-  { id: "FD001", user: "Rahul Sharma", email: "rahul@email.com", provider: "Bajaj Finance", principal: 500000, rate: "9.1%", tenure: "2 Years", date: "2024-11-15", maturity: "2026-11-15", status: "Active", kycStatus: "Verified", payoutType: "Quarterly" },
-  { id: "FD002", user: "Priya Patel", email: "priya@email.com", provider: "Shriram Finance", principal: 300000, rate: "8.75%", tenure: "3 Years", date: "2024-11-14", maturity: "2027-11-14", status: "Active", kycStatus: "Verified", payoutType: "Cumulative" },
-  { id: "FD003", user: "Amit Kumar", email: "amit@email.com", provider: "HDFC Bank", principal: 200000, rate: "7.25%", tenure: "1 Year", date: "2024-11-13", maturity: "2025-11-13", status: "Pending", kycStatus: "Pending", payoutType: "Monthly" },
-  { id: "FD004", user: "Sneha Reddy", email: "sneha@email.com", provider: "Mahindra Finance", principal: 150000, rate: "8.35%", tenure: "5 Years", date: "2024-11-12", maturity: "2029-11-12", status: "Active", kycStatus: "Verified", payoutType: "Annually" },
-  { id: "FD005", user: "Vikram Singh", email: "vikram@email.com", provider: "SBI", principal: 100000, rate: "6.8%", tenure: "1 Year", date: "2024-11-11", maturity: "2025-11-11", status: "Matured", kycStatus: "Verified", payoutType: "Cumulative" },
-  { id: "FD006", user: "Kavita Gupta", email: "kavita@email.com", provider: "Utkarsh Small Finance", principal: 400000, rate: "8.1%", tenure: "2 Years", date: "2024-11-10", maturity: "2026-11-10", status: "Active", kycStatus: "Verified", payoutType: "Quarterly" },
+  { id: "FD001", user: "Rahul Sharma", email: "rahul@email.com", phone: "+91 98765 43210", provider: "Bajaj Finance", principal: 500000, rate: "9.1%", tenure: "2 Years", date: "2024-11-15", maturity: "2026-11-15", status: "Active", kycStatus: "Verified", payoutType: "Quarterly", interestEarned: 22750, paymentMethod: "Net Banking" },
+  { id: "FD002", user: "Priya Patel", email: "priya@email.com", phone: "+91 98765 43211", provider: "Shriram Finance", principal: 300000, rate: "8.75%", tenure: "3 Years", date: "2024-11-14", maturity: "2027-11-14", status: "Active", kycStatus: "Verified", payoutType: "Cumulative", interestEarned: 0, paymentMethod: "UPI" },
+  { id: "FD003", user: "Amit Kumar", email: "amit@email.com", phone: "+91 98765 43212", provider: "HDFC Bank", principal: 200000, rate: "7.25%", tenure: "1 Year", date: "2024-11-13", maturity: "2025-11-13", status: "Pending", kycStatus: "Pending", payoutType: "Monthly", interestEarned: 0, paymentMethod: "Net Banking" },
+  { id: "FD004", user: "Sneha Reddy", email: "sneha@email.com", phone: "+91 98765 43213", provider: "Mahindra Finance", principal: 150000, rate: "8.35%", tenure: "5 Years", date: "2024-11-12", maturity: "2029-11-12", status: "Active", kycStatus: "Verified", payoutType: "Annually", interestEarned: 6262, paymentMethod: "UPI" },
+  { id: "FD005", user: "Vikram Singh", email: "vikram@email.com", phone: "+91 98765 43214", provider: "SBI", principal: 100000, rate: "6.8%", tenure: "1 Year", date: "2024-11-11", maturity: "2025-11-11", status: "Matured", kycStatus: "Verified", payoutType: "Cumulative", interestEarned: 6800, paymentMethod: "Net Banking" },
+  { id: "FD006", user: "Kavita Gupta", email: "kavita@email.com", phone: "+91 98765 43215", provider: "Utkarsh Small Finance", principal: 400000, rate: "8.1%", tenure: "2 Years", date: "2024-11-10", maturity: "2026-11-10", status: "Active", kycStatus: "Verified", payoutType: "Quarterly", interestEarned: 16200, paymentMethod: "UPI" },
+  { id: "FD007", user: "Rajesh Kapoor", email: "rajesh@email.com", phone: "+91 98765 43216", provider: "ICICI Bank", principal: 250000, rate: "7.15%", tenure: "2 Years", date: "2024-11-09", maturity: "2026-11-09", status: "Active", kycStatus: "Verified", payoutType: "Monthly", interestEarned: 8937, paymentMethod: "Net Banking" },
+  { id: "FD008", user: "Sunita Devi", email: "sunita@email.com", phone: "+91 98765 43217", provider: "Jana Small Finance", principal: 350000, rate: "8.25%", tenure: "3 Years", date: "2024-11-08", maturity: "2027-11-08", status: "Processing", kycStatus: "Verified", payoutType: "Cumulative", interestEarned: 0, paymentMethod: "UPI" },
 ];
 
 const redemptionRequests = [
-  { id: "RD001", bookingId: "FD001", user: "Rahul Sharma", provider: "Bajaj Finance", principal: 500000, requestDate: "2024-11-20", reason: "Emergency", status: "Pending", penalty: 5000 },
-  { id: "RD002", bookingId: "FD004", user: "Sneha Reddy", provider: "Mahindra Finance", principal: 150000, requestDate: "2024-11-18", reason: "Better Investment", status: "Approved", penalty: 1500 },
-  { id: "RD003", bookingId: "FD002", user: "Priya Patel", provider: "Shriram Finance", principal: 300000, requestDate: "2024-11-15", reason: "Personal", status: "Rejected", penalty: 0 },
+  { id: "RD001", bookingId: "FD001", user: "Rahul Sharma", email: "rahul@email.com", provider: "Bajaj Finance", principal: 500000, currentValue: 522750, requestDate: "2024-11-20", reason: "Emergency", status: "Pending", penalty: 5000, penaltyRate: "1%", tenure: "2 Years", completedTenure: "6 Months" },
+  { id: "RD002", bookingId: "FD004", user: "Sneha Reddy", email: "sneha@email.com", provider: "Mahindra Finance", principal: 150000, currentValue: 156262, requestDate: "2024-11-18", reason: "Better Investment", status: "Approved", penalty: 1500, penaltyRate: "1%", tenure: "5 Years", completedTenure: "1 Year" },
+  { id: "RD003", bookingId: "FD002", user: "Priya Patel", email: "priya@email.com", provider: "Shriram Finance", principal: 300000, currentValue: 307875, requestDate: "2024-11-15", reason: "Personal", status: "Rejected", penalty: 0, penaltyRate: "1.5%", tenure: "3 Years", completedTenure: "3 Months" },
+  { id: "RD004", bookingId: "FD006", user: "Kavita Gupta", email: "kavita@email.com", provider: "Utkarsh Small Finance", principal: 400000, currentValue: 416200, requestDate: "2024-11-14", reason: "Liquidity", status: "Pending", penalty: 4000, penaltyRate: "1%", tenure: "2 Years", completedTenure: "8 Months" },
 ];
 
 const stats = [
-  { label: "Total Bookings", value: "1,892", change: "+12.5%", icon: PiggyBank, color: "bg-blue-100 text-blue-600" },
-  { label: "Active FDs", value: "1,456", change: "+8.2%", icon: CheckCircle, color: "bg-green-100 text-green-600" },
-  { label: "Pending Approval", value: "234", change: "-5.1%", icon: Clock, color: "bg-amber-100 text-amber-600" },
-  { label: "Total Value", value: "₹240 Cr", change: "+18.7%", icon: IndianRupee, color: "bg-purple-100 text-purple-600" },
+  { label: "Total Bookings", value: "1,892", change: "+12.5%", icon: PiggyBank, color: "bg-blue-100 text-blue-600", bgGlow: "from-blue-500/20" },
+  { label: "Active FDs", value: "1,456", change: "+8.2%", icon: CheckCircle, color: "bg-green-100 text-green-600", bgGlow: "from-green-500/20" },
+  { label: "Pending Approval", value: "234", change: "-5.1%", icon: Clock, color: "bg-amber-100 text-amber-600", bgGlow: "from-amber-500/20" },
+  { label: "Total Value", value: "₹240 Cr", change: "+18.7%", icon: IndianRupee, color: "bg-purple-100 text-purple-600", bgGlow: "from-purple-500/20" },
+  { label: "Avg Rate", value: "8.15%", change: "+0.25%", icon: Percent, color: "bg-teal-100 text-teal-600", bgGlow: "from-teal-500/20" },
+  { label: "Redemption Queue", value: "18", change: "-4", icon: RefreshCw, color: "bg-rose-100 text-rose-600", bgGlow: "from-rose-500/20" },
 ];
 
 const AdminFDBookings = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [providerFilter, setProviderFilter] = useState("all");
+  const [tenureFilter, setTenureFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("bookings");
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
   const [selectedRedemption, setSelectedRedemption] = useState<any>(null);
@@ -61,21 +70,26 @@ const AdminFDBookings = () => {
                           booking.provider.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           booking.id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || booking.status.toLowerCase() === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesProvider = providerFilter === "all" || booking.provider === providerFilter;
+    return matchesSearch && matchesStatus && matchesProvider;
   });
+
+  const providers = [...new Set(mockBookings.map(b => b.provider))];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Active":
-        return <Badge className="bg-green-100 text-green-700">Active</Badge>;
+        return <Badge className="bg-green-100 text-green-700 border-green-200">Active</Badge>;
       case "Pending":
-        return <Badge className="bg-amber-100 text-amber-700">Pending</Badge>;
+        return <Badge className="bg-amber-100 text-amber-700 border-amber-200">Pending</Badge>;
       case "Matured":
-        return <Badge className="bg-purple-100 text-purple-700">Matured</Badge>;
+        return <Badge className="bg-purple-100 text-purple-700 border-purple-200">Matured</Badge>;
+      case "Processing":
+        return <Badge className="bg-blue-100 text-blue-700 border-blue-200">Processing</Badge>;
       case "Approved":
-        return <Badge className="bg-green-100 text-green-700">Approved</Badge>;
+        return <Badge className="bg-green-100 text-green-700 border-green-200">Approved</Badge>;
       case "Rejected":
-        return <Badge className="bg-red-100 text-red-700">Rejected</Badge>;
+        return <Badge className="bg-red-100 text-red-700 border-red-200">Rejected</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -84,7 +98,7 @@ const AdminFDBookings = () => {
   const handleApprove = (booking: any) => {
     toast({
       title: "FD Booking Approved",
-      description: `FD booking ${booking.id} for ${booking.user} has been approved.`,
+      description: `FD booking ${booking.id} for ${booking.user} has been approved successfully.`,
     });
     setShowApprovalDialog(false);
   };
@@ -92,7 +106,7 @@ const AdminFDBookings = () => {
   const handleReject = (booking: any) => {
     toast({
       title: "FD Booking Rejected",
-      description: `FD booking ${booking.id} has been rejected.`,
+      description: `FD booking ${booking.id} has been rejected with reason: ${rejectionReason || 'Not specified'}`,
       variant: "destructive",
     });
     setShowApprovalDialog(false);
@@ -102,7 +116,7 @@ const AdminFDBookings = () => {
   const handleRedemptionApprove = (redemption: any) => {
     toast({
       title: "Redemption Approved",
-      description: `Redemption request ${redemption.id} has been approved.`,
+      description: `Redemption request ${redemption.id} approved. Net payout: ₹${(redemption.currentValue - redemption.penalty).toLocaleString()}`,
     });
     setShowRedemptionDialog(false);
   };
@@ -117,42 +131,56 @@ const AdminFDBookings = () => {
     setRejectionReason("");
   };
 
+  const formatCurrency = (amount: number) => {
+    return `₹${amount.toLocaleString('en-IN')}`;
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-secondary">FD Bookings Management</h1>
-          <p className="text-muted-foreground">Approve, track, and manage Fixed Deposit bookings</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" /> Export
-          </Button>
-          <Button variant="outline" className="gap-2">
-            <FileText className="w-4 h-4" /> Generate Report
-          </Button>
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-secondary via-secondary/95 to-primary/80 p-6 md:p-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+        <svg className="absolute right-0 top-0 h-full w-1/3 text-white/5" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon fill="currentColor" points="50,0 100,0 100,100 0,100" />
+        </svg>
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+              <PiggyBank className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white font-display">FD Bookings Management</h1>
+              <p className="text-white/70">Approve, track, and manage all Fixed Deposit bookings and redemptions</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Download className="w-4 h-4" /> Export Bookings
+            </Button>
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <FileText className="w-4 h-4" /> Generate Report
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Enhanced Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map((stat, i) => (
-          <Card key={i}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+          <Card key={i} className="relative overflow-hidden hover:shadow-lg transition-shadow group">
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGlow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
+            <CardContent className="p-4 relative">
+              <div className="flex items-center justify-between mb-3">
                 <div className={`p-2.5 rounded-xl ${stat.color}`}>
                   <stat.icon className="w-5 h-5" />
                 </div>
-                <span className="text-sm text-green-600 flex items-center gap-0.5">
-                  <ArrowUpRight className="w-3 h-3" />
+                <span className={`text-xs flex items-center gap-0.5 ${stat.change.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
+                  <ArrowUpRight className={`w-3 h-3 ${!stat.change.startsWith('+') && 'rotate-180'}`} />
                   {stat.change}
                 </span>
               </div>
-              <div className="mt-3">
-                <p className="text-2xl font-bold text-secondary">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
+              <p className="text-2xl font-bold text-secondary">{stat.value}</p>
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
             </CardContent>
           </Card>
         ))}

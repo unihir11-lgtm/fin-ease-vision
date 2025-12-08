@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { 
   Search, Download, Eye, CheckCircle, Clock, XCircle,
   Filter, Landmark, User, FileText, AlertCircle,
-  IndianRupee, TrendingUp, ArrowUpRight, RefreshCw
+  IndianRupee, TrendingUp, ArrowUpRight, RefreshCw,
+  Calendar, BarChart3, Percent, Shield, Users, Mail, Phone
 } from "lucide-react";
 import {
   Table,
@@ -24,33 +25,41 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
 const mockOrders = [
-  { id: "BO001", user: "Rahul Sharma", email: "rahul@email.com", bond: "MoneyBoxx March'27", isin: "INE0DXQ07017", units: 50, amount: 50000, date: "2024-11-15", status: "Completed", yield: "12.5%", kycStatus: "Verified" },
-  { id: "BO002", user: "Priya Patel", email: "priya@email.com", bond: "REC Limited", isin: "INE020B07HM8", units: 10, amount: 100000, date: "2024-11-15", status: "Pending", yield: "7.85%", kycStatus: "Verified" },
-  { id: "BO003", user: "Amit Kumar", email: "amit@email.com", bond: "NHAI", isin: "INE906B07GP7", units: 75, amount: 75000, date: "2024-11-14", status: "Completed", yield: "7.35%", kycStatus: "Verified" },
-  { id: "BO004", user: "Sneha Reddy", email: "sneha@email.com", bond: "Indel Money Aug'26", isin: "INE0F3407018", units: 30, amount: 30000, date: "2024-11-14", status: "Failed", yield: "12.8%", kycStatus: "Pending" },
-  { id: "BO005", user: "Vikram Singh", email: "vikram@email.com", bond: "IRFC", isin: "INE053F07AE8", units: 100, amount: 100000, date: "2024-11-13", status: "Completed", yield: "7.65%", kycStatus: "Verified" },
-  { id: "BO006", user: "Kavita Gupta", email: "kavita@email.com", bond: "Varthana Aug'27", isin: "INE0H5G07012", units: 40, amount: 40000, date: "2024-11-13", status: "Pending", yield: "12.5%", kycStatus: "Verified" },
+  { id: "BO001", user: "Rahul Sharma", email: "rahul@email.com", phone: "+91 98765 43210", bond: "MoneyBoxx March'27", isin: "INE0DXQ07017", units: 50, amount: 50000, date: "2024-11-15", status: "Completed", yield: "12.5%", kycStatus: "Verified", rating: "AA-", paymentMethod: "UPI" },
+  { id: "BO002", user: "Priya Patel", email: "priya@email.com", phone: "+91 98765 43211", bond: "REC Limited", isin: "INE020B07HM8", units: 10, amount: 100000, date: "2024-11-15", status: "Pending", yield: "7.85%", kycStatus: "Verified", rating: "AAA", paymentMethod: "Net Banking" },
+  { id: "BO003", user: "Amit Kumar", email: "amit@email.com", phone: "+91 98765 43212", bond: "NHAI", isin: "INE906B07GP7", units: 75, amount: 75000, date: "2024-11-14", status: "Completed", yield: "7.35%", kycStatus: "Verified", rating: "AAA", paymentMethod: "UPI" },
+  { id: "BO004", user: "Sneha Reddy", email: "sneha@email.com", phone: "+91 98765 43213", bond: "Indel Money Aug'26", isin: "INE0F3407018", units: 30, amount: 30000, date: "2024-11-14", status: "Failed", yield: "12.8%", kycStatus: "Pending", rating: "BBB+", paymentMethod: "Net Banking" },
+  { id: "BO005", user: "Vikram Singh", email: "vikram@email.com", phone: "+91 98765 43214", bond: "IRFC", isin: "INE053F07AE8", units: 100, amount: 100000, date: "2024-11-13", status: "Completed", yield: "7.65%", kycStatus: "Verified", rating: "AAA", paymentMethod: "UPI" },
+  { id: "BO006", user: "Kavita Gupta", email: "kavita@email.com", phone: "+91 98765 43215", bond: "Varthana Aug'27", isin: "INE0H5G07012", units: 40, amount: 40000, date: "2024-11-13", status: "Pending", yield: "12.5%", kycStatus: "Verified", rating: "AA", paymentMethod: "Net Banking" },
+  { id: "BO007", user: "Deepak Mehra", email: "deepak@email.com", phone: "+91 98765 43216", bond: "PFC Limited", isin: "INE134E08KN9", units: 200, amount: 200000, date: "2024-11-12", status: "Completed", yield: "7.45%", kycStatus: "Verified", rating: "AAA", paymentMethod: "UPI" },
+  { id: "BO008", user: "Neha Joshi", email: "neha@email.com", phone: "+91 98765 43217", bond: "Axis Bank AT1", isin: "INE238A08AB1", units: 25, amount: 250000, date: "2024-11-12", status: "Processing", yield: "9.25%", kycStatus: "Verified", rating: "AA+", paymentMethod: "Net Banking" },
 ];
 
 const redemptionRequests = [
-  { id: "RD001", orderId: "BO001", user: "Rahul Sharma", bond: "MoneyBoxx March'27", units: 25, currentValue: 26500, requestDate: "2024-11-20", reason: "Profit Booking", status: "Pending" },
-  { id: "RD002", orderId: "BO003", user: "Amit Kumar", bond: "NHAI", units: 50, currentValue: 52000, requestDate: "2024-11-18", reason: "Liquidity", status: "Approved" },
-  { id: "RD003", orderId: "BO005", user: "Vikram Singh", bond: "IRFC", units: 30, currentValue: 31500, requestDate: "2024-11-15", reason: "Rebalancing", status: "Rejected" },
+  { id: "RD001", orderId: "BO001", user: "Rahul Sharma", email: "rahul@email.com", bond: "MoneyBoxx March'27", units: 25, currentValue: 26500, purchaseValue: 25000, requestDate: "2024-11-20", reason: "Profit Booking", status: "Pending", settlementDays: 2 },
+  { id: "RD002", orderId: "BO003", user: "Amit Kumar", email: "amit@email.com", bond: "NHAI", units: 50, currentValue: 52000, purchaseValue: 50000, requestDate: "2024-11-18", reason: "Liquidity", status: "Approved", settlementDays: 2 },
+  { id: "RD003", orderId: "BO005", user: "Vikram Singh", email: "vikram@email.com", bond: "IRFC", units: 30, currentValue: 31500, purchaseValue: 30000, requestDate: "2024-11-15", reason: "Rebalancing", status: "Rejected", settlementDays: 0 },
+  { id: "RD004", orderId: "BO007", user: "Deepak Mehra", email: "deepak@email.com", bond: "PFC Limited", units: 100, currentValue: 103000, purchaseValue: 100000, requestDate: "2024-11-14", reason: "Partial Exit", status: "Pending", settlementDays: 2 },
 ];
 
 const stats = [
-  { label: "Total Orders", value: "2,456", change: "+15.2%", icon: Landmark, color: "bg-blue-100 text-blue-600" },
-  { label: "Completed", value: "2,102", change: "+12.8%", icon: CheckCircle, color: "bg-green-100 text-green-600" },
-  { label: "Pending Approval", value: "298", change: "-3.5%", icon: Clock, color: "bg-amber-100 text-amber-600" },
-  { label: "Total Value", value: "₹85 Cr", change: "+22.4%", icon: IndianRupee, color: "bg-purple-100 text-purple-600" },
+  { label: "Total Orders", value: "2,456", change: "+15.2%", icon: Landmark, color: "bg-blue-100 text-blue-600", bgGlow: "from-blue-500/20" },
+  { label: "Completed", value: "2,102", change: "+12.8%", icon: CheckCircle, color: "bg-green-100 text-green-600", bgGlow: "from-green-500/20" },
+  { label: "Pending Approval", value: "298", change: "-3.5%", icon: Clock, color: "bg-amber-100 text-amber-600", bgGlow: "from-amber-500/20" },
+  { label: "Total Value", value: "₹85 Cr", change: "+22.4%", icon: IndianRupee, color: "bg-purple-100 text-purple-600", bgGlow: "from-purple-500/20" },
+  { label: "Avg Yield", value: "9.45%", change: "+0.35%", icon: Percent, color: "bg-teal-100 text-teal-600", bgGlow: "from-teal-500/20" },
+  { label: "Redemption Queue", value: "12", change: "-2", icon: RefreshCw, color: "bg-rose-100 text-rose-600", bgGlow: "from-rose-500/20" },
 ];
 
 const AdminBondOrders = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [ratingFilter, setRatingFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
   const [activeTab, setActiveTab] = useState("orders");
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
   const [selectedRedemption, setSelectedRedemption] = useState<any>(null);
@@ -62,21 +71,24 @@ const AdminBondOrders = () => {
                           order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           order.isin.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || order.status.toLowerCase() === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesRating = ratingFilter === "all" || order.rating.includes(ratingFilter);
+    return matchesSearch && matchesStatus && matchesRating;
   });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Completed":
-        return <Badge className="bg-green-100 text-green-700">Completed</Badge>;
+        return <Badge className="bg-green-100 text-green-700 border-green-200">Completed</Badge>;
       case "Pending":
-        return <Badge className="bg-amber-100 text-amber-700">Pending</Badge>;
+        return <Badge className="bg-amber-100 text-amber-700 border-amber-200">Pending</Badge>;
       case "Failed":
-        return <Badge className="bg-red-100 text-red-700">Failed</Badge>;
+        return <Badge className="bg-red-100 text-red-700 border-red-200">Failed</Badge>;
+      case "Processing":
+        return <Badge className="bg-blue-100 text-blue-700 border-blue-200">Processing</Badge>;
       case "Approved":
-        return <Badge className="bg-green-100 text-green-700">Approved</Badge>;
+        return <Badge className="bg-green-100 text-green-700 border-green-200">Approved</Badge>;
       case "Rejected":
-        return <Badge className="bg-red-100 text-red-700">Rejected</Badge>;
+        return <Badge className="bg-red-100 text-red-700 border-red-200">Rejected</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -85,7 +97,7 @@ const AdminBondOrders = () => {
   const handleApprove = (order: any) => {
     toast({
       title: "Bond Order Approved",
-      description: `Order ${order.id} for ${order.user} has been approved.`,
+      description: `Order ${order.id} for ${order.user} has been approved successfully.`,
     });
     setShowApprovalDialog(false);
   };
@@ -93,7 +105,7 @@ const AdminBondOrders = () => {
   const handleReject = (order: any) => {
     toast({
       title: "Bond Order Rejected",
-      description: `Order ${order.id} has been rejected.`,
+      description: `Order ${order.id} has been rejected with reason: ${rejectionReason || 'Not specified'}`,
       variant: "destructive",
     });
     setShowApprovalDialog(false);
@@ -103,7 +115,7 @@ const AdminBondOrders = () => {
   const handleRedemptionApprove = (redemption: any) => {
     toast({
       title: "Redemption Approved",
-      description: `Redemption request ${redemption.id} has been approved. Settlement in T+2.`,
+      description: `Redemption request ${redemption.id} has been approved. Settlement in T+${redemption.settlementDays}.`,
     });
     setShowRedemptionDialog(false);
   };
@@ -118,42 +130,56 @@ const AdminBondOrders = () => {
     setRejectionReason("");
   };
 
+  const formatCurrency = (amount: number) => {
+    return `₹${amount.toLocaleString('en-IN')}`;
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-secondary">Bond Orders Management</h1>
-          <p className="text-muted-foreground">Approve, track, and manage bond purchase orders</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="gap-2">
-            <Download className="w-4 h-4" /> Export
-          </Button>
-          <Button variant="outline" className="gap-2">
-            <FileText className="w-4 h-4" /> Generate Report
-          </Button>
+      {/* Enhanced Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-secondary via-secondary/95 to-primary/80 p-6 md:p-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+        <svg className="absolute right-0 top-0 h-full w-1/3 text-white/5" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <polygon fill="currentColor" points="50,0 100,0 100,100 0,100" />
+        </svg>
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+              <Landmark className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white font-display">Bond Orders Management</h1>
+              <p className="text-white/70">Approve, track, and manage all bond purchase orders and redemptions</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Download className="w-4 h-4" /> Export Orders
+            </Button>
+            <Button variant="outline" className="gap-2 bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <FileText className="w-4 h-4" /> Generate Report
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Enhanced Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map((stat, i) => (
-          <Card key={i}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+          <Card key={i} className="relative overflow-hidden hover:shadow-lg transition-shadow group">
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgGlow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
+            <CardContent className="p-4 relative">
+              <div className="flex items-center justify-between mb-3">
                 <div className={`p-2.5 rounded-xl ${stat.color}`}>
                   <stat.icon className="w-5 h-5" />
                 </div>
-                <span className="text-sm text-green-600 flex items-center gap-0.5">
-                  <ArrowUpRight className="w-3 h-3" />
+                <span className={`text-xs flex items-center gap-0.5 ${stat.change.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
+                  <ArrowUpRight className={`w-3 h-3 ${!stat.change.startsWith('+') && 'rotate-180'}`} />
                   {stat.change}
                 </span>
               </div>
-              <div className="mt-3">
-                <p className="text-2xl font-bold text-secondary">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
+              <p className="text-2xl font-bold text-secondary">{stat.value}</p>
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
             </CardContent>
           </Card>
         ))}
