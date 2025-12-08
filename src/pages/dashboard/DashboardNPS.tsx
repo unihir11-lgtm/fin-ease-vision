@@ -14,7 +14,8 @@ import {
   Building2, TrendingUp, IndianRupee, PieChart, ArrowUpRight, ArrowDownRight,
   User, Shield, Bell, CreditCard, Calendar, ChevronRight, FileText, Download,
   Edit, Eye, EyeOff, Lock, Smartphone, Mail, MapPin, Clock, CheckCircle,
-  AlertCircle, Target, Wallet, BarChart3, RefreshCw, Receipt, Gift, Settings
+  AlertCircle, Target, Wallet, BarChart3, RefreshCw, Receipt, Gift, Settings,
+  Image, Printer, FileDown, Info, DollarSign, TrendingDown, Percent, LineChart as LineChartIcon
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, Legend, AreaChart, Area } from "recharts";
@@ -25,6 +26,9 @@ const DashboardNPS = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
   const [showRedemptionDialog, setShowRedemptionDialog] = useState(false);
+  const [showPRANCardDialog, setShowPRANCardDialog] = useState(false);
+  const [showNAVDialog, setShowNAVDialog] = useState(false);
+  const [showStatementDialog, setShowStatementDialog] = useState(false);
   
   // Profile state
   const [profile, setProfile] = useState({
@@ -93,6 +97,23 @@ const DashboardNPS = () => {
       { date: "15 Oct 2025", type: "Contribution", amount: 5000, status: "Completed" },
       { date: "01 Oct 2025", type: "Fund Switch", amount: 0, status: "Completed" },
     ],
+  };
+
+  // NAV Details Data
+  const navDetails = [
+    { fund: "Equity (E)", nav: 58.42, change: 0.85, changePercent: 1.47, date: "08 Dec 2025" },
+    { fund: "Corporate Bond (C)", nav: 42.18, change: 0.12, changePercent: 0.29, date: "08 Dec 2025" },
+    { fund: "Government Bond (G)", nav: 35.67, change: 0.08, changePercent: 0.22, date: "08 Dec 2025" },
+    { fund: "Alternative (A)", nav: 28.95, change: -0.15, changePercent: -0.52, date: "08 Dec 2025" },
+  ];
+
+  // Contribution Details with OPO Trail and Service Tax
+  const contributionDetails = {
+    totalInvestment: 580000,
+    opoTrailCommission: 1160,
+    serviceTax: 209,
+    netContribution: 578631,
+    lastUpdated: "08 Dec 2025",
   };
 
   const contributionHistory = [
@@ -174,6 +195,24 @@ const DashboardNPS = () => {
     setShowRedemptionDialog(false);
   };
 
+  const handleDownloadPRANCard = (format: string) => {
+    toast({
+      title: `PRAN Card ${format}`,
+      description: format === 'print' 
+        ? "Opening print dialog for ePRAN card..." 
+        : `Downloading PRAN card as ${format.toUpperCase()}...`,
+    });
+    setShowPRANCardDialog(false);
+  };
+
+  const handleDownloadStatement = (format: string) => {
+    toast({
+      title: "Statement Download",
+      description: `Downloading your NPS statement in ${format.toUpperCase()} format...`,
+    });
+    setShowStatementDialog(false);
+  };
+
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case "contribution": return <CreditCard className="w-4 h-4" />;
@@ -201,15 +240,154 @@ const DashboardNPS = () => {
           <h1 className="text-2xl md:text-3xl font-bold text-secondary font-display">National Pension System</h1>
           <p className="text-muted-foreground mt-1">Secure your retirement with Protean NPS</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 px-4 py-2 text-sm">
             <CheckCircle className="w-4 h-4 mr-2" />
             PRAN: {npsData.pran}
           </Badge>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Download className="w-4 h-4" />
-            Statement
-          </Button>
+          <Dialog open={showPRANCardDialog} onOpenChange={setShowPRANCardDialog}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <CreditCard className="w-4 h-4" />
+                PRAN Card
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-primary" />
+                  Download PRAN Card
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="p-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl border border-primary/20">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm text-muted-foreground">PRAN Number</span>
+                    <span className="font-bold font-mono text-lg text-primary">{npsData.pran}</span>
+                  </div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-sm text-muted-foreground">Name</span>
+                    <span className="font-medium text-secondary">{profile.fullName}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Status</span>
+                    <Badge className="bg-green-100 text-green-700">{npsData.pranStatus}</Badge>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <Button 
+                    onClick={() => handleDownloadPRANCard('image')} 
+                    variant="outline" 
+                    className="flex-col h-auto py-4 gap-2"
+                  >
+                    <Image className="w-5 h-5 text-primary" />
+                    <span className="text-xs">Image</span>
+                  </Button>
+                  <Button 
+                    onClick={() => handleDownloadPRANCard('pdf')} 
+                    variant="outline" 
+                    className="flex-col h-auto py-4 gap-2"
+                  >
+                    <FileDown className="w-5 h-5 text-primary" />
+                    <span className="text-xs">PDF</span>
+                  </Button>
+                  <Button 
+                    onClick={() => handleDownloadPRANCard('print')} 
+                    variant="outline" 
+                    className="flex-col h-auto py-4 gap-2"
+                  >
+                    <Printer className="w-5 h-5 text-primary" />
+                    <span className="text-xs">Print ePRAN</span>
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={showStatementDialog} onOpenChange={setShowStatementDialog}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Download className="w-4 h-4" />
+                Statement
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-primary" />
+                  Download Statement
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Select Period</Label>
+                  <Select defaultValue="current-fy">
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="current-fy">Current Financial Year (2025-26)</SelectItem>
+                      <SelectItem value="last-fy">Last Financial Year (2024-25)</SelectItem>
+                      <SelectItem value="last-3-years">Last 3 Years</SelectItem>
+                      <SelectItem value="all">Since Inception</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button onClick={() => handleDownloadStatement('pdf')} className="gap-2">
+                    <FileDown className="w-4 h-4" />
+                    PDF Format
+                  </Button>
+                  <Button onClick={() => handleDownloadStatement('excel')} variant="outline" className="gap-2">
+                    <Download className="w-4 h-4" />
+                    Excel Format
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={showNAVDialog} onOpenChange={setShowNAVDialog}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <LineChartIcon className="w-4 h-4" />
+                NAV Details
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <LineChartIcon className="w-5 h-5 text-primary" />
+                  NAV Details - {npsData.pensionFundManager}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="text-sm text-muted-foreground flex items-center gap-2">
+                  <Info className="w-4 h-4" />
+                  Net Asset Value as on {navDetails[0].date}
+                </div>
+                <div className="space-y-3">
+                  {navDetails.map((item, index) => (
+                    <div key={index} className="p-4 bg-muted/30 rounded-xl flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-secondary">{item.fund}</p>
+                        <p className="text-xs text-muted-foreground">Updated: {item.date}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xl font-bold text-secondary">₹{item.nav.toFixed(2)}</p>
+                        <div className={`flex items-center gap-1 text-sm ${item.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {item.change >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                          <span>{item.change >= 0 ? '+' : ''}{item.change.toFixed(2)} ({item.changePercent.toFixed(2)}%)</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="p-3 bg-blue-50 rounded-lg text-sm text-blue-700 flex items-start gap-2">
+                  <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span>NAV is updated at the end of each business day. Your unit balance remains constant; only NAV changes.</span>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -579,9 +757,33 @@ const DashboardNPS = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="p-4 bg-white rounded-xl border border-primary/20">
-                    <p className="text-sm text-muted-foreground">Total Contributions</p>
-                    <p className="text-3xl font-bold text-primary mt-1">₹{npsData.totalContributed.toLocaleString()}</p>
+                    <p className="text-sm text-muted-foreground">Total Investment Amount</p>
+                    <p className="text-3xl font-bold text-primary mt-1">₹{contributionDetails.totalInvestment.toLocaleString()}</p>
                   </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="w-4 h-4 text-amber-600" />
+                        <span className="text-sm text-muted-foreground">OPO Trail Commission</span>
+                      </div>
+                      <span className="font-semibold text-amber-600">- ₹{contributionDetails.opoTrailCommission.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                      <div className="flex items-center gap-2">
+                        <Percent className="w-4 h-4 text-red-500" />
+                        <span className="text-sm text-muted-foreground">Service Tax</span>
+                      </div>
+                      <span className="font-semibold text-red-500">- ₹{contributionDetails.serviceTax.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                        <span className="text-sm font-medium text-green-700">Net Contribution</span>
+                      </div>
+                      <span className="font-bold text-green-700">₹{contributionDetails.netContribution.toLocaleString()}</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground text-center">Last updated: {contributionDetails.lastUpdated}</p>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 bg-white rounded-xl">
                       <p className="text-xs text-muted-foreground">This Financial Year</p>
