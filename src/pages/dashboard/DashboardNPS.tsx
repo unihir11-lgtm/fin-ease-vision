@@ -1191,8 +1191,9 @@ const DashboardNPS = () => {
                   <thead>
                     <tr className="border-b border-border">
                       <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Fund Type</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">PFM</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Current NAV</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Day Change</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Day</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Week</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Month</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Year</th>
@@ -1201,7 +1202,18 @@ const DashboardNPS = () => {
                   </thead>
                   <tbody>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                      <td className="py-4 px-4 font-medium text-secondary">Equity (E)</td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-blue-500" />
+                          <span className="font-medium text-secondary">Equity (E)</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div>
+                          <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
+                          <p className="text-xs text-muted-foreground">Scheme E - Tier 1</p>
+                        </div>
+                      </td>
                       <td className="py-4 px-4 text-right font-bold">₹58.42</td>
                       <td className="py-4 px-4 text-right text-green-600">+1.47%</td>
                       <td className="py-4 px-4 text-right text-green-600">+2.85%</td>
@@ -1210,7 +1222,18 @@ const DashboardNPS = () => {
                       <td className="py-4 px-4 text-right text-green-600">+45.8%</td>
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                      <td className="py-4 px-4 font-medium text-secondary">Corporate Bond (C)</td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-green-500" />
+                          <span className="font-medium text-secondary">Corporate Bond (C)</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div>
+                          <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
+                          <p className="text-xs text-muted-foreground">Scheme C - Tier 1</p>
+                        </div>
+                      </td>
                       <td className="py-4 px-4 text-right font-bold">₹42.18</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.29%</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.85%</td>
@@ -1219,7 +1242,18 @@ const DashboardNPS = () => {
                       <td className="py-4 px-4 text-right text-green-600">+32.5%</td>
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                      <td className="py-4 px-4 font-medium text-secondary">Government Bond (G)</td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-amber-500" />
+                          <span className="font-medium text-secondary">Government Bond (G)</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div>
+                          <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
+                          <p className="text-xs text-muted-foreground">Scheme G - Tier 1</p>
+                        </div>
+                      </td>
                       <td className="py-4 px-4 text-right font-bold">₹35.67</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.22%</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.65%</td>
@@ -1228,7 +1262,18 @@ const DashboardNPS = () => {
                       <td className="py-4 px-4 text-right text-green-600">+28.2%</td>
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                      <td className="py-4 px-4 font-medium text-secondary">Alternative Assets (A)</td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-purple-500" />
+                          <span className="font-medium text-secondary">Alternative Assets (A)</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div>
+                          <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
+                          <p className="text-xs text-muted-foreground">Scheme A - Tier 1</p>
+                        </div>
+                      </td>
                       <td className="py-4 px-4 text-right font-bold">₹28.95</td>
                       <td className="py-4 px-4 text-right text-red-600">-0.52%</td>
                       <td className="py-4 px-4 text-right text-green-600">+1.25%</td>
@@ -1238,6 +1283,10 @@ const DashboardNPS = () => {
                     </tr>
                   </tbody>
                 </table>
+              </div>
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg flex items-start gap-2">
+                <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-blue-700">NAV is updated at the end of each business day. PFM: Pension Fund Manager manages your investments across different asset classes.</p>
               </div>
             </CardContent>
           </Card>
@@ -1454,66 +1503,117 @@ const DashboardNPS = () => {
             </CardContent>
           </Card>
 
-          {/* Available Statements */}
+          {/* Statement List View */}
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2">
+                <CardTitle className="text-lg flex items-center gap-2">
                   <FileText className="w-5 h-5 text-primary" />
-                  Available Statements
+                  Statement List
                 </CardTitle>
-                <Select defaultValue="all">
-                  <SelectTrigger className="w-40 h-8 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="comprehensive">Comprehensive</SelectItem>
-                    <SelectItem value="contribution">Contribution</SelectItem>
-                    <SelectItem value="transaction">Transaction</SelectItem>
-                    <SelectItem value="tax">Tax Statement</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2">
+                  <Select defaultValue="all">
+                    <SelectTrigger className="w-40 h-8 text-xs bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg z-50">
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="comprehensive">Comprehensive</SelectItem>
+                      <SelectItem value="contribution">Contribution</SelectItem>
+                      <SelectItem value="transaction">Transaction</SelectItem>
+                      <SelectItem value="nav">NAV Statement</SelectItem>
+                      <SelectItem value="tax">Tax Statement</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select defaultValue="2025">
+                    <SelectTrigger className="w-24 h-8 text-xs bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border shadow-lg z-50">
+                      <SelectItem value="2025">2025</SelectItem>
+                      <SelectItem value="2024">2024</SelectItem>
+                      <SelectItem value="2023">2023</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {[
-                  { type: "Comprehensive Statement", period: "FY 2025-26 (Apr-Dec)", generated: "08 Dec 2025", size: "2.4 MB", icon: FileText },
-                  { type: "Tax Statement (Form 16)", period: "FY 2024-25", generated: "15 Apr 2025", size: "856 KB", icon: Receipt },
-                  { type: "Transaction Statement", period: "Nov 2025", generated: "01 Dec 2025", size: "1.2 MB", icon: FileText },
-                  { type: "NAV Statement", period: "Oct 2025", generated: "01 Nov 2025", size: "456 KB", icon: LineChartIcon },
-                  { type: "Contribution Statement", period: "FY 2024-25", generated: "01 Apr 2025", size: "1.8 MB", icon: IndianRupee },
-                  { type: "Comprehensive Statement", period: "FY 2024-25", generated: "01 Apr 2025", size: "3.2 MB", icon: FileText },
-                ].map((statement, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-xl hover:bg-muted/50 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <statement.icon className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-secondary">{statement.type}</p>
-                        <p className="text-sm text-muted-foreground">{statement.period}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Generated</p>
-                        <p className="text-sm font-medium">{statement.generated}</p>
-                      </div>
-                      <Badge variant="secondary" className="text-xs">{statement.size}</Badge>
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <Download className="w-4 h-4" />
-                        Download
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/30">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Statement Type</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Period</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Generated On</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Format</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Size</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Status</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { type: "Comprehensive Statement", period: "FY 2025-26 (Apr-Dec)", generated: "08 Dec 2025", format: "PDF", size: "2.4 MB", status: "Ready" },
+                      { type: "Tax Statement (Form 16)", period: "FY 2024-25", generated: "15 Apr 2025", format: "PDF", size: "856 KB", status: "Ready" },
+                      { type: "Transaction Statement", period: "Nov 2025", generated: "01 Dec 2025", format: "PDF", size: "1.2 MB", status: "Ready" },
+                      { type: "NAV Statement", period: "Oct 2025", generated: "01 Nov 2025", format: "Excel", size: "456 KB", status: "Ready" },
+                      { type: "Contribution Statement", period: "Q2 FY 2025-26", generated: "01 Oct 2025", format: "PDF", size: "1.1 MB", status: "Ready" },
+                      { type: "Comprehensive Statement", period: "FY 2024-25", generated: "01 Apr 2025", format: "PDF", size: "3.2 MB", status: "Ready" },
+                      { type: "NAV Statement", period: "Sep 2025", generated: "01 Oct 2025", format: "PDF", size: "425 KB", status: "Ready" },
+                      { type: "Transaction Statement", period: "Q1 FY 2025-26", generated: "01 Jul 2025", format: "Excel", size: "980 KB", status: "Ready" },
+                      { type: "Contribution Statement", period: "FY 2024-25", generated: "01 Apr 2025", format: "PDF", size: "1.8 MB", status: "Ready" },
+                      { type: "Tax Statement (Form 16)", period: "FY 2023-24", generated: "15 Apr 2024", format: "PDF", size: "824 KB", status: "Ready" },
+                    ].map((statement, index) => (
+                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-lg ${
+                              statement.type.includes('Comprehensive') ? 'bg-blue-100' :
+                              statement.type.includes('Tax') ? 'bg-green-100' :
+                              statement.type.includes('NAV') ? 'bg-purple-100' :
+                              statement.type.includes('Transaction') ? 'bg-amber-100' : 'bg-primary/10'
+                            }`}>
+                              <FileText className={`w-4 h-4 ${
+                                statement.type.includes('Comprehensive') ? 'text-blue-600' :
+                                statement.type.includes('Tax') ? 'text-green-600' :
+                                statement.type.includes('NAV') ? 'text-purple-600' :
+                                statement.type.includes('Transaction') ? 'text-amber-600' : 'text-primary'
+                              }`} />
+                            </div>
+                            <span className="font-medium text-secondary">{statement.type}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground">{statement.period}</td>
+                        <td className="py-3 px-4 text-sm">{statement.generated}</td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge variant="outline" className="text-xs">{statement.format}</Badge>
+                        </td>
+                        <td className="py-3 px-4 text-right text-sm text-muted-foreground">{statement.size}</td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge className="bg-green-100 text-green-700 text-xs">{statement.status}</Badge>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <div className="flex items-center justify-center gap-1">
+                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+                              <Eye className="w-4 h-4 text-muted-foreground" />
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+                              <Download className="w-4 h-4 text-primary" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              <div className="flex items-center justify-center mt-4">
-                <Button variant="outline" className="gap-2">
-                  View All Statements <ChevronRight className="w-4 h-4" />
-                </Button>
+              <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                <p className="text-sm text-muted-foreground">Showing 10 of 24 statements</p>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" disabled>Previous</Button>
+                  <Button variant="outline" size="sm">Next</Button>
+                </div>
               </div>
             </CardContent>
           </Card>
