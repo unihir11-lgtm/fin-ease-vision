@@ -15,6 +15,7 @@ import AdminBondOrders from "./admin/AdminBondOrders";
 import AdminBondAnalytics from "./admin/AdminBondAnalytics";
 import AdminFDBookings from "./admin/AdminFDBookings";
 import AdminFDAnalytics from "./admin/AdminFDAnalytics";
+import AdminRoleManagement from "./admin/AdminRoleManagement";
 
 const Admin = () => {
   return (
@@ -40,6 +41,7 @@ const Admin = () => {
         <Route path="fds/analytics" element={<AdminFDAnalytics />} />
         {/* System Routes */}
         <Route path="logs" element={<AdminLogs />} />
+        <Route path="roles" element={<AdminRoleManagement />} />
         {/* Legacy route redirects */}
         <Route path="cms/ipo" element={<Navigate to="/admin/ipo/management" replace />} />
         <Route path="cms/bonds" element={<Navigate to="/admin/bonds/management" replace />} />
