@@ -533,10 +533,12 @@ const DashboardNPS = () => {
 
       {/* Tabs Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-muted/50 p-1 rounded-xl h-auto">
+        <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full bg-muted/50 p-1 rounded-xl h-auto">
           <TabsTrigger value="overview" className="text-xs sm:text-sm py-2.5">Overview</TabsTrigger>
           <TabsTrigger value="contributions" className="text-xs sm:text-sm py-2.5">Contributions</TabsTrigger>
-          <TabsTrigger value="performance" className="text-xs sm:text-sm py-2.5">Performance</TabsTrigger>
+          <TabsTrigger value="nav-performance" className="text-xs sm:text-sm py-2.5">NAV & Performance</TabsTrigger>
+          <TabsTrigger value="statements" className="text-xs sm:text-sm py-2.5">Statements</TabsTrigger>
+          <TabsTrigger value="performance" className="text-xs sm:text-sm py-2.5">Analytics</TabsTrigger>
           <TabsTrigger value="redemption" className="text-xs sm:text-sm py-2.5">Withdrawal</TabsTrigger>
         </TabsList>
 
@@ -1120,6 +1122,448 @@ const DashboardNPS = () => {
                           <Badge className={item.status === "Completed" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}>
                             {item.status}
                           </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* NAV & Performance Tab */}
+        <TabsContent value="nav-performance" className="space-y-6 mt-6">
+          {/* NAV Overview Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {navDetails.map((nav, index) => (
+              <Card key={index} className={`${nav.change >= 0 ? 'border-green-200' : 'border-red-200'}`}>
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      nav.fund.includes('Equity') ? 'bg-blue-500' :
+                      nav.fund.includes('Corporate') ? 'bg-green-500' :
+                      nav.fund.includes('Government') ? 'bg-amber-500' : 'bg-purple-500'
+                    }`} />
+                    <span className="text-sm font-medium text-secondary">{nav.fund}</span>
+                  </div>
+                  <p className="text-2xl font-bold text-secondary">₹{nav.nav.toFixed(2)}</p>
+                  <div className={`flex items-center gap-1 mt-2 ${nav.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {nav.change >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                    <span className="text-sm font-medium">{nav.change >= 0 ? '+' : ''}{nav.change.toFixed(2)} ({nav.changePercent.toFixed(2)}%)</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">As on {nav.date}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Detailed NAV Table */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <LineChartIcon className="w-5 h-5 text-primary" />
+                  NAV Details - {npsData.pensionFundManager}
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Select defaultValue="1m">
+                    <SelectTrigger className="w-24 h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1w">1 Week</SelectItem>
+                      <SelectItem value="1m">1 Month</SelectItem>
+                      <SelectItem value="3m">3 Months</SelectItem>
+                      <SelectItem value="1y">1 Year</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button variant="outline" size="sm" className="gap-2 h-8">
+                    <Download className="w-3 h-3" />
+                    Export
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Fund Type</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Current NAV</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Day Change</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Week</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Month</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Year</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Since Inception</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                      <td className="py-4 px-4 font-medium text-secondary">Equity (E)</td>
+                      <td className="py-4 px-4 text-right font-bold">₹58.42</td>
+                      <td className="py-4 px-4 text-right text-green-600">+1.47%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+2.85%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+4.52%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+14.2%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+45.8%</td>
+                    </tr>
+                    <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                      <td className="py-4 px-4 font-medium text-secondary">Corporate Bond (C)</td>
+                      <td className="py-4 px-4 text-right font-bold">₹42.18</td>
+                      <td className="py-4 px-4 text-right text-green-600">+0.29%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+0.85%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+1.42%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+9.8%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+32.5%</td>
+                    </tr>
+                    <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                      <td className="py-4 px-4 font-medium text-secondary">Government Bond (G)</td>
+                      <td className="py-4 px-4 text-right font-bold">₹35.67</td>
+                      <td className="py-4 px-4 text-right text-green-600">+0.22%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+0.65%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+1.12%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+7.5%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+28.2%</td>
+                    </tr>
+                    <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                      <td className="py-4 px-4 font-medium text-secondary">Alternative Assets (A)</td>
+                      <td className="py-4 px-4 text-right font-bold">₹28.95</td>
+                      <td className="py-4 px-4 text-right text-red-600">-0.52%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+1.25%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+2.85%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+11.2%</td>
+                      <td className="py-4 px-4 text-right text-green-600">+38.5%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* NAV Trend Chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <LineChartIcon className="w-5 h-5 text-primary" />
+                  NAV Trend - All Funds
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={[
+                      { date: "Jul", equity: 54.2, corporate: 40.5, govt: 34.2, alt: 27.1 },
+                      { date: "Aug", equity: 55.1, corporate: 41.0, govt: 34.5, alt: 27.8 },
+                      { date: "Sep", equity: 56.3, corporate: 41.3, govt: 34.9, alt: 28.2 },
+                      { date: "Oct", equity: 57.2, corporate: 41.8, govt: 35.2, alt: 28.5 },
+                      { date: "Nov", equity: 57.8, corporate: 42.0, govt: 35.5, alt: 29.1 },
+                      { date: "Dec", equity: 58.4, corporate: 42.2, govt: 35.7, alt: 29.0 },
+                    ]}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="date" tick={{ fontSize: 12 }} stroke="#9CA3AF" />
+                      <YAxis tick={{ fontSize: 12 }} stroke="#9CA3AF" tickFormatter={(v) => `₹${v}`} />
+                      <Tooltip formatter={(value: number) => [`₹${value.toFixed(2)}`]} />
+                      <Legend />
+                      <Line type="monotone" dataKey="equity" name="Equity (E)" stroke="#3B82F6" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey="corporate" name="Corporate (C)" stroke="#22C55E" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey="govt" name="Govt Bond (G)" stroke="#F59E0B" strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey="alt" name="Alternative (A)" stroke="#8B5CF6" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Unit Holdings */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <PieChart className="w-5 h-5 text-primary" />
+                  Unit Holdings Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {investmentDetails.map((inv, index) => (
+                    <div key={index} className="p-4 bg-muted/30 rounded-xl">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full ${
+                            inv.fundType.includes('Equity') ? 'bg-blue-500' :
+                            inv.fundType.includes('Corporate') ? 'bg-green-500' :
+                            inv.fundType.includes('Government') ? 'bg-amber-500' : 'bg-purple-500'
+                          }`} />
+                          <span className="font-medium text-secondary">{inv.fundType}</span>
+                        </div>
+                        <Badge variant="outline" className="text-xs">{inv.pfm}</Badge>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4 mt-3">
+                        <div>
+                          <p className="text-xs text-muted-foreground">Units</p>
+                          <p className="font-bold font-mono">{inv.units.toFixed(4)}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">NAV</p>
+                          <p className="font-bold">₹{inv.nav.toFixed(2)}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">Value</p>
+                          <p className="font-bold text-primary">₹{inv.currentValue.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="p-4 bg-primary/10 rounded-xl border border-primary/20">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-secondary">Total Units</span>
+                      <span className="font-bold font-mono">{investmentDetails.reduce((sum, i) => sum + i.units, 0).toFixed(4)}</span>
+                    </div>
+                    <div className="flex items-center justify-between mt-2">
+                      <span className="font-semibold text-secondary">Total Value</span>
+                      <span className="font-bold text-primary text-lg">₹{investmentDetails.reduce((sum, i) => sum + i.currentValue, 0).toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Statements Tab */}
+        <TabsContent value="statements" className="space-y-6 mt-6">
+          {/* Statement Summary Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-blue-100">
+                    <FileText className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Total Statements</p>
+                    <p className="text-2xl font-bold text-secondary">24</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-green-100">
+                    <Download className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Downloaded</p>
+                    <p className="text-2xl font-bold text-secondary">18</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-amber-100">
+                    <Calendar className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Last Generated</p>
+                    <p className="text-lg font-bold text-secondary">08 Dec 2025</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-purple-100">
+                    <Receipt className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Contribution Receipts</p>
+                    <p className="text-2xl font-bold text-secondary">48</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Generate Statement */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <FileText className="w-5 h-5 text-primary" />
+                Generate Statement
+              </CardTitle>
+              <CardDescription>Download your NPS account statement for any period</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <Label className="text-sm font-medium">Statement Type</Label>
+                  <Select defaultValue="comprehensive">
+                    <SelectTrigger className="mt-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="comprehensive">Comprehensive Statement</SelectItem>
+                      <SelectItem value="contribution">Contribution Statement</SelectItem>
+                      <SelectItem value="transaction">Transaction Statement</SelectItem>
+                      <SelectItem value="nav">NAV Statement</SelectItem>
+                      <SelectItem value="tax">Tax Statement (Form 16)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Period</Label>
+                  <Select defaultValue="current-fy">
+                    <SelectTrigger className="mt-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="current-fy">Current FY (2025-26)</SelectItem>
+                      <SelectItem value="last-fy">Last FY (2024-25)</SelectItem>
+                      <SelectItem value="last-3-years">Last 3 Years</SelectItem>
+                      <SelectItem value="since-inception">Since Inception</SelectItem>
+                      <SelectItem value="custom">Custom Range</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Format</Label>
+                  <Select defaultValue="pdf">
+                    <SelectTrigger className="mt-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pdf">PDF</SelectItem>
+                      <SelectItem value="excel">Excel</SelectItem>
+                      <SelectItem value="csv">CSV</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-end">
+                  <Button className="w-full gap-2">
+                    <Download className="w-4 h-4" />
+                    Generate & Download
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Available Statements */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-primary" />
+                  Available Statements
+                </CardTitle>
+                <Select defaultValue="all">
+                  <SelectTrigger className="w-40 h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="comprehensive">Comprehensive</SelectItem>
+                    <SelectItem value="contribution">Contribution</SelectItem>
+                    <SelectItem value="transaction">Transaction</SelectItem>
+                    <SelectItem value="tax">Tax Statement</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { type: "Comprehensive Statement", period: "FY 2025-26 (Apr-Dec)", generated: "08 Dec 2025", size: "2.4 MB", icon: FileText },
+                  { type: "Tax Statement (Form 16)", period: "FY 2024-25", generated: "15 Apr 2025", size: "856 KB", icon: Receipt },
+                  { type: "Transaction Statement", period: "Nov 2025", generated: "01 Dec 2025", size: "1.2 MB", icon: FileText },
+                  { type: "NAV Statement", period: "Oct 2025", generated: "01 Nov 2025", size: "456 KB", icon: LineChartIcon },
+                  { type: "Contribution Statement", period: "FY 2024-25", generated: "01 Apr 2025", size: "1.8 MB", icon: IndianRupee },
+                  { type: "Comprehensive Statement", period: "FY 2024-25", generated: "01 Apr 2025", size: "3.2 MB", icon: FileText },
+                ].map((statement, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-xl hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <statement.icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-secondary">{statement.type}</p>
+                        <p className="text-sm text-muted-foreground">{statement.period}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Generated</p>
+                        <p className="text-sm font-medium">{statement.generated}</p>
+                      </div>
+                      <Badge variant="secondary" className="text-xs">{statement.size}</Badge>
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Download className="w-4 h-4" />
+                        Download
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center justify-center mt-4">
+                <Button variant="outline" className="gap-2">
+                  View All Statements <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Contribution Receipts */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Receipt className="w-5 h-5 text-primary" />
+                  Contribution Receipts
+                </CardTitle>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Download All
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Receipt No.</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Date</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Type</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Amount</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Units Allotted</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Status</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactionHistory.slice(0, 5).map((txn, index) => (
+                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                        <td className="py-3 px-4 font-mono text-sm text-primary">{txn.id}</td>
+                        <td className="py-3 px-4 text-sm">{txn.date}</td>
+                        <td className="py-3 px-4">
+                          <Badge variant="outline" className="text-xs">{txn.type}</Badge>
+                        </td>
+                        <td className="py-3 px-4 text-right font-semibold">₹{txn.amount.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right font-mono text-sm">{txn.units.toFixed(4)}</td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge className="bg-green-100 text-green-700 text-xs">{txn.status}</Badge>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <Button variant="ghost" size="sm" className="gap-1 h-7 text-xs">
+                            <Download className="w-3 h-3" />
+                            Receipt
+                          </Button>
                         </td>
                       </tr>
                     ))}
