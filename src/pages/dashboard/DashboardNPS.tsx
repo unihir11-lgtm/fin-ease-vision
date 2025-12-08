@@ -1384,16 +1384,16 @@ const DashboardNPS = () => {
         {/* Statements Tab */}
         <TabsContent value="statements" className="space-y-6 mt-6">
           {/* Statement Summary Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
             <Card>
               <CardContent className="p-5">
                 <div className="flex items-center gap-3">
                   <div className="p-3 rounded-xl bg-blue-100">
-                    <FileText className="w-6 h-6 text-blue-600" />
+                    <Receipt className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Total Statements</p>
-                    <p className="text-2xl font-bold text-secondary">24</p>
+                    <p className="text-xs text-muted-foreground">Total Transactions</p>
+                    <p className="text-2xl font-bold text-secondary">48</p>
                   </div>
                 </div>
               </CardContent>
@@ -1402,24 +1402,11 @@ const DashboardNPS = () => {
               <CardContent className="p-5">
                 <div className="flex items-center gap-3">
                   <div className="p-3 rounded-xl bg-green-100">
-                    <Download className="w-6 h-6 text-green-600" />
+                    <IndianRupee className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Downloaded</p>
-                    <p className="text-2xl font-bold text-secondary">18</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-5">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-amber-100">
-                    <Calendar className="w-6 h-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Last Generated</p>
-                    <p className="text-lg font-bold text-secondary">08 Dec 2025</p>
+                    <p className="text-xs text-muted-foreground">Total Invested</p>
+                    <p className="text-2xl font-bold text-secondary">₹5.8L</p>
                   </div>
                 </div>
               </CardContent>
@@ -1428,113 +1415,82 @@ const DashboardNPS = () => {
               <CardContent className="p-5">
                 <div className="flex items-center gap-3">
                   <div className="p-3 rounded-xl bg-purple-100">
-                    <Receipt className="w-6 h-6 text-purple-600" />
+                    <BarChart3 className="w-6 h-6 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Contribution Receipts</p>
-                    <p className="text-2xl font-bold text-secondary">48</p>
+                    <p className="text-xs text-muted-foreground">Total Units</p>
+                    <p className="text-2xl font-bold text-secondary">14,799</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-amber-100">
+                    <Building2 className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">PFM</p>
+                    <p className="text-sm font-bold text-secondary">HDFC Pension</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-xl bg-primary/10">
+                    <TrendingUp className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Current Value</p>
+                    <p className="text-2xl font-bold text-primary">₹6.85L</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Generate Statement */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <FileText className="w-5 h-5 text-primary" />
-                Generate Statement
-              </CardTitle>
-              <CardDescription>Download your NPS account statement for any period</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                  <Label className="text-sm font-medium">Statement Type</Label>
-                  <Select defaultValue="comprehensive">
-                    <SelectTrigger className="mt-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="comprehensive">Comprehensive Statement</SelectItem>
-                      <SelectItem value="contribution">Contribution Statement</SelectItem>
-                      <SelectItem value="transaction">Transaction Statement</SelectItem>
-                      <SelectItem value="nav">NAV Statement</SelectItem>
-                      <SelectItem value="tax">Tax Statement (Form 16)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium">Period</Label>
-                  <Select defaultValue="current-fy">
-                    <SelectTrigger className="mt-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="current-fy">Current FY (2025-26)</SelectItem>
-                      <SelectItem value="last-fy">Last FY (2024-25)</SelectItem>
-                      <SelectItem value="last-3-years">Last 3 Years</SelectItem>
-                      <SelectItem value="since-inception">Since Inception</SelectItem>
-                      <SelectItem value="custom">Custom Range</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label className="text-sm font-medium">Format</Label>
-                  <Select defaultValue="pdf">
-                    <SelectTrigger className="mt-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pdf">PDF</SelectItem>
-                      <SelectItem value="excel">Excel</SelectItem>
-                      <SelectItem value="csv">CSV</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-end">
-                  <Button className="w-full gap-2">
-                    <Download className="w-4 h-4" />
-                    Generate & Download
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Statement List View */}
+          {/* Transaction Statement List */}
           <Card>
             <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-primary" />
-                  Statement List
-                </CardTitle>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Receipt className="w-5 h-5 text-primary" />
+                    Transaction Statement
+                  </CardTitle>
+                  <CardDescription>Complete list of all NPS transactions with fund details</CardDescription>
+                </div>
                 <div className="flex items-center gap-2">
                   <Select defaultValue="all">
-                    <SelectTrigger className="w-40 h-8 text-xs bg-background">
+                    <SelectTrigger className="w-36 h-8 text-xs bg-background">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg z-50">
                       <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="comprehensive">Comprehensive</SelectItem>
-                      <SelectItem value="contribution">Contribution</SelectItem>
-                      <SelectItem value="transaction">Transaction</SelectItem>
-                      <SelectItem value="nav">NAV Statement</SelectItem>
-                      <SelectItem value="tax">Tax Statement</SelectItem>
+                      <SelectItem value="contribution">Contributions</SelectItem>
+                      <SelectItem value="switch">Fund Switch</SelectItem>
+                      <SelectItem value="withdrawal">Withdrawals</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select defaultValue="2025">
-                    <SelectTrigger className="w-24 h-8 text-xs bg-background">
+                  <Select defaultValue="all-funds">
+                    <SelectTrigger className="w-32 h-8 text-xs bg-background">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-background border shadow-lg z-50">
-                      <SelectItem value="2025">2025</SelectItem>
-                      <SelectItem value="2024">2024</SelectItem>
-                      <SelectItem value="2023">2023</SelectItem>
+                      <SelectItem value="all-funds">All Funds</SelectItem>
+                      <SelectItem value="equity">Equity (E)</SelectItem>
+                      <SelectItem value="corporate">Corporate (C)</SelectItem>
+                      <SelectItem value="govt">Govt Bond (G)</SelectItem>
+                      <SelectItem value="alt">Alternative (A)</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Button variant="outline" size="sm" className="gap-2 h-8">
+                    <Download className="w-3 h-3" />
+                    Export
+                  </Button>
                 </div>
               </div>
             </CardHeader>
@@ -1543,65 +1499,57 @@ const DashboardNPS = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-border bg-muted/30">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Statement Type</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Period</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Generated On</th>
-                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Format</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Size</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Txn ID</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Date</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Type</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Fund / PFM</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Amount</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Units</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Tier</th>
                       <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Status</th>
-                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {[
-                      { type: "Comprehensive Statement", period: "FY 2025-26 (Apr-Dec)", generated: "08 Dec 2025", format: "PDF", size: "2.4 MB", status: "Ready" },
-                      { type: "Tax Statement (Form 16)", period: "FY 2024-25", generated: "15 Apr 2025", format: "PDF", size: "856 KB", status: "Ready" },
-                      { type: "Transaction Statement", period: "Nov 2025", generated: "01 Dec 2025", format: "PDF", size: "1.2 MB", status: "Ready" },
-                      { type: "NAV Statement", period: "Oct 2025", generated: "01 Nov 2025", format: "Excel", size: "456 KB", status: "Ready" },
-                      { type: "Contribution Statement", period: "Q2 FY 2025-26", generated: "01 Oct 2025", format: "PDF", size: "1.1 MB", status: "Ready" },
-                      { type: "Comprehensive Statement", period: "FY 2024-25", generated: "01 Apr 2025", format: "PDF", size: "3.2 MB", status: "Ready" },
-                      { type: "NAV Statement", period: "Sep 2025", generated: "01 Oct 2025", format: "PDF", size: "425 KB", status: "Ready" },
-                      { type: "Transaction Statement", period: "Q1 FY 2025-26", generated: "01 Jul 2025", format: "Excel", size: "980 KB", status: "Ready" },
-                      { type: "Contribution Statement", period: "FY 2024-25", generated: "01 Apr 2025", format: "PDF", size: "1.8 MB", status: "Ready" },
-                      { type: "Tax Statement (Form 16)", period: "FY 2023-24", generated: "15 Apr 2024", format: "PDF", size: "824 KB", status: "Ready" },
-                    ].map((statement, index) => (
+                      { id: "TXN789456", date: "15 Nov 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 58.40, units: 85.62, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789455", date: "15 Nov 2025", type: "Contribution", fund: "Corporate (C)", pfm: "HDFC Pension", amount: 3000, nav: 42.15, units: 71.17, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789454", date: "15 Nov 2025", type: "Contribution", fund: "Govt Bond (G)", pfm: "HDFC Pension", amount: 1500, nav: 35.62, units: 42.11, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789453", date: "15 Nov 2025", type: "Contribution", fund: "Alternative (A)", pfm: "HDFC Pension", amount: 500, nav: 29.05, units: 17.21, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789452", date: "15 Oct 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 58.02, units: 86.18, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789451", date: "15 Oct 2025", type: "Contribution", fund: "Corporate (C)", pfm: "HDFC Pension", amount: 3000, nav: 41.95, units: 71.51, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789450", date: "01 Oct 2025", type: "Fund Switch", fund: "E → C", pfm: "HDFC Pension", amount: 25000, nav: 57.85, units: 432.15, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789449", date: "15 Sep 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 57.18, units: 87.45, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789448", date: "01 Sep 2025", type: "Lump Sum", fund: "Equity (E)", pfm: "HDFC Pension", amount: 25000, nav: 56.52, units: 442.31, tier: "Tier 1", status: "Completed" },
+                      { id: "TXN789447", date: "15 Aug 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 56.10, units: 89.12, tier: "Tier 2", status: "Completed" },
+                    ].map((txn, index) => (
                       <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                        <td className="py-3 px-4 font-mono text-sm text-primary">{txn.id}</td>
+                        <td className="py-3 px-4 text-sm">{txn.date}</td>
                         <td className="py-3 px-4">
-                          <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${
-                              statement.type.includes('Comprehensive') ? 'bg-blue-100' :
-                              statement.type.includes('Tax') ? 'bg-green-100' :
-                              statement.type.includes('NAV') ? 'bg-purple-100' :
-                              statement.type.includes('Transaction') ? 'bg-amber-100' : 'bg-primary/10'
-                            }`}>
-                              <FileText className={`w-4 h-4 ${
-                                statement.type.includes('Comprehensive') ? 'text-blue-600' :
-                                statement.type.includes('Tax') ? 'text-green-600' :
-                                statement.type.includes('NAV') ? 'text-purple-600' :
-                                statement.type.includes('Transaction') ? 'text-amber-600' : 'text-primary'
-                              }`} />
-                            </div>
-                            <span className="font-medium text-secondary">{statement.type}</span>
+                          <Badge variant="outline" className={`text-xs ${
+                            txn.type === 'Contribution' ? 'bg-green-50 text-green-700 border-green-200' :
+                            txn.type === 'Fund Switch' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                            txn.type === 'Lump Sum' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                            'bg-amber-50 text-amber-700 border-amber-200'
+                          }`}>
+                            {txn.type}
+                          </Badge>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div>
+                            <p className="text-sm font-medium text-secondary">{txn.fund}</p>
+                            <p className="text-xs text-muted-foreground">{txn.pfm}</p>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-sm text-muted-foreground">{statement.period}</td>
-                        <td className="py-3 px-4 text-sm">{statement.generated}</td>
+                        <td className="py-3 px-4 text-right font-semibold">₹{txn.amount.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right text-sm">₹{txn.nav.toFixed(2)}</td>
+                        <td className="py-3 px-4 text-right font-mono text-sm">{txn.units.toFixed(4)}</td>
                         <td className="py-3 px-4 text-center">
-                          <Badge variant="outline" className="text-xs">{statement.format}</Badge>
-                        </td>
-                        <td className="py-3 px-4 text-right text-sm text-muted-foreground">{statement.size}</td>
-                        <td className="py-3 px-4 text-center">
-                          <Badge className="bg-green-100 text-green-700 text-xs">{statement.status}</Badge>
+                          <Badge variant="secondary" className="text-xs">{txn.tier}</Badge>
                         </td>
                         <td className="py-3 px-4 text-center">
-                          <div className="flex items-center justify-center gap-1">
-                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                              <Eye className="w-4 h-4 text-muted-foreground" />
-                            </Button>
-                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                              <Download className="w-4 h-4 text-primary" />
-                            </Button>
-                          </div>
+                          <Badge className="bg-green-100 text-green-700 text-xs">{txn.status}</Badge>
                         </td>
                       </tr>
                     ))}
@@ -1609,7 +1557,7 @@ const DashboardNPS = () => {
                 </table>
               </div>
               <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                <p className="text-sm text-muted-foreground">Showing 10 of 24 statements</p>
+                <p className="text-sm text-muted-foreground">Showing 10 of 48 transactions</p>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm" disabled>Previous</Button>
                   <Button variant="outline" size="sm">Next</Button>
@@ -1618,60 +1566,63 @@ const DashboardNPS = () => {
             </CardContent>
           </Card>
 
-          {/* Contribution Receipts */}
+          {/* Fund-wise Transaction Summary */}
           <Card>
             <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Receipt className="w-5 h-5 text-primary" />
-                  Contribution Receipts
-                </CardTitle>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Download className="w-4 h-4" />
-                  Download All
-                </Button>
-              </div>
+              <CardTitle className="text-base flex items-center gap-2">
+                <PieChart className="w-5 h-5 text-primary" />
+                Fund-wise Transaction Summary
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-border">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Receipt No.</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Date</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Type</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Amount</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Units Allotted</th>
-                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Status</th>
-                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {transactionHistory.slice(0, 5).map((txn, index) => (
-                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                        <td className="py-3 px-4 font-mono text-sm text-primary">{txn.id}</td>
-                        <td className="py-3 px-4 text-sm">{txn.date}</td>
-                        <td className="py-3 px-4">
-                          <Badge variant="outline" className="text-xs">{txn.type}</Badge>
-                        </td>
-                        <td className="py-3 px-4 text-right font-semibold">₹{txn.amount.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right font-mono text-sm">{txn.units.toFixed(4)}</td>
-                        <td className="py-3 px-4 text-center">
-                          <Badge className="bg-green-100 text-green-700 text-xs">{txn.status}</Badge>
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <Button variant="ghost" size="sm" className="gap-1 h-7 text-xs">
-                            <Download className="w-3 h-3" />
-                            Receipt
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { fund: "Equity (E)", pfm: "HDFC Pension Fund", scheme: "Scheme E - Tier 1", transactions: 28, invested: 292500, units: 5862.45, nav: 58.42, value: 342500, color: "blue" },
+                  { fund: "Corporate Bond (C)", pfm: "HDFC Pension Fund", scheme: "Scheme C - Tier 1", transactions: 12, invested: 174000, units: 4875.32, nav: 42.18, value: 205625, color: "green" },
+                  { fund: "Govt Bond (G)", pfm: "HDFC Pension Fund", scheme: "Scheme G - Tier 1", transactions: 6, invested: 87000, units: 2885.21, nav: 35.67, value: 102938, color: "amber" },
+                  { fund: "Alternative (A)", pfm: "HDFC Pension Fund", scheme: "Scheme A - Tier 1", transactions: 2, invested: 26500, units: 1176.51, nav: 28.95, value: 34062, color: "purple" },
+                ].map((item, index) => (
+                  <div key={index} className={`p-4 rounded-xl border-2 border-${item.color}-200 bg-${item.color}-50/30`}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className={`w-3 h-3 rounded-full bg-${item.color}-500`} style={{ backgroundColor: item.color === 'blue' ? '#3B82F6' : item.color === 'green' ? '#22C55E' : item.color === 'amber' ? '#F59E0B' : '#8B5CF6' }} />
+                      <span className="font-semibold text-secondary">{item.fund}</span>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">PFM</span>
+                        <span className="font-medium text-secondary">{item.pfm}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Scheme</span>
+                        <span className="text-xs text-muted-foreground">{item.scheme}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Transactions</span>
+                        <span className="font-medium">{item.transactions}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Units</span>
+                        <span className="font-mono font-medium">{item.units.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">NAV</span>
+                        <span className="font-medium">₹{item.nav.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between pt-2 border-t">
+                        <span className="text-muted-foreground">Invested</span>
+                        <span className="font-medium">₹{item.invested.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Current Value</span>
+                        <span className="font-bold text-primary">₹{item.value.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
+
         </TabsContent>
 
         {/* Performance Tab */}
