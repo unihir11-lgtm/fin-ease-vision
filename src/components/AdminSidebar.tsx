@@ -230,6 +230,12 @@ const AdminSidebar = () => {
           <Activity className="w-5 h-5" />
           <span className="font-medium">Activity Logs</span>
         </Link>
+
+        {/* Role Management */}
+        <Link to="/admin/roles" className={navLinkClass(isActive("/admin/roles"))}>
+          <ShieldCheck className="w-5 h-5" />
+          <span className="font-medium">Role Management</span>
+        </Link>
       </nav>
 
       {/* Footer */}
