@@ -16,14 +16,14 @@ import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, PieChart as RechartsPie, Pie, Cell, AreaChart, Area } from "recharts";
 
 const mockPayments = [
-  { id: "PAY-2025-001", user: "Rahul Sharma", pran: "1100345678901", amount: 50000, date: "2025-11-15", status: "completed", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
-  { id: "PAY-2025-002", user: "Priya Patel", pran: "1100345678902", amount: 25000, date: "2025-11-14", status: "pending", tier: "Tier 1", frequency: "One-time", fund: "Active Choice", pfm: "ICICI Prudential" },
-  { id: "PAY-2025-003", user: "Amit Kumar", pran: "1100345678903", amount: 100000, date: "2025-11-13", status: "completed", tier: "Tier 1 & 2", frequency: "Quarterly", fund: "Aggressive", pfm: "SBI Pension" },
-  { id: "PAY-2025-004", user: "Sneha Reddy", pran: "1100345678904", amount: 30000, date: "2025-11-12", status: "failed", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
-  { id: "PAY-2025-005", user: "Vikram Singh", pran: "1100345678905", amount: 75000, date: "2025-11-11", status: "completed", tier: "Tier 1 & 2", frequency: "Monthly", fund: "Moderate", pfm: "UTI Retirement" },
-  { id: "PAY-2025-006", user: "Neha Gupta", pran: "1100345678906", amount: 45000, date: "2025-11-10", status: "completed", tier: "Tier 1", frequency: "One-time", fund: "Conservative", pfm: "Kotak Pension" },
-  { id: "PAY-2025-007", user: "Arjun Nair", pran: "1100345678907", amount: 60000, date: "2025-11-09", status: "pending_approval", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
-  { id: "PAY-2025-008", user: "Kavita Joshi", pran: "1100345678908", amount: 35000, date: "2025-11-08", status: "completed", tier: "Tier 1", frequency: "Quarterly", fund: "Active Choice", pfm: "ICICI Prudential" },
+  { id: "PAY-2025-001", user: "Rahul Sharma", pran: "1100345678901", amount: 50000, popCharges: 50, serviceTax: 9, pgCharges: 10, netAmount: 49931, date: "2025-11-15", status: "completed", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
+  { id: "PAY-2025-002", user: "Priya Patel", pran: "1100345678902", amount: 25000, popCharges: 25, serviceTax: 5, pgCharges: 5, netAmount: 24965, date: "2025-11-14", status: "pending", tier: "Tier 1", frequency: "One-time", fund: "Active Choice", pfm: "ICICI Prudential" },
+  { id: "PAY-2025-003", user: "Amit Kumar", pran: "1100345678903", amount: 100000, popCharges: 100, serviceTax: 18, pgCharges: 20, netAmount: 99862, date: "2025-11-13", status: "completed", tier: "Tier 1 & 2", frequency: "Quarterly", fund: "Aggressive", pfm: "SBI Pension" },
+  { id: "PAY-2025-004", user: "Sneha Reddy", pran: "1100345678904", amount: 30000, popCharges: 30, serviceTax: 5, pgCharges: 6, netAmount: 29959, date: "2025-11-12", status: "failed", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
+  { id: "PAY-2025-005", user: "Vikram Singh", pran: "1100345678905", amount: 75000, popCharges: 75, serviceTax: 14, pgCharges: 15, netAmount: 74896, date: "2025-11-11", status: "completed", tier: "Tier 1 & 2", frequency: "Monthly", fund: "Moderate", pfm: "UTI Retirement" },
+  { id: "PAY-2025-006", user: "Neha Gupta", pran: "1100345678906", amount: 45000, popCharges: 45, serviceTax: 8, pgCharges: 9, netAmount: 44938, date: "2025-11-10", status: "completed", tier: "Tier 1", frequency: "One-time", fund: "Conservative", pfm: "Kotak Pension" },
+  { id: "PAY-2025-007", user: "Arjun Nair", pran: "1100345678907", amount: 60000, popCharges: 60, serviceTax: 11, pgCharges: 12, netAmount: 59917, date: "2025-11-09", status: "pending_approval", tier: "Tier 1", frequency: "Monthly", fund: "Auto Choice", pfm: "HDFC Pension" },
+  { id: "PAY-2025-008", user: "Kavita Joshi", pran: "1100345678908", amount: 35000, popCharges: 35, serviceTax: 6, pgCharges: 7, netAmount: 34952, date: "2025-11-08", status: "completed", tier: "Tier 1", frequency: "Quarterly", fund: "Active Choice", pfm: "ICICI Prudential" },
 ];
 
 const AdminNPSPayments = () => {
@@ -310,9 +310,10 @@ const AdminNPSPayments = () => {
                   <th className="text-left p-4 font-medium text-secondary text-sm">User Details</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">PRAN</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Tier</th>
-                  <th className="text-left p-4 font-medium text-secondary text-sm">Frequency</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Fund</th>
-                  <th className="text-left p-4 font-medium text-secondary text-sm">Amount</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Gross Amt</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Charges</th>
+                  <th className="text-left p-4 font-medium text-secondary text-sm">Net Amt</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Date</th>
                   <th className="text-left p-4 font-medium text-secondary text-sm">Status</th>
                   <th className="text-right p-4 font-medium text-secondary text-sm">Actions</th>
@@ -332,9 +333,16 @@ const AdminNPSPayments = () => {
                     <td className="p-4">
                       <Badge variant="outline" className="text-xs">{payment.tier}</Badge>
                     </td>
-                    <td className="p-4 text-sm text-muted-foreground">{payment.frequency}</td>
                     <td className="p-4 text-sm text-muted-foreground">{payment.fund}</td>
-                    <td className="p-4 font-bold text-secondary text-sm">₹{payment.amount.toLocaleString()}</td>
+                    <td className="p-4 font-medium text-secondary text-sm">₹{payment.amount.toLocaleString()}</td>
+                    <td className="p-4">
+                      <div className="text-xs space-y-0.5">
+                        <p className="text-amber-600">POP: ₹{payment.popCharges}</p>
+                        <p className="text-orange-600">Tax: ₹{payment.serviceTax}</p>
+                        <p className="text-red-600">PG: ₹{payment.pgCharges}</p>
+                      </div>
+                    </td>
+                    <td className="p-4 font-bold text-green-600 text-sm">₹{payment.netAmount.toLocaleString()}</td>
                     <td className="p-4 text-sm text-muted-foreground">{payment.date}</td>
                     <td className="p-4">{getStatusBadge(payment.status)}</td>
                     <td className="p-4">
@@ -365,8 +373,8 @@ const AdminNPSPayments = () => {
                                     <p className="font-mono">{selectedPayment.pran}</p>
                                   </div>
                                   <div>
-                                    <Label className="text-xs text-muted-foreground">Amount</Label>
-                                    <p className="font-bold text-primary text-lg">₹{selectedPayment.amount.toLocaleString()}</p>
+                                    <Label className="text-xs text-muted-foreground">PFM</Label>
+                                    <p className="font-medium">{selectedPayment.pfm}</p>
                                   </div>
                                   <div>
                                     <Label className="text-xs text-muted-foreground">Tier</Label>
@@ -381,8 +389,34 @@ const AdminNPSPayments = () => {
                                     <p className="font-medium">{selectedPayment.fund}</p>
                                   </div>
                                   <div>
-                                    <Label className="text-xs text-muted-foreground">PFM</Label>
-                                    <p className="font-medium">{selectedPayment.pfm}</p>
+                                    <Label className="text-xs text-muted-foreground">Date</Label>
+                                    <p className="font-medium">{selectedPayment.date}</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="p-4 bg-muted/30 rounded-lg space-y-3">
+                                  <p className="text-sm font-semibold text-secondary">Payment Breakdown</p>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-muted-foreground">Gross Amount</span>
+                                      <span className="font-medium">₹{selectedPayment.amount.toLocaleString()}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-amber-600">POP Charges (0.1%)</span>
+                                      <span className="text-amber-600">- ₹{selectedPayment.popCharges}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-orange-600">Service Tax (18%)</span>
+                                      <span className="text-orange-600">- ₹{selectedPayment.serviceTax}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                      <span className="text-red-600">Payment Gateway Charges</span>
+                                      <span className="text-red-600">- ₹{selectedPayment.pgCharges}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm pt-2 border-t border-border">
+                                      <span className="font-semibold text-green-700">Net Contribution</span>
+                                      <span className="font-bold text-green-700">₹{selectedPayment.netAmount.toLocaleString()}</span>
+                                    </div>
                                   </div>
                                 </div>
                                 

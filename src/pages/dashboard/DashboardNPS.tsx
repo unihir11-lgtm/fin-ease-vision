@@ -225,12 +225,14 @@ const DashboardNPS = () => {
     { fund: "Alternative (A)", nav: 28.95, change: -0.15, changePercent: -0.52, date: "08 Dec 2025" },
   ];
 
-  // Contribution Details with OPO Trail and Service Tax
+  // Contribution Details with POP Charges, Service Tax, and Payment Gateway Charges
   const contributionDetails = {
     totalInvestment: 580000,
-    opoTrailCommission: 1160,
-    serviceTax: 209,
-    netContribution: 578631,
+    popCharges: 580,
+    serviceTax: 104,
+    paymentGatewayCharges: 116,
+    totalCharges: 800,
+    netContribution: 579200,
     lastUpdated: "08 Dec 2025",
   };
 
@@ -1022,16 +1024,30 @@ const DashboardNPS = () => {
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
                         <DollarSign className="w-4 h-4 text-amber-600" />
-                        <span className="text-sm text-muted-foreground">OPO Trail Commission</span>
+                        <span className="text-sm text-muted-foreground">POP Charges (0.1%)</span>
                       </div>
-                      <span className="font-semibold text-amber-600">- ₹{contributionDetails.opoTrailCommission.toLocaleString()}</span>
+                      <span className="font-semibold text-amber-600">- ₹{contributionDetails.popCharges.toLocaleString()}</span>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
-                        <Percent className="w-4 h-4 text-red-500" />
-                        <span className="text-sm text-muted-foreground">Service Tax</span>
+                        <Percent className="w-4 h-4 text-orange-500" />
+                        <span className="text-sm text-muted-foreground">Service Tax (18%)</span>
                       </div>
-                      <span className="font-semibold text-red-500">- ₹{contributionDetails.serviceTax.toLocaleString()}</span>
+                      <span className="font-semibold text-orange-500">- ₹{contributionDetails.serviceTax.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                      <div className="flex items-center gap-2">
+                        <CreditCard className="w-4 h-4 text-red-500" />
+                        <span className="text-sm text-muted-foreground">Payment Gateway Charges</span>
+                      </div>
+                      <span className="font-semibold text-red-500">- ₹{contributionDetails.paymentGatewayCharges.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                      <div className="flex items-center gap-2">
+                        <Receipt className="w-4 h-4 text-red-600" />
+                        <span className="text-sm font-medium text-red-700">Total Charges</span>
+                      </div>
+                      <span className="font-bold text-red-700">- ₹{contributionDetails.totalCharges.toLocaleString()}</span>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-center gap-2">
@@ -1190,13 +1206,11 @@ const DashboardNPS = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">PFM</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Current NAV</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">PFM / Scheme</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV (₹)</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV Units</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Day</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Week</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Month</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Year</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Total Value</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1D Change</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Since Inception</th>
                     </tr>
                   </thead>
@@ -1210,10 +1224,8 @@ const DashboardNPS = () => {
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹58.42</td>
                       <td className="py-4 px-4 text-right font-mono">5,862.45</td>
+                      <td className="py-4 px-4 text-right font-bold text-primary">₹3,42,500</td>
                       <td className="py-4 px-4 text-right text-green-600">+1.47%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+2.85%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+4.52%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+14.2%</td>
                       <td className="py-4 px-4 text-right text-green-600">+45.8%</td>
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
@@ -1225,10 +1237,8 @@ const DashboardNPS = () => {
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹42.18</td>
                       <td className="py-4 px-4 text-right font-mono">4,875.32</td>
+                      <td className="py-4 px-4 text-right font-bold text-primary">₹2,05,625</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.29%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+0.85%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+1.42%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+9.8%</td>
                       <td className="py-4 px-4 text-right text-green-600">+32.5%</td>
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
@@ -1240,10 +1250,8 @@ const DashboardNPS = () => {
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹35.67</td>
                       <td className="py-4 px-4 text-right font-mono">2,885.21</td>
+                      <td className="py-4 px-4 text-right font-bold text-primary">₹1,02,938</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.22%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+0.65%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+1.12%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+7.5%</td>
                       <td className="py-4 px-4 text-right text-green-600">+28.2%</td>
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
@@ -1255,11 +1263,19 @@ const DashboardNPS = () => {
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹28.95</td>
                       <td className="py-4 px-4 text-right font-mono">1,176.51</td>
+                      <td className="py-4 px-4 text-right font-bold text-primary">₹34,062</td>
                       <td className="py-4 px-4 text-right text-red-600">-0.52%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+1.25%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+2.85%</td>
-                      <td className="py-4 px-4 text-right text-green-600">+11.2%</td>
                       <td className="py-4 px-4 text-right text-green-600">+38.5%</td>
+                    </tr>
+                    <tr className="bg-primary/5 border-t-2 border-primary/20">
+                      <td className="py-4 px-4">
+                        <p className="text-sm font-bold text-secondary">Total Portfolio</p>
+                      </td>
+                      <td className="py-4 px-4 text-right">-</td>
+                      <td className="py-4 px-4 text-right font-bold font-mono">14,799.49</td>
+                      <td className="py-4 px-4 text-right font-bold text-primary text-lg">₹6,85,125</td>
+                      <td className="py-4 px-4 text-right text-green-600 font-semibold">+0.87%</td>
+                      <td className="py-4 px-4 text-right text-green-600 font-semibold">+36.25%</td>
                     </tr>
                   </tbody>
                 </table>
