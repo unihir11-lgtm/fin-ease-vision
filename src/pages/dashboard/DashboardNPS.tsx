@@ -99,6 +99,124 @@ const DashboardNPS = () => {
     ],
   };
 
+  // Investment Details with NAV, PFM, Units
+  const investmentDetails = [
+    { 
+      fundType: "Equity (E)", 
+      pfm: "HDFC Pension Fund",
+      units: 5862.45,
+      nav: 58.42,
+      currentValue: 342500,
+      investedValue: 292500,
+      returns: 50000,
+      returnsPercent: 17.1,
+      lastUpdated: "08 Dec 2025"
+    },
+    { 
+      fundType: "Corporate Bond (C)", 
+      pfm: "HDFC Pension Fund",
+      units: 4875.32,
+      nav: 42.18,
+      currentValue: 205625,
+      investedValue: 174000,
+      returns: 31625,
+      returnsPercent: 18.2,
+      lastUpdated: "08 Dec 2025"
+    },
+    { 
+      fundType: "Government Bond (G)", 
+      pfm: "HDFC Pension Fund",
+      units: 2885.21,
+      nav: 35.67,
+      currentValue: 102938,
+      investedValue: 87000,
+      returns: 15938,
+      returnsPercent: 18.3,
+      lastUpdated: "08 Dec 2025"
+    },
+    { 
+      fundType: "Alternative Assets (A)", 
+      pfm: "HDFC Pension Fund",
+      units: 1176.51,
+      nav: 28.95,
+      currentValue: 34062,
+      investedValue: 26500,
+      returns: 7562,
+      returnsPercent: 28.5,
+      lastUpdated: "08 Dec 2025"
+    },
+  ];
+
+  // Transaction History
+  const transactionHistory = [
+    { 
+      id: "TXN789456", 
+      date: "15 Nov 2025", 
+      type: "Contribution", 
+      fund: "Auto Choice",
+      amount: 5000, 
+      units: 85.62,
+      nav: 58.40,
+      status: "Completed",
+      tier: "Tier 1"
+    },
+    { 
+      id: "TXN789455", 
+      date: "15 Oct 2025", 
+      type: "Contribution", 
+      fund: "Auto Choice",
+      amount: 5000, 
+      units: 86.21,
+      nav: 58.02,
+      status: "Completed",
+      tier: "Tier 1"
+    },
+    { 
+      id: "TXN789454", 
+      date: "01 Oct 2025", 
+      type: "Fund Switch", 
+      fund: "E to C",
+      amount: 25000, 
+      units: 432.18,
+      nav: 57.85,
+      status: "Completed",
+      tier: "Tier 1"
+    },
+    { 
+      id: "TXN789453", 
+      date: "15 Sep 2025", 
+      type: "Contribution", 
+      fund: "Auto Choice",
+      amount: 5000, 
+      units: 87.45,
+      nav: 57.18,
+      status: "Completed",
+      tier: "Tier 1"
+    },
+    { 
+      id: "TXN789452", 
+      date: "01 Sep 2025", 
+      type: "Lump Sum", 
+      fund: "Equity Heavy",
+      amount: 25000, 
+      units: 442.31,
+      nav: 56.52,
+      status: "Completed",
+      tier: "Tier 1"
+    },
+    { 
+      id: "TXN789451", 
+      date: "15 Aug 2025", 
+      type: "Contribution", 
+      fund: "Auto Choice",
+      amount: 5000, 
+      units: 89.12,
+      nav: 56.10,
+      status: "Completed",
+      tier: "Tier 2"
+    },
+  ];
+
   // NAV Details Data
   const navDetails = [
     { fund: "Equity (E)", nav: 58.42, change: 0.85, changePercent: 1.47, date: "08 Dec 2025" },
@@ -577,6 +695,175 @@ const DashboardNPS = () => {
             </Card>
           </div>
 
+          {/* My Investments - Detailed View */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                  My Investments
+                </CardTitle>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Export
+                </Button>
+              </div>
+              <CardDescription>Detailed fund-wise investment breakdown with NAV and units</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Fund Type</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">PFM</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Units</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV (₹)</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Invested</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Current Value</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Returns</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {investmentDetails.map((investment, index) => (
+                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-3 h-3 rounded-full ${
+                              investment.fundType.includes('Equity') ? 'bg-blue-500' :
+                              investment.fundType.includes('Corporate') ? 'bg-green-500' :
+                              investment.fundType.includes('Government') ? 'bg-amber-500' : 'bg-purple-500'
+                            }`} />
+                            <span className="font-medium text-secondary">{investment.fundType}</span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 text-sm text-muted-foreground">{investment.pfm}</td>
+                        <td className="py-4 px-4 text-right font-mono text-sm">{investment.units.toFixed(2)}</td>
+                        <td className="py-4 px-4 text-right">
+                          <span className="font-semibold">₹{investment.nav.toFixed(2)}</span>
+                        </td>
+                        <td className="py-4 px-4 text-right text-sm">₹{investment.investedValue.toLocaleString()}</td>
+                        <td className="py-4 px-4 text-right font-semibold text-secondary">₹{investment.currentValue.toLocaleString()}</td>
+                        <td className="py-4 px-4 text-right">
+                          <div className="flex flex-col items-end">
+                            <span className="font-semibold text-green-600">+₹{investment.returns.toLocaleString()}</span>
+                            <span className="text-xs text-green-600">+{investment.returnsPercent}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr className="bg-muted/50">
+                      <td className="py-4 px-4 font-semibold text-secondary" colSpan={2}>Total</td>
+                      <td className="py-4 px-4 text-right font-mono font-semibold">
+                        {investmentDetails.reduce((sum, i) => sum + i.units, 0).toFixed(2)}
+                      </td>
+                      <td className="py-4 px-4 text-right text-muted-foreground">-</td>
+                      <td className="py-4 px-4 text-right font-semibold">
+                        ₹{investmentDetails.reduce((sum, i) => sum + i.investedValue, 0).toLocaleString()}
+                      </td>
+                      <td className="py-4 px-4 text-right font-bold text-secondary">
+                        ₹{investmentDetails.reduce((sum, i) => sum + i.currentValue, 0).toLocaleString()}
+                      </td>
+                      <td className="py-4 px-4 text-right">
+                        <span className="font-bold text-green-600">
+                          +₹{investmentDetails.reduce((sum, i) => sum + i.returns, 0).toLocaleString()}
+                        </span>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4 flex items-center gap-1">
+                <Info className="w-3 h-3" />
+                NAV updated as on {investmentDetails[0].lastUpdated}
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Transaction History */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Receipt className="w-5 h-5 text-primary" />
+                  Transaction History
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Select defaultValue="all">
+                    <SelectTrigger className="w-32 h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="contribution">Contributions</SelectItem>
+                      <SelectItem value="switch">Fund Switch</SelectItem>
+                      <SelectItem value="withdrawal">Withdrawals</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button variant="outline" size="sm" className="gap-2 h-8">
+                    <Download className="w-3 h-3" />
+                    Export
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Transaction ID</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Date</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Type</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Fund</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Amount</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Units</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Tier</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-muted-foreground">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactionHistory.map((txn, index) => (
+                      <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                        <td className="py-3 px-4 font-mono text-sm text-primary">{txn.id}</td>
+                        <td className="py-3 px-4 text-sm">{txn.date}</td>
+                        <td className="py-3 px-4">
+                          <Badge variant="outline" className={`text-xs ${
+                            txn.type === 'Contribution' ? 'bg-green-50 text-green-700 border-green-200' :
+                            txn.type === 'Fund Switch' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                            txn.type === 'Lump Sum' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                            'bg-amber-50 text-amber-700 border-amber-200'
+                          }`}>
+                            {txn.type}
+                          </Badge>
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground">{txn.fund}</td>
+                        <td className="py-3 px-4 text-right font-semibold">₹{txn.amount.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right font-mono text-sm">{txn.units.toFixed(2)}</td>
+                        <td className="py-3 px-4 text-right text-sm">₹{txn.nav.toFixed(2)}</td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge variant="secondary" className="text-xs">{txn.tier}</Badge>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge className="bg-green-100 text-green-700 text-xs">{txn.status}</Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <p className="text-xs text-muted-foreground">Showing 6 of 48 transactions</p>
+                <Button variant="outline" size="sm" className="gap-2">
+                  View All <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Quick Actions */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button onClick={() => setActiveTab("contributions")} className="h-auto py-5 flex-col gap-2 bg-primary hover:bg-primary/90">
@@ -600,37 +887,6 @@ const DashboardNPS = () => {
               <span className="text-xs text-muted-foreground">Add or modify</span>
             </Button>
           </div>
-
-          {/* Recent Activity */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary" />
-                Recent Activity
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {npsData.recentTransactions.map((txn, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${txn.type === 'Contribution' ? 'bg-green-100' : 'bg-blue-100'}`}>
-                        {txn.type === 'Contribution' ? <IndianRupee className="w-4 h-4 text-green-600" /> : <RefreshCw className="w-4 h-4 text-blue-600" />}
-                      </div>
-                      <div>
-                        <p className="font-medium text-secondary text-sm">{txn.type}</p>
-                        <p className="text-xs text-muted-foreground">{txn.date}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      {txn.amount > 0 && <p className="font-bold text-secondary">₹{txn.amount.toLocaleString()}</p>}
-                      <Badge className="bg-green-100 text-green-700 text-xs">{txn.status}</Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </TabsContent>
 
         {/* Contributions Tab */}
