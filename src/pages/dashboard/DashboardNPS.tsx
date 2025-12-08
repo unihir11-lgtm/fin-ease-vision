@@ -1190,9 +1190,9 @@ const DashboardNPS = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Fund Type</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">PFM</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Current NAV</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV Units</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Day</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Week</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">1 Month</th>
@@ -1203,18 +1203,13 @@ const DashboardNPS = () => {
                   <tbody>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                       <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full bg-blue-500" />
-                          <span className="font-medium text-secondary">Equity (E)</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
                         <div>
                           <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
                           <p className="text-xs text-muted-foreground">Scheme E - Tier 1</p>
                         </div>
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹58.42</td>
+                      <td className="py-4 px-4 text-right font-mono">5,862.45</td>
                       <td className="py-4 px-4 text-right text-green-600">+1.47%</td>
                       <td className="py-4 px-4 text-right text-green-600">+2.85%</td>
                       <td className="py-4 px-4 text-right text-green-600">+4.52%</td>
@@ -1223,18 +1218,13 @@ const DashboardNPS = () => {
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                       <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full bg-green-500" />
-                          <span className="font-medium text-secondary">Corporate Bond (C)</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
                         <div>
                           <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
                           <p className="text-xs text-muted-foreground">Scheme C - Tier 1</p>
                         </div>
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹42.18</td>
+                      <td className="py-4 px-4 text-right font-mono">4,875.32</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.29%</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.85%</td>
                       <td className="py-4 px-4 text-right text-green-600">+1.42%</td>
@@ -1243,18 +1233,13 @@ const DashboardNPS = () => {
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                       <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full bg-amber-500" />
-                          <span className="font-medium text-secondary">Government Bond (G)</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
                         <div>
                           <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
                           <p className="text-xs text-muted-foreground">Scheme G - Tier 1</p>
                         </div>
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹35.67</td>
+                      <td className="py-4 px-4 text-right font-mono">2,885.21</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.22%</td>
                       <td className="py-4 px-4 text-right text-green-600">+0.65%</td>
                       <td className="py-4 px-4 text-right text-green-600">+1.12%</td>
@@ -1263,18 +1248,13 @@ const DashboardNPS = () => {
                     </tr>
                     <tr className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                       <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full bg-purple-500" />
-                          <span className="font-medium text-secondary">Alternative Assets (A)</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
                         <div>
                           <p className="text-sm font-medium text-secondary">HDFC Pension Fund</p>
                           <p className="text-xs text-muted-foreground">Scheme A - Tier 1</p>
                         </div>
                       </td>
                       <td className="py-4 px-4 text-right font-bold">₹28.95</td>
+                      <td className="py-4 px-4 text-right font-mono">1,176.51</td>
                       <td className="py-4 px-4 text-right text-red-600">-0.52%</td>
                       <td className="py-4 px-4 text-right text-green-600">+1.25%</td>
                       <td className="py-4 px-4 text-right text-green-600">+2.85%</td>
@@ -1452,16 +1432,16 @@ const DashboardNPS = () => {
             </Card>
           </div>
 
-          {/* Transaction Statement List */}
+          {/* Last 5 Transactions */}
           <Card>
             <CardHeader className="pb-3">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Receipt className="w-5 h-5 text-primary" />
-                    Transaction Statement
+                    Last 5 Transactions
                   </CardTitle>
-                  <CardDescription>Complete list of all NPS transactions with fund details</CardDescription>
+                  <CardDescription>Recent NPS transactions with fund details</CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
                   <Select defaultValue="all">
@@ -1491,6 +1471,10 @@ const DashboardNPS = () => {
                     <Download className="w-3 h-3" />
                     Export
                   </Button>
+                  <Button size="sm" className="gap-2 h-8" onClick={() => setShowStatementDialog(true)}>
+                    <FileDown className="w-3 h-3" />
+                    Download Statement
+                  </Button>
                 </div>
               </div>
             </CardHeader>
@@ -1511,18 +1495,7 @@ const DashboardNPS = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      { id: "TXN789456", date: "15 Nov 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 58.40, units: 85.62, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789455", date: "15 Nov 2025", type: "Contribution", fund: "Corporate (C)", pfm: "HDFC Pension", amount: 3000, nav: 42.15, units: 71.17, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789454", date: "15 Nov 2025", type: "Contribution", fund: "Govt Bond (G)", pfm: "HDFC Pension", amount: 1500, nav: 35.62, units: 42.11, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789453", date: "15 Nov 2025", type: "Contribution", fund: "Alternative (A)", pfm: "HDFC Pension", amount: 500, nav: 29.05, units: 17.21, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789452", date: "15 Oct 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 58.02, units: 86.18, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789451", date: "15 Oct 2025", type: "Contribution", fund: "Corporate (C)", pfm: "HDFC Pension", amount: 3000, nav: 41.95, units: 71.51, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789450", date: "01 Oct 2025", type: "Fund Switch", fund: "E → C", pfm: "HDFC Pension", amount: 25000, nav: 57.85, units: 432.15, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789449", date: "15 Sep 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 57.18, units: 87.45, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789448", date: "01 Sep 2025", type: "Lump Sum", fund: "Equity (E)", pfm: "HDFC Pension", amount: 25000, nav: 56.52, units: 442.31, tier: "Tier 1", status: "Completed" },
-                      { id: "TXN789447", date: "15 Aug 2025", type: "Contribution", fund: "Equity (E)", pfm: "HDFC Pension", amount: 5000, nav: 56.10, units: 89.12, tier: "Tier 2", status: "Completed" },
-                    ].map((txn, index) => (
+                    {transactionHistory.slice(0, 5).map((txn, index) => (
                       <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                         <td className="py-3 px-4 font-mono text-sm text-primary">{txn.id}</td>
                         <td className="py-3 px-4 text-sm">{txn.date}</td>
@@ -1539,7 +1512,7 @@ const DashboardNPS = () => {
                         <td className="py-3 px-4">
                           <div>
                             <p className="text-sm font-medium text-secondary">{txn.fund}</p>
-                            <p className="text-xs text-muted-foreground">{txn.pfm}</p>
+                            <p className="text-xs text-muted-foreground">{npsData.pensionFundManager}</p>
                           </div>
                         </td>
                         <td className="py-3 px-4 text-right font-semibold">₹{txn.amount.toLocaleString()}</td>
@@ -1557,11 +1530,11 @@ const DashboardNPS = () => {
                 </table>
               </div>
               <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                <p className="text-sm text-muted-foreground">Showing 10 of 48 transactions</p>
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" disabled>Previous</Button>
-                  <Button variant="outline" size="sm">Next</Button>
-                </div>
+                <p className="text-sm text-muted-foreground">Showing last 5 transactions</p>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Eye className="w-3 h-3" />
+                  View All Transactions
+                </Button>
               </div>
             </CardContent>
           </Card>
