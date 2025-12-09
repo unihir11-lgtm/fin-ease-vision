@@ -1,0 +1,3174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinEase - Reference HTML/CSS for Developer</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ============================================
+       FINEASE COMPLETE CSS REFERENCE
+       ============================================ */
+
+    /* ============================================
+       1. CSS VARIABLES / DESIGN TOKENS
+       ============================================ */
+    :root {
+      /* ---- PRIMARY COLORS ---- */
+      --primary: hsl(168, 72%, 40%);           /* #1DAB91 - Teal accent */
+      --primary-foreground: hsl(0, 0%, 100%);  /* #FFFFFF */
+      
+      /* ---- SECONDARY COLORS ---- */
+      --secondary: hsl(197, 77%, 17%);         /* #0A344A - Dark teal for headings/footer */
+      --secondary-foreground: hsl(0, 0%, 100%);/* #FFFFFF */
+      
+      /* ---- ACCENT COLORS ---- */
+      --accent: hsl(174, 77%, 39%);            /* #17AF9B - Teal green for buttons */
+      --accent-foreground: hsl(0, 0%, 100%);   /* #FFFFFF */
+      
+      /* ---- BACKGROUND COLORS ---- */
+      --background: hsl(0, 0%, 100%);          /* #FFFFFF */
+      --foreground: hsl(200, 18%, 20%);        /* #2A3D47 */
+      
+      /* ---- MUTED COLORS ---- */
+      --muted: hsl(210, 10%, 94%);             /* #EEF0F2 */
+      --muted-foreground: hsl(200, 10%, 44%);  /* #656F75 - Gray text */
+      
+      /* ---- CARD COLORS ---- */
+      --card: hsl(0, 0%, 100%);                /* #FFFFFF */
+      --card-foreground: hsl(200, 18%, 20%);   /* #2A3D47 */
+      --card-border: hsl(195, 60%, 94%);       /* #E7F6FE */
+      
+      /* ---- BORDER & INPUT ---- */
+      --border: hsl(210, 14%, 91%);            /* #E5E8EB */
+      --input: hsl(210, 14%, 91%);             /* #E5E8EB */
+      --ring: hsl(168, 72%, 40%);              /* #1DAB91 */
+      
+      /* ---- DESTRUCTIVE ---- */
+      --destructive: hsl(0, 84%, 60%);         /* #EF4444 */
+      --destructive-foreground: hsl(0, 0%, 100%);
+      
+      /* ---- FOOTER SPECIFIC ---- */
+      --hero-bg: hsl(197, 77%, 17%);           /* #0A344A */
+      --footer-bg: hsl(197, 77%, 17%);         /* #0A344A */
+      --footer-input: hsl(197, 60%, 35%);      /* #236A8E */
+      --footer-button: hsl(168, 72%, 40%);     /* #1DAB91 */
+      --footer-copyright: hsl(178, 93%, 23%);  /* #057170 */
+      
+      /* ---- SECTION BACKGROUNDS ---- */
+      --section-alt: hsl(210, 20%, 98%);       /* #FAFBFC */
+      --section-teal: hsl(168, 40%, 97%);      /* #F4FAF9 */
+      
+      /* ---- ICON BACKGROUNDS ---- */
+      --icon-teal: hsl(168, 60%, 95%);         /* #E8F8F5 */
+      --icon-orange: hsl(35, 90%, 95%);        /* #FEF6E9 */
+      --icon-blue: hsl(210, 80%, 95%);         /* #EBF4FE */
+      --icon-purple: hsl(270, 60%, 95%);       /* #F4EDFE */
+      --icon-red: hsl(0, 70%, 95%);            /* #FEE9E9 */
+      
+      /* ---- GRADIENTS ---- */
+      --gradient-hero: linear-gradient(to left, hsl(161, 74%, 39%), hsl(185, 58%, 37%));
+      /* HEX: linear-gradient(to left, #1AAE90, #258996) */
+      
+      --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(210, 20%, 99%) 100%);
+      --gradient-subtle: linear-gradient(180deg, hsl(168, 40%, 98%) 0%, hsl(0, 0%, 100%) 100%);
+      --gradient-section: linear-gradient(180deg, hsl(210, 20%, 98%) 0%, hsl(0, 0%, 100%) 100%);
+      
+      /* ---- SHADOWS ---- */
+      --shadow-xs: 0 1px 2px hsla(0, 0%, 0%, 0.04);
+      --shadow-sm: 0 2px 8px hsla(0, 0%, 0%, 0.06);
+      --shadow-card: 0 4px 20px hsla(197, 77%, 17%, 0.08);
+      /* RGBA: 0 4px 20px rgba(23, 93, 128, 0.08) */
+      --shadow-card-hover: 0 12px 40px hsla(197, 77%, 17%, 0.14);
+      /* RGBA: 0 12px 40px rgba(23, 93, 128, 0.14) */
+      --shadow-button: 0 4px 14px hsla(168, 72%, 40%, 0.25);
+      /* RGBA: 0 4px 14px rgba(29, 171, 145, 0.25) */
+      --shadow-button-hover: 0 6px 20px hsla(168, 72%, 40%, 0.35);
+      
+      /* ---- BORDER RADIUS ---- */
+      --radius: 0.5rem;          /* 8px */
+      --radius-md: 0.375rem;     /* 6px */
+      --radius-lg: 0.5rem;       /* 8px */
+      --radius-xl: 0.75rem;      /* 12px */
+      --radius-2xl: 1rem;        /* 16px */
+      --radius-3xl: 1.5rem;      /* 24px */
+    }
+
+    /* ============================================
+       2. HEX COLOR REFERENCE (for easy copy)
+       ============================================ */
+    /*
+    PRIMARY COLORS:
+    - Primary Teal:     #1DAB91  (hsl 168, 72%, 40%)
+    - Secondary Dark:   #0A344A  (hsl 197, 77%, 17%)
+    - Accent Teal:      #17AF9B  (hsl 174, 77%, 39%)
+    
+    TEXT COLORS:
+    - Foreground:       #2A3D47  (hsl 200, 18%, 20%)
+    - Muted Text:       #656F75  (hsl 200, 10%, 44%)
+    - White:            #FFFFFF
+    
+    BACKGROUND COLORS:
+    - Background:       #FFFFFF
+    - Muted BG:         #EEF0F2  (hsl 210, 10%, 94%)
+    - Section Alt:      #FAFBFC  (hsl 210, 20%, 98%)
+    
+    BORDER COLORS:
+    - Border:           #E5E8EB  (hsl 210, 14%, 91%)
+    - Card Border:      #E7F6FE  (hsl 195, 60%, 94%)
+    
+    FOOTER COLORS:
+    - Footer BG:        #0A344A
+    - Footer Input:     #236A8E
+    - Footer Button:    #1DAB91
+    - Copyright BG:     #057170  (hsl 178, 93%, 23%)
+    
+    ICON BACKGROUNDS:
+    - Teal:             #E8F8F5
+    - Orange:           #FEF6E9
+    - Blue:             #EBF4FE
+    - Purple:           #F4EDFE
+    - Red:              #FEE9E9
+    
+    GRADIENT COLORS (Hero):
+    - Start (Right):    #1AAE90  (hsl 161, 74%, 39%)
+    - End (Left):       #258996  (hsl 185, 58%, 37%)
+    
+    STATUS COLORS:
+    - Success/Green:    #10B981 (Emerald 500)
+    - Warning/Amber:    #F59E0B (Amber 500)
+    - Error/Red:        #EF4444 (Red 500)
+    - Info/Blue:        #3B82F6 (Blue 500)
+    - Purple:           #A855F7 (Purple 500)
+    - Orange:           #F97316 (Orange 500)
+    */
+
+    /* ============================================
+       3. BASE STYLES
+       ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--foreground);
+      background-color: var(--background);
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+
+    /* ============================================
+       4. TYPOGRAPHY
+       ============================================ */
+    /* Font Families */
+    .font-sans {
+      font-family: 'Nunito', system-ui, sans-serif;
+    }
+
+    .font-display {
+      font-family: 'Raleway', system-ui, sans-serif;
+    }
+
+    /* Font Sizes */
+    .text-xs { font-size: 0.75rem; line-height: 1rem; }      /* 12px */
+    .text-sm { font-size: 0.875rem; line-height: 1.25rem; }  /* 14px */
+    .text-base { font-size: 1rem; line-height: 1.5rem; }     /* 16px */
+    .text-lg { font-size: 1.125rem; line-height: 1.75rem; }  /* 18px */
+    .text-xl { font-size: 1.25rem; line-height: 1.75rem; }   /* 20px */
+    .text-2xl { font-size: 1.5rem; line-height: 2rem; }      /* 24px */
+    .text-3xl { font-size: 1.875rem; line-height: 2.25rem; } /* 30px */
+    .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }   /* 36px */
+    .text-5xl { font-size: 3rem; line-height: 1.1; }         /* 48px */
+    .text-6xl { font-size: 3.75rem; line-height: 1; }        /* 60px */
+
+    /* Font Weights */
+    .font-normal { font-weight: 400; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .font-extrabold { font-weight: 800; }
+
+    /* Letter Spacing */
+    .tracking-tight { letter-spacing: -0.025em; }
+    .tracking-wide { letter-spacing: 0.025em; }
+    .tracking-wider { letter-spacing: 0.05em; }
+
+    /* ============================================
+       5. HEADER COMPONENT
+       ============================================ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid rgba(229, 232, 235, 0.5);
+    }
+
+    .header-container {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    @media (min-width: 1024px) {
+      .header-container {
+        padding: 12px 48px;
+      }
+    }
+
+    .header-logo {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    @media (min-width: 768px) {
+      .header-logo {
+        height: 44px;
+      }
+    }
+
+    .header-nav {
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+
+    @media (min-width: 1024px) {
+      .header-nav {
+        display: flex;
+      }
+    }
+
+    .header-nav-link {
+      padding: 8px 16px;
+      color: var(--muted-foreground);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .header-nav-link:hover,
+    .header-nav-link.active {
+      color: var(--primary);
+    }
+
+    .header-search {
+      width: 240px;
+      height: 40px;
+      padding: 0 16px;
+      background-color: rgba(238, 240, 242, 0.4);
+      border-radius: 8px;
+      border: 1px solid rgba(229, 232, 235, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    @media (min-width: 1024px) {
+      .header-search {
+        width: 280px;
+      }
+    }
+
+    .header-search:focus-within {
+      border-color: rgba(29, 171, 145, 0.4);
+      background-color: #FFFFFF;
+      box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.04);
+    }
+
+    .header-search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: var(--foreground);
+    }
+
+    .header-search-input::placeholder {
+      color: var(--muted-foreground);
+    }
+
+    .header-login {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .header-login-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(229, 232, 235, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+
+    .header-login:hover .header-login-icon {
+      border-color: rgba(29, 171, 145, 0.4);
+    }
+
+    .header-login-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--foreground);
+      transition: color 0.2s;
+    }
+
+    .header-login:hover .header-login-text {
+      color: var(--primary);
+    }
+
+    /* ============================================
+       6. HERO SECTION
+       ============================================ */
+    .hero {
+      position: relative;
+      padding-top: 112px;
+      background: var(--gradient-hero);
+      /* linear-gradient(to left, #1AAE90, #258996) */
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding-top: 128px;
+      }
+    }
+
+    /* Hero Background Pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+
+    .hero-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+      position: relative;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-container {
+        padding: 0 64px;
+      }
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      padding: 32px 0;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-content {
+        flex-direction: row;
+        gap: 64px;
+        padding: 56px 0;
+      }
+    }
+
+    .hero-left {
+      flex: 1;
+      color: #FFFFFF;
+    }
+
+    /* Hero Badge */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #10B981; /* Green 400 */
+      animation: pulse-subtle 2s ease-in-out infinite;
+    }
+
+    /* Hero Heading */
+    .hero-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .hero-title {
+        font-size: 36px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-title {
+        font-size: 48px;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .hero-title {
+        font-size: 52px;
+      }
+    }
+
+    .hero-title-highlight {
+      color: var(--primary); /* #1DAB91 */
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 512px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-subtitle {
+        font-size: 20px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-subtitle {
+        font-size: 24px;
+      }
+    }
+
+    /* Hero Feature List */
+    .hero-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .hero-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    @media (min-width: 768px) {
+      .hero-feature-item {
+        font-size: 16px;
+      }
+    }
+
+    .hero-feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Hero Buttons */
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-top: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-hero-primary {
+      background-color: #FFFFFF;
+      color: var(--secondary); /* #0A344A */
+      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-hero-primary:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-hero-outline {
+      background-color: transparent;
+      color: #FFFFFF;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-hero-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Hero Stats */
+    .hero-stats {
+      display: flex;
+      gap: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @media (min-width: 1024px) {
+      .hero-stats {
+        gap: 40px;
+      }
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-stat-value {
+        font-size: 30px;
+      }
+    }
+
+    .hero-stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+    }
+
+    /* Hero Illustration */
+    .hero-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-right {
+        justify-content: flex-end;
+      }
+    }
+
+    .hero-illustration {
+      width: 100%;
+      max-width: 384px;
+      object-fit: contain;
+      filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @media (min-width: 768px) {
+      .hero-illustration {
+        max-width: 448px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-illustration {
+        max-width: 512px;
+      }
+    }
+
+    /* Hero Floating Cards */
+    .hero-float-card {
+      position: absolute;
+      background-color: #FFFFFF;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(229, 232, 235, 0.5);
+      display: none;
+      animation: fade-in 0.4s ease-out forwards;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-float-card {
+        display: flex;
+      }
+    }
+
+    .hero-float-card-left {
+      top: 24px;
+      left: 0;
+    }
+
+    .hero-float-card-right {
+      bottom: 40px;
+      right: 0;
+      animation-delay: 0.3s;
+    }
+
+    .hero-float-card-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-float-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-float-card-icon.green {
+      background-color: #D1FAE5; /* Green 100 */
+    }
+
+    .hero-float-card-icon.teal {
+      background-color: rgba(29, 171, 145, 0.1);
+    }
+
+    .hero-float-card-label {
+      font-size: 12px;
+      color: var(--muted-foreground);
+      font-weight: 500;
+    }
+
+    .hero-float-card-value {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .hero-float-card-value.green {
+      color: #16A34A; /* Green 600 */
+    }
+
+    .hero-float-card-value.teal {
+      color: var(--primary);
+    }
+
+    /* ============================================
+       7. TAGLINE SECTION
+       ============================================ */
+    .tagline {
+      padding: 56px 0;
+      background: linear-gradient(to bottom, var(--background), rgba(238, 240, 242, 0.3));
+    }
+
+    @media (min-width: 768px) {
+      .tagline {
+        padding: 80px 0;
+      }
+    }
+
+    .tagline-container {
+      max-width: 896px;
+      margin: 0 auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .tagline-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background-color: rgba(29, 171, 145, 0.1);
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .tagline-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .tagline-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--secondary);
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .tagline-title {
+        font-size: 30px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .tagline-title {
+        font-size: 36px;
+      }
+    }
+
+    .tagline-description {
+      font-size: 16px;
+      color: var(--muted-foreground);
+      line-height: 1.6;
+      max-width: 672px;
+      margin: 0 auto 24px;
+    }
+
+    @media (min-width: 768px) {
+      .tagline-description {
+        font-size: 18px;
+      }
+    }
+
+    .tagline-features {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding-top: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .tagline-features {
+        gap: 32px;
+      }
+    }
+
+    .tagline-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(42, 61, 71, 0.8);
+    }
+
+    @media (min-width: 768px) {
+      .tagline-feature {
+        font-size: 16px;
+      }
+    }
+
+    /* ============================================
+       8. OFFERINGS SECTION
+       ============================================ */
+    .offerings {
+      padding: 80px 0;
+      background-color: var(--background);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .offerings {
+        padding: 112px 0;
+      }
+    }
+
+    /* Background decorations */
+    .offerings::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top, hsl(168, 40%, 97%) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .offerings-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .offerings-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    @media (min-width: 768px) {
+      .offerings-header {
+        margin-bottom: 80px;
+      }
+    }
+
+    .offerings-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, rgba(29, 171, 145, 0.1), rgba(10, 52, 74, 0.1));
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      border: 1px solid rgba(29, 171, 145, 0.2);
+    }
+
+    .offerings-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .offerings-title {
+        font-size: 36px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .offerings-title {
+        font-size: 48px;
+      }
+    }
+
+    .offerings-description {
+      font-size: 16px;
+      color: var(--muted-foreground);
+      max-width: 672px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 768px) {
+      .offerings-description {
+        font-size: 18px;
+      }
+    }
+
+    .offerings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 1152px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 640px) {
+      .offerings-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .offerings-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+      }
+    }
+
+    /* Offering Card */
+    .offering-card {
+      position: relative;
+      padding: 28px;
+      border-radius: 16px;
+      background-color: var(--card);
+      border: 1px solid rgba(229, 232, 235, 0.5);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s;
+      overflow: hidden;
+      animation: fade-in 0.4s ease-out forwards;
+    }
+
+    @media (min-width: 768px) {
+      .offering-card {
+        padding: 32px;
+      }
+    }
+
+    .offering-card:hover {
+      border-color: rgba(29, 171, 145, 0.3);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-4px);
+    }
+
+    /* Hover gradient overlay */
+    .offering-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, rgba(29, 171, 145, 0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .offering-card:hover::before {
+      opacity: 1;
+    }
+
+    .offering-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, rgba(29, 171, 145, 0.2), rgba(29, 171, 145, 0.1));
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(29, 171, 145, 0.2);
+    }
+
+    .offering-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.04);
+      transition: transform 0.3s;
+      position: relative;
+    }
+
+    .offering-card:hover .offering-icon {
+      transform: scale(1.1);
+    }
+
+    /* Icon background colors */
+    .offering-icon.teal { background-color: hsl(168, 60%, 95%); }
+    .offering-icon.orange { background-color: hsl(35, 90%, 95%); }
+    .offering-icon.blue { background-color: hsl(210, 80%, 95%); }
+    .offering-icon.purple { background-color: hsl(270, 60%, 95%); }
+    .offering-icon.red { background-color: hsl(0, 70%, 95%); }
+
+    .offering-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 12px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .offering-card:hover .offering-title {
+      color: var(--primary);
+    }
+
+    .offering-description {
+      font-size: 14px;
+      color: var(--muted-foreground);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .offering-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 20px;
+      border-top: 1px solid rgba(229, 232, 235, 0.5);
+      position: relative;
+    }
+
+    .offering-stat {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, rgba(10, 52, 74, 0.1), rgba(10, 52, 74, 0.05));
+      color: var(--secondary);
+    }
+
+    .offering-cta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      opacity: 0;
+      transform: translateX(8px);
+      transition: all 0.3s;
+    }
+
+    .offering-card:hover .offering-cta {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ============================================
+       9. TRUST BADGES SECTION
+       ============================================ */
+    .trust-badges {
+      padding: 56px 0;
+      background: linear-gradient(to bottom, var(--secondary), rgba(10, 52, 74, 0.95));
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .trust-badges {
+        padding: 80px 0;
+      }
+    }
+
+    /* Background decoration */
+    .trust-badges::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(29, 171, 145, 0.1) 0%, transparent 70%);
+    }
+
+    .trust-badges-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .trust-badges-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .trust-badges-label {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .trust-badges-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .trust-badges-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 32px;
+      }
+    }
+
+    .trust-badge-card {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+      padding: 24px;
+      border-radius: 16px;
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s;
+      animation: fade-in 0.4s ease-out forwards;
+    }
+
+    .trust-badge-card:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .trust-badge-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+
+    .trust-badge-card:hover .trust-badge-icon {
+      transform: scale(1.1);
+    }
+
+    /* Badge icon gradients */
+    .trust-badge-icon.emerald { background: linear-gradient(to bottom right, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05)); }
+    .trust-badge-icon.blue { background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05)); }
+    .trust-badge-icon.amber { background: linear-gradient(to bottom right, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05)); }
+    .trust-badge-icon.purple { background: linear-gradient(to bottom right, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.05)); }
+
+    .trust-badge-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .trust-badge-description {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       10. ABOUT SECTION
+       ============================================ */
+    .about {
+      padding: 80px 0;
+      background: linear-gradient(to bottom, rgba(238, 240, 242, 0.3), var(--background));
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .about {
+        padding: 112px 0;
+      }
+    }
+
+    /* Background blurs */
+    .about::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 384px;
+      height: 384px;
+      background-color: rgba(29, 171, 145, 0.05);
+      border-radius: 50%;
+      filter: blur(64px);
+    }
+
+    .about::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 384px;
+      height: 384px;
+      background-color: rgba(10, 52, 74, 0.05);
+      border-radius: 50%;
+      filter: blur(64px);
+    }
+
+    .about-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .about-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 64px;
+    }
+
+    @media (min-width: 1024px) {
+      .about-content {
+        flex-direction: row;
+        gap: 96px;
+      }
+    }
+
+    .about-left {
+      flex: 1;
+    }
+
+    .about-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: linear-gradient(to right, rgba(29, 171, 145, 0.1), rgba(29, 171, 145, 0.05));
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(29, 171, 145, 0.2);
+      margin-bottom: 32px;
+    }
+
+    .about-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--secondary);
+      line-height: 1.2;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .about-title {
+        font-size: 36px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .about-title {
+        font-size: 48px;
+      }
+    }
+
+    .about-title-highlight {
+      color: var(--primary);
+    }
+
+    .about-text {
+      font-size: 16px;
+      color: var(--muted-foreground);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .about-text {
+        font-size: 18px;
+      }
+    }
+
+    .about-text-bold {
+      color: var(--foreground);
+      font-weight: 600;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 32px 0;
+    }
+
+    @media (min-width: 640px) {
+      .about-features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .about-feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .about-feature-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: rgba(29, 171, 145, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .about-feature-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--secondary);
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .about-stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .about-stat-card {
+      text-align: center;
+      padding: 20px;
+      border-radius: 16px;
+      background-color: var(--card);
+      border: 1px solid rgba(229, 232, 235, 0.5);
+      transition: all 0.3s;
+      animation: fade-in 0.4s ease-out forwards;
+    }
+
+    .about-stat-card:hover {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      transform: translateY(-4px);
+    }
+
+    .about-stat-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Stat icon gradients */
+    .about-stat-icon.teal { background: linear-gradient(to bottom right, rgba(29, 171, 145, 0.2), rgba(29, 171, 145, 0.05)); }
+    .about-stat-icon.blue { background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05)); }
+    .about-stat-icon.amber { background: linear-gradient(to bottom right, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05)); }
+    .about-stat-icon.purple { background: linear-gradient(to bottom right, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.05)); }
+
+    .about-stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    .about-stat-label {
+      font-size: 12px;
+      color: var(--muted-foreground);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* About Illustration */
+    .about-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .about-illustration-wrapper {
+      position: relative;
+    }
+
+    .about-illustration-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, rgba(29, 171, 145, 0.1), transparent, rgba(10, 52, 74, 0.1));
+      border-radius: 50%;
+      filter: blur(64px);
+      transform: scale(1.5);
+    }
+
+    .about-illustration {
+      width: 100%;
+      max-width: 384px;
+      object-fit: contain;
+      position: relative;
+      z-index: 10;
+      filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @media (min-width: 768px) {
+      .about-illustration {
+        max-width: 448px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .about-illustration {
+        max-width: 512px;
+      }
+    }
+
+    /* About Floating Badge */
+    .about-float-badge {
+      position: absolute;
+      bottom: -16px;
+      left: -16px;
+      background-color: #FFFFFF;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(229, 232, 235, 0.5);
+      display: none;
+      animation: fade-in 0.4s ease-out forwards;
+      animation-delay: 0.3s;
+    }
+
+    @media (min-width: 768px) {
+      .about-float-badge {
+        display: flex;
+      }
+    }
+
+    .about-float-badge-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .about-float-badge-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background-color: #D1FAE5; /* Green 100 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-float-badge-label {
+      font-size: 12px;
+      color: var(--muted-foreground);
+      font-weight: 500;
+    }
+
+    .about-float-badge-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    /* ============================================
+       11. SERVICE SECTIONS
+       ============================================ */
+    .service-section {
+      padding: 64px 0;
+    }
+
+    @media (min-width: 768px) {
+      .service-section {
+        padding: 80px 0;
+      }
+    }
+
+    .service-section.alt {
+      background-color: rgba(238, 240, 242, 0.2);
+    }
+
+    .service-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .service-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    @media (min-width: 1024px) {
+      .service-content {
+        flex-direction: row;
+        gap: 80px;
+      }
+    }
+
+    .service-content.reverse {
+      flex-direction: column;
+    }
+
+    @media (min-width: 1024px) {
+      .service-content.reverse {
+        flex-direction: row-reverse;
+      }
+    }
+
+    .service-image-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .service-image-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, rgba(29, 171, 145, 0.05), transparent);
+      border-radius: 50%;
+      filter: blur(64px);
+    }
+
+    .service-image {
+      width: 100%;
+      max-width: 320px;
+      object-fit: contain;
+      position: relative;
+      z-index: 10;
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+      transition: transform 0.5s;
+    }
+
+    @media (min-width: 768px) {
+      .service-image {
+        max-width: 384px;
+      }
+    }
+
+    .service-image:hover {
+      transform: scale(1.05);
+    }
+
+    .service-text {
+      flex: 1;
+      text-align: center;
+    }
+
+    @media (min-width: 1024px) {
+      .service-text {
+        text-align: left;
+      }
+    }
+
+    .service-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background-color: rgba(10, 52, 74, 0.1);
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .service-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .service-title {
+        font-size: 30px;
+      }
+    }
+
+    .service-description {
+      font-size: 16px;
+      color: var(--muted-foreground);
+      line-height: 1.6;
+      max-width: 512px;
+      margin: 0 auto 20px;
+    }
+
+    @media (min-width: 1024px) {
+      .service-description {
+        margin: 0 0 20px;
+      }
+    }
+
+    .service-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .service-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted-foreground);
+      justify-content: center;
+    }
+
+    @media (min-width: 1024px) {
+      .service-feature {
+        justify-content: flex-start;
+      }
+    }
+
+    .service-feature-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--primary);
+    }
+
+    /* ============================================
+       12. CTA SECTION
+       ============================================ */
+    .cta {
+      padding: 80px 0;
+      background: linear-gradient(to bottom right, var(--secondary), var(--secondary), rgba(29, 171, 145, 0.8));
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .cta {
+        padding: 112px 0;
+      }
+    }
+
+    /* CTA Background Pattern */
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+
+    /* CTA Background blurs */
+    .cta-bg-1 {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 384px;
+      height: 384px;
+      background-color: rgba(29, 171, 145, 0.2);
+      border-radius: 50%;
+      filter: blur(64px);
+    }
+
+    .cta-bg-2 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 384px;
+      height: 384px;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      filter: blur(64px);
+    }
+
+    .cta-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .cta-content {
+      max-width: 896px;
+      margin: 0 auto;
+      text-align: center;
+      color: #FFFFFF;
+    }
+
+    .cta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 32px;
+      animation: fade-in 0.4s ease-out forwards;
+    }
+
+    .cta-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 32px;
+      animation: fade-in 0.4s ease-out forwards;
+      animation-delay: 0.1s;
+    }
+
+    @media (min-width: 768px) {
+      .cta-title {
+        font-size: 36px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .cta-title {
+        font-size: 48px;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .cta-title {
+        font-size: 60px;
+      }
+    }
+
+    .cta-description {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 672px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+      animation: fade-in 0.4s ease-out forwards;
+      animation-delay: 0.2s;
+    }
+
+    @media (min-width: 768px) {
+      .cta-description {
+        font-size: 20px;
+      }
+    }
+
+    .cta-trust-points {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 32px;
+      animation: fade-in 0.4s ease-out forwards;
+      animation-delay: 0.25s;
+    }
+
+    @media (min-width: 768px) {
+      .cta-trust-points {
+        gap: 32px;
+      }
+    }
+
+    .cta-trust-point {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      justify-content: center;
+      padding-top: 16px;
+      margin-bottom: 32px;
+      animation: fade-in 0.4s ease-out forwards;
+      animation-delay: 0.3s;
+    }
+
+    @media (min-width: 640px) {
+      .cta-buttons {
+        flex-direction: row;
+      }
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 32px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 12px;
+      transition: all 0.3s;
+    }
+
+    .btn-cta-primary {
+      background-color: #FFFFFF;
+      color: var(--secondary);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-cta-primary:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .btn-cta-outline {
+      background-color: transparent;
+      color: #FFFFFF;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-cta-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* CTA Social Proof */
+    .cta-social-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding-top: 24px;
+      animation: fade-in 0.4s ease-out forwards;
+      animation-delay: 0.4s;
+    }
+
+    .cta-avatars {
+      display: flex;
+    }
+
+    .cta-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(to bottom right, rgba(29, 171, 145, 0.4), rgba(29, 171, 145, 0.6));
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: -8px;
+    }
+
+    .cta-avatar:first-child {
+      margin-left: 0;
+    }
+
+    .cta-social-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .cta-social-text strong {
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* ============================================
+       13. FOOTER
+       ============================================ */
+    .footer {
+      width: 100%;
+      background-color: var(--secondary); /* #0A344A */
+      color: #FFFFFF;
+      font-family: 'Nunito', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Newsletter Section */
+    .footer-newsletter {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-newsletter-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .footer-newsletter-container {
+        padding: 48px 64px;
+      }
+    }
+
+    .footer-newsletter-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background: linear-gradient(to right, rgba(29, 171, 145, 0.2), rgba(23, 175, 155, 0.2));
+      border-radius: 16px;
+      padding: 32px;
+    }
+
+    @media (min-width: 1024px) {
+      .footer-newsletter-content {
+        flex-direction: row;
+      }
+    }
+
+    .footer-newsletter-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .footer-newsletter-text {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-newsletter-form {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+
+    @media (min-width: 1024px) {
+      .footer-newsletter-form {
+        width: auto;
+      }
+    }
+
+    .footer-newsletter-input {
+      flex: 1;
+      height: 48px;
+      padding: 0 16px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #FFFFFF;
+      font-size: 14px;
+    }
+
+    @media (min-width: 1024px) {
+      .footer-newsletter-input {
+        width: 320px;
+      }
+    }
+
+    .footer-newsletter-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-newsletter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 48px;
+      padding: 0 24px;
+      background-color: #FFFFFF;
+      color: var(--secondary);
+      font-weight: 700;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .footer-newsletter-btn:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Main Footer Content */
+    .footer-main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-main {
+        padding: 64px 24px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .footer-main {
+        padding: 64px;
+      }
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 48px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+      }
+    }
+
+    /* Brand Section */
+    .footer-brand {
+      grid-column: span 1;
+    }
+
+    @media (min-width: 1024px) {
+      .footer-brand {
+        grid-column: span 2;
+      }
+    }
+
+    .footer-logo {
+      height: 40px;
+      filter: brightness(0) invert(1);
+      margin-bottom: 24px;
+    }
+
+    .footer-description {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      max-width: 384px;
+      margin-bottom: 24px;
+    }
+
+    /* Contact Info */
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .footer-contact-icon {
+      width: 32px;
+      height: 32px;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .footer-contact-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+    }
+
+    .footer-contact-link {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-contact-link:hover {
+      color: #FFFFFF;
+    }
+
+    /* Social Links */
+    .footer-social {
+      display: flex;
+      gap: 8px;
+    }
+
+    .footer-social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .footer-social-link:hover {
+      background-color: var(--primary);
+      transform: scale(1.1);
+    }
+
+    /* Footer Links */
+    .footer-links-title {
+      font-family: 'Raleway', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-link:hover {
+      color: #FFFFFF;
+      transform: translateX(4px);
+    }
+
+    /* Regulatory Info */
+    .footer-regulatory {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-regulatory-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .footer-regulatory-container {
+        padding: 24px 64px;
+      }
+    }
+
+    .footer-regulatory-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .footer-regulatory-content {
+        flex-direction: row;
+      }
+    }
+
+    .footer-regulatory-text {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-regulatory-text {
+        text-align: left;
+      }
+    }
+
+    .footer-regulatory-ids {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Copyright */
+    .footer-copyright {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--accent); /* #17AF9B or use #057170 for darker */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-copyright-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+
+    /* ============================================
+       14. BUTTON COMPONENT
+       ============================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Button Sizes */
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+
+    .btn-md {
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+
+    .btn-lg {
+      padding: 14px 28px;
+      font-size: 16px;
+      border-radius: 12px;
+    }
+
+    .btn-xl {
+      padding: 16px 32px;
+      font-size: 18px;
+      border-radius: 12px;
+    }
+
+    /* Button Variants */
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      box-shadow: 0 4px 14px hsla(168, 72%, 40%, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px hsla(168, 72%, 40%, 0.35);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: var(--secondary-foreground);
+    }
+
+    .btn-secondary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(29, 171, 145, 0.1);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--foreground);
+    }
+
+    .btn-ghost:hover {
+      background-color: var(--muted);
+    }
+
+    /* ============================================
+       15. CARD COMPONENT
+       ============================================ */
+    .card {
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      align-items: flex-start;
+      gap: 12px;
+      border-radius: 16px;
+      border: 1px solid hsl(195, 60%, 94%); /* #E7F6FE */
+      background: #FFFFFF;
+      box-shadow: 0 4px 20px rgba(23, 93, 128, 0.08);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 40px rgba(23, 93, 128, 0.14);
+    }
+
+    /* ============================================
+       16. ANIMATIONS
+       ============================================ */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    @keyframes pulse-subtle {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes scale-in {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.4s ease-out forwards;
+    }
+
+    .animate-slide-up {
+      animation: slide-up 0.5s ease-out forwards;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Animation delays */
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+
+    /* ============================================
+       17. UTILITY CLASSES
+       ============================================ */
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: 0 24px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        padding: 0 32px;
+      }
+    }
+
+    /* Flexbox */
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .flex-row { flex-direction: row; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .gap-4 { gap: 16px; }
+    .gap-6 { gap: 24px; }
+    .gap-8 { gap: 32px; }
+
+    /* Grid */
+    .grid { display: grid; }
+
+    /* Spacing */
+    .p-4 { padding: 16px; }
+    .p-6 { padding: 24px; }
+    .p-8 { padding: 32px; }
+    .px-4 { padding-left: 16px; padding-right: 16px; }
+    .py-4 { padding-top: 16px; padding-bottom: 16px; }
+    .mb-4 { margin-bottom: 16px; }
+    .mb-6 { margin-bottom: 24px; }
+    .mt-4 { margin-top: 16px; }
+    .mt-6 { margin-top: 24px; }
+
+    /* Text */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .text-right { text-align: right; }
+
+    /* Colors */
+    .text-primary { color: var(--primary); }
+    .text-secondary { color: var(--secondary); }
+    .text-muted { color: var(--muted-foreground); }
+    .text-white { color: #FFFFFF; }
+    .bg-primary { background-color: var(--primary); }
+    .bg-secondary { background-color: var(--secondary); }
+    .bg-muted { background-color: var(--muted); }
+    .bg-white { background-color: #FFFFFF; }
+
+    /* Border Radius */
+    .rounded { border-radius: 4px; }
+    .rounded-md { border-radius: 6px; }
+    .rounded-lg { border-radius: 8px; }
+    .rounded-xl { border-radius: 12px; }
+    .rounded-2xl { border-radius: 16px; }
+    .rounded-3xl { border-radius: 24px; }
+    .rounded-full { border-radius: 9999px; }
+
+    /* Shadows */
+    .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+    .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1); }
+    .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
+    .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
+    .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+
+    /* Responsive Hidden/Visible */
+    @media (max-width: 767px) {
+      .md\:hidden { display: none; }
+    }
+    @media (max-width: 1023px) {
+      .lg\:hidden { display: none; }
+    }
+    @media (min-width: 768px) {
+      .md\:flex { display: flex; }
+      .md\:block { display: block; }
+    }
+    @media (min-width: 1024px) {
+      .lg\:flex { display: flex; }
+      .lg\:block { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ============================================
+       HEADER
+       ============================================ -->
+  <header class="header">
+    <div class="header-container">
+      <!-- Logo -->
+      <a href="/">
+        <img src="https://via.placeholder.com/120x40/1DAB91/FFFFFF?text=FinEase" alt="FinEase" class="header-logo">
+      </a>
+
+      <!-- Navigation -->
+      <nav class="header-nav">
+        <a href="/ipo" class="header-nav-link">IPO</a>
+        <a href="/bonds" class="header-nav-link">Bond</a>
+        <a href="/fds" class="header-nav-link">FD</a>
+        <a href="/nps" class="header-nav-link">NPS</a>
+        <a href="/calculators" class="header-nav-link">Calculators</a>
+        <a href="https://www.thefinease.com/" target="_blank" class="header-nav-link">Screener</a>
+      </nav>
+
+      <!-- Search & Login -->
+      <div class="flex items-center gap-4" style="display: none;">
+        <!-- Add md:flex to show on desktop -->
+      </div>
+      <div class="md:flex items-center gap-4" style="display: flex;">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #656F75;">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="text" placeholder="Search IPO, Bonds, FDs..." class="header-search-input">
+        </div>
+
+        <a href="/auth" class="header-login">
+          <div class="header-login-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #656F75;">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <span class="header-login-text">Login</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================
+       HERO SECTION
+       ============================================ -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <!-- Left Content -->
+        <div class="hero-left">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>India's Trusted Investment Platform</span>
+          </div>
+          
+          <h1 class="hero-title">
+            Your Digital <span class="hero-title-highlight">Wealth Mall</span>
+          </h1>
+          <h2 class="hero-subtitle">
+            Diversify Assets, Multiply Opportunities, Grow Your Wealth
+          </h2>
+          
+          <ul class="hero-features">
+            <li class="hero-feature-item">
+              <div class="hero-feature-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                  <polyline points="16 7 22 7 22 13"></polyline>
+                </svg>
+              </div>
+              IPOs, Bonds, FDs & NPS in one platform
+            </li>
+            <li class="hero-feature-item">
+              <div class="hero-feature-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              SEBI & RBI compliant investments
+            </li>
+            <li class="hero-feature-item">
+              <div class="hero-feature-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                  <line x1="19" y1="5" x2="5" y2="19"></line>
+                  <circle cx="6.5" cy="6.5" r="2.5"></circle>
+                  <circle cx="17.5" cy="17.5" r="2.5"></circle>
+                </svg>
+              </div>
+              Earn up to 9.10% on Fixed Deposits
+            </li>
+          </ul>
+
+          <div class="hero-buttons">
+            <a href="/auth" class="btn-hero btn-hero-primary">
+              Start Investing
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            <a href="/nps/register" class="btn-hero btn-hero-outline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 21h18M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+              </svg>
+              Open NPS Account
+            </a>
+          </div>
+
+          <!-- Trust Stats -->
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-value">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2" style="opacity: 0.8;">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                50K+
+              </div>
+              <p class="hero-stat-label">Active Users</p>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-value">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2" style="opacity: 0.8;">
+                  <circle cx="12" cy="8" r="7"></circle>
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                </svg>
+                ₹100Cr+
+              </div>
+              <p class="hero-stat-label">AUM</p>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-value">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                4.8
+              </div>
+              <p class="hero-stat-label">User Rating</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Illustration -->
+        <div class="hero-right">
+          <img src="https://via.placeholder.com/500x400/E8F8F5/1DAB91?text=Hero+Illustration" alt="Investment illustration" class="hero-illustration">
+          
+          <!-- Floating Cards -->
+          <div class="hero-float-card hero-float-card-left">
+            <div class="hero-float-card-content">
+              <div class="hero-float-card-icon green">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                  <polyline points="16 7 22 7 22 13"></polyline>
+                </svg>
+              </div>
+              <div>
+                <p class="hero-float-card-label">IPO Returns</p>
+                <p class="hero-float-card-value green">+45.2%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="hero-float-card hero-float-card-right">
+            <div class="hero-float-card-content">
+              <div class="hero-float-card-icon teal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <div>
+                <p class="hero-float-card-label">FD Interest</p>
+                <p class="hero-float-card-value teal">9.10% p.a.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       TAGLINE SECTION
+       ============================================ -->
+  <section class="tagline">
+    <div class="tagline-container">
+      <div class="tagline-badge">
+        <span class="tagline-badge-dot"></span>
+        Trusted by 50,000+ Investors
+      </div>
+      
+      <h2 class="tagline-title">
+        The Digital Wealth Mall for All Your Investments
+      </h2>
+      
+      <p class="tagline-description">
+        Seamlessly manage and track all your investments with cutting-edge technology and expert tools – empowering you to make informed decisions for a secure and prosperous financial future.
+      </p>
+      
+      <div class="tagline-features">
+        <div class="tagline-feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          SEBI & RBI Compliant
+        </div>
+        <div class="tagline-feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Secure Investments
+        </div>
+        <div class="tagline-feature">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Expert Support
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       OFFERINGS SECTION
+       ============================================ -->
+  <section class="offerings">
+    <div class="offerings-container">
+      <div class="offerings-header">
+        <div class="offerings-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+          </svg>
+          Investment Options
+        </div>
+        <h2 class="offerings-title">Our Investment Offerings</h2>
+        <p class="offerings-description">
+          Access diverse investment options tailored to your financial goals. Start your wealth creation journey today.
+        </p>
+      </div>
+
+      <div class="offerings-grid">
+        <!-- IPO Card -->
+        <a href="/ipo" class="offering-card" style="animation-delay: 0s;">
+          <span class="offering-badge">Popular</span>
+          <div class="offering-icon teal">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+              <polyline points="16 7 22 7 22 13"></polyline>
+            </svg>
+          </div>
+          <h3 class="offering-title">IPO</h3>
+          <p class="offering-description">Get early access to companies going public. Invest in Initial Public Offerings and be part of the growth journey.</p>
+          <div class="offering-footer">
+            <span class="offering-stat">5+ Open IPOs</span>
+            <span class="offering-cta">
+              Explore
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Bonds Card -->
+        <a href="/bonds" class="offering-card" style="animation-delay: 0.1s;">
+          <div class="offering-icon orange">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2">
+              <line x1="12" x2="12" y1="2" y2="22"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3 class="offering-title">Bonds</h3>
+          <p class="offering-description">Secure, fixed-income investments with predictable returns. Diversify your portfolio with AAA-rated bonds.</p>
+          <div class="offering-footer">
+            <span class="offering-stat">Up to 9.5% Yield</span>
+            <span class="offering-cta">
+              Explore
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Fixed Deposits Card -->
+        <a href="/fds" class="offering-card" style="animation-delay: 0.2s;">
+          <span class="offering-badge">Trending</span>
+          <div class="offering-icon blue">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2">
+              <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+              <line x1="2" x2="22" y1="10" y2="10"></line>
+            </svg>
+          </div>
+          <h3 class="offering-title">Fixed Deposits</h3>
+          <p class="offering-description">DICGC insured FDs from trusted banks and NBFCs. Earn up to 9.10% with complete safety.</p>
+          <div class="offering-footer">
+            <span class="offering-stat">Up to 9.10% p.a.</span>
+            <span class="offering-cta">
+              Explore
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- NPS Card -->
+        <a href="/dashboard/nps" class="offering-card" style="animation-delay: 0.3s;">
+          <div class="offering-icon purple">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2">
+              <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"></path>
+              <path d="M2 9v1c0 1.1.9 2 2 2h1"></path>
+              <path d="M16 11h.01"></path>
+            </svg>
+          </div>
+          <h3 class="offering-title">NPS</h3>
+          <p class="offering-description">Plan your retirement with National Pension System. Tax benefits under Section 80C and 80CCD.</p>
+          <div class="offering-footer">
+            <span class="offering-stat">Tax Savings</span>
+            <span class="offering-cta">
+              Explore
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </div>
+        </a>
+
+        <!-- Calculators Card -->
+        <a href="/calculators" class="offering-card" style="animation-delay: 0.4s;">
+          <div class="offering-icon red">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+              <rect width="16" height="20" x="4" y="2" rx="2"></rect>
+              <line x1="8" x2="16" y1="6" y2="6"></line>
+              <line x1="16" x2="16" y1="14" y2="18"></line>
+              <path d="M16 10h.01"></path>
+              <path d="M12 10h.01"></path>
+              <path d="M8 10h.01"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M8 14h.01"></path>
+              <path d="M12 18h.01"></path>
+              <path d="M8 18h.01"></path>
+            </svg>
+          </div>
+          <h3 class="offering-title">Calculators</h3>
+          <p class="offering-description">Plan your investments with our FD, SIP, and Lumpsum calculators. Make informed financial decisions.</p>
+          <div class="offering-footer">
+            <span class="offering-stat">Free Tools</span>
+            <span class="offering-cta">
+              Explore
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       TRUST BADGES SECTION
+       ============================================ -->
+  <section class="trust-badges">
+    <div class="trust-badges-container">
+      <div class="trust-badges-header">
+        <p class="trust-badges-label">Why Choose FinEase</p>
+      </div>
+      <div class="trust-badges-grid">
+        <div class="trust-badge-card" style="animation-delay: 0s;">
+          <div class="trust-badge-icon emerald">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4 class="trust-badge-title">SEBI Registered</h4>
+          <p class="trust-badge-description">Fully compliant with SEBI regulations</p>
+        </div>
+        <div class="trust-badge-card" style="animation-delay: 0.1s;">
+          <div class="trust-badge-icon blue">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h4 class="trust-badge-title">Bank-Grade Security</h4>
+          <p class="trust-badge-description">256-bit SSL encryption</p>
+        </div>
+        <div class="trust-badge-card" style="animation-delay: 0.2s;">
+          <div class="trust-badge-icon amber">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+          <h4 class="trust-badge-title">RBI Compliant</h4>
+          <p class="trust-badge-description">Regulated financial services</p>
+        </div>
+        <div class="trust-badge-card" style="animation-delay: 0.3s;">
+          <div class="trust-badge-icon purple">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+          <h4 class="trust-badge-title">DICGC Insured</h4>
+          <p class="trust-badge-description">FDs insured up to ₹5 lakh</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       CTA SECTION
+       ============================================ -->
+  <section class="cta">
+    <div class="cta-bg-1"></div>
+    <div class="cta-bg-2"></div>
+    <div class="cta-container">
+      <div class="cta-content">
+        <div class="cta-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+          </svg>
+          Start Your Investment Journey
+        </div>
+        
+        <h2 class="cta-title">Ready to Grow Your Wealth?</h2>
+        
+        <p class="cta-description">
+          Join 50,000+ investors who trust FinEase for their investment needs. Start with as little as ₹100.
+        </p>
+
+        <div class="cta-trust-points">
+          <div class="cta-trust-point">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>No hidden charges</span>
+          </div>
+          <div class="cta-trust-point">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>SEBI registered</span>
+          </div>
+          <div class="cta-trust-point">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+              <polyline points="16 7 22 7 22 13"></polyline>
+            </svg>
+            <span>High returns</span>
+          </div>
+        </div>
+        
+        <div class="cta-buttons">
+          <a href="/auth" class="btn-cta btn-cta-primary">
+            Create Free Account
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+          <a href="/calculators" class="btn-cta btn-cta-outline">
+            Explore Products
+          </a>
+        </div>
+        
+        <div class="cta-social-proof">
+          <div class="cta-avatars">
+            <div class="cta-avatar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="cta-avatar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="cta-avatar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="cta-avatar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+              </svg>
+            </div>
+          </div>
+          <p class="cta-social-text">
+            <strong>50,000+</strong> investors trust us
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer class="footer">
+    <!-- Newsletter -->
+    <div class="footer-newsletter">
+      <div class="footer-newsletter-container">
+        <div class="footer-newsletter-content">
+          <div>
+            <h3 class="footer-newsletter-title">Stay Updated</h3>
+            <p class="footer-newsletter-text">Get the latest investment opportunities and market insights</p>
+          </div>
+          <div class="footer-newsletter-form">
+            <input type="email" placeholder="Enter your email" class="footer-newsletter-input">
+            <button class="footer-newsletter-btn">
+              Subscribe
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m22 2-7 20-4-9-9-4Z"></path>
+                <path d="M22 2 11 13"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Footer Content -->
+    <div class="footer-main">
+      <div class="footer-grid">
+        <!-- Brand Section -->
+        <div class="footer-brand">
+          <img src="https://via.placeholder.com/120x40/FFFFFF/1DAB91?text=FinEase" alt="FinEase" class="footer-logo">
+          <p class="footer-description">
+            Your trusted digital wealth platform for IPOs, Bonds, Fixed Deposits, and NPS investments. 
+            Start your investment journey with us today.
+          </p>
+          
+          <!-- Contact Info -->
+          <div class="footer-contact">
+            <div class="footer-contact-item">
+              <div class="footer-contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+              <p class="footer-contact-text">
+                36, Third floor, Palm spring complex,<br>
+                Ellisbridge, Ahmedabad-380006, Gujarat
+              </p>
+            </div>
+            <div class="footer-contact-item">
+              <div class="footer-contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+              </div>
+              <a href="mailto:fineaseresearchpvtltd@gmail.com" class="footer-contact-link">
+                fineaseresearchpvtltd@gmail.com
+              </a>
+            </div>
+            <div class="footer-contact-item">
+              <div class="footer-contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DAB91" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              </div>
+              <a href="tel:079-2666588" class="footer-contact-link">
+                079-2666588
+              </a>
+            </div>
+          </div>
+          
+          <!-- Social Links -->
+          <div class="footer-social">
+            <a href="#" class="footer-social-link" aria-label="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="Twitter">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect width="4" height="12" x="2" y="9"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div>
+          <h4 class="footer-links-title">Our Services</h4>
+          <ul class="footer-links-list">
+            <li><a href="/ipo" class="footer-link">IPO</a></li>
+            <li><a href="/bonds" class="footer-link">Bonds</a></li>
+            <li><a href="/fds" class="footer-link">Fixed Deposits</a></li>
+            <li><a href="/nps" class="footer-link">NPS</a></li>
+            <li><a href="/calculators" class="footer-link">Calculators</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h4 class="footer-links-title">Company</h4>
+          <ul class="footer-links-list">
+            <li><a href="#" class="footer-link">About Us</a></li>
+            <li><a href="#" class="footer-link">Careers</a></li>
+            <li><a href="#" class="footer-link">Blog</a></li>
+            <li><a href="#" class="footer-link">Press</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 class="footer-links-title">Legal</h4>
+          <ul class="footer-links-list">
+            <li><a href="#" class="footer-link">Terms of Service</a></li>
+            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+            <li><a href="#" class="footer-link">Risk Disclosure</a></li>
+            <li><a href="#" class="footer-link">Grievance Redressal</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regulatory Info -->
+    <div class="footer-regulatory">
+      <div class="footer-regulatory-container">
+        <div class="footer-regulatory-content">
+          <p class="footer-regulatory-text">
+            FinEase Research Pvt. Ltd. is a SEBI registered investment advisor. Investments are subject to market risks. 
+            Please read all scheme related documents carefully before investing.
+          </p>
+          <div class="footer-regulatory-ids">
+            <span>SEBI Reg. No: INH000000XXX</span>
+            <span style="display: none;">|</span>
+            <span>CIN: U67190GJ2020PTCXXXXXX</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-copyright">
+      <p class="footer-copyright-text">
+        © 2025 FinEase Research Pvt. Ltd. All rights reserved.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
