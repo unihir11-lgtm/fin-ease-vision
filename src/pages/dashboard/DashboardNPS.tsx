@@ -117,6 +117,23 @@ const DashboardNPS = () => {
     asOnDate: "10/12/2025"
   };
 
+  // XIRR Performance Data (from API)
+  const xirrData = {
+    subscriberName: "BHVCVT DHDVDHVC WVVV",
+    pran: "110112862456",
+    xirr: "-3.49",
+    notionalGainLoss: "-86.10",
+    currentHoldingValuation: "413.90",
+    totalWithdrawal: "0.00",
+    totalNumberContribution: "1",
+    totalContributionAmount: "500.00",
+    FYxirr: "0.00"
+  };
+
+  // Download Statement Dialog state
+  const [showDownloadStatementDialog, setShowDownloadStatementDialog] = useState(false);
+  const [selectedFYRange, setSelectedFYRange] = useState("2024-25");
+
   // Helper function to extract scheme type from scheme name
   const getSchemeType = (schemeName: string) => {
     if (schemeName.includes("SCHEME E")) return { type: "Equity (E)", color: "bg-blue-500" };
@@ -858,6 +875,192 @@ const DashboardNPS = () => {
                   <Clock className="w-3 h-3" />
                   As on {npsData.asOnDate}
                 </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* XIRR Performance Summary */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Percent className="w-5 h-5 text-primary" />
+                  Investment Performance (XIRR)
+                </CardTitle>
+                <Dialog open={showDownloadStatementDialog} onOpenChange={setShowDownloadStatementDialog}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Download className="w-4 h-4" />
+                      Download Statement
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="flex items-center gap-2">
+                        <FileText className="w-5 h-5 text-primary" />
+                        Download Statement of Holding
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">Select Financial Year</Label>
+                        <Select value={selectedFYRange} onValueChange={setSelectedFYRange}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Financial Year" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="2025-26">FY 2025-26 (Current)</SelectItem>
+                            <SelectItem value="2024-25">FY 2024-25</SelectItem>
+                            <SelectItem value="2023-24">FY 2023-24</SelectItem>
+                            <SelectItem value="2022-23">FY 2022-23</SelectItem>
+                            <SelectItem value="2021-22">FY 2021-22</SelectItem>
+                            <SelectItem value="all">All Years (Since Inception)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="p-4 bg-muted/30 rounded-lg">
+                        <p className="text-sm text-muted-foreground mb-2">Statement will include:</p>
+                        <ul className="text-sm space-y-1">
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-3 h-3 text-green-600" />
+                            <span>Scheme-wise holdings & NAV</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-3 h-3 text-green-600" />
+                            <span>Contribution history</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-3 h-3 text-green-600" />
+                            <span>XIRR & Performance metrics</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-3 h-3 text-green-600" />
+                            <span>Transaction details</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Button 
+                          onClick={() => {
+                            toast({
+                              title: "Statement Download",
+                              description: `Downloading statement for FY ${selectedFYRange} in PDF format...`,
+                            });
+                            setShowDownloadStatementDialog(false);
+                          }} 
+                          className="gap-2"
+                        >
+                          <FileDown className="w-4 h-4" />
+                          PDF Format
+                        </Button>
+                        <Button 
+                          onClick={() => {
+                            toast({
+                              title: "Statement Download",
+                              description: `Downloading statement for FY ${selectedFYRange} in Excel format...`,
+                            });
+                            setShowDownloadStatementDialog(false);
+                          }} 
+                          variant="outline" 
+                          className="gap-2"
+                        >
+                          <Download className="w-4 h-4" />
+                          Excel Format
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              <CardDescription>Returns calculated using Extended Internal Rate of Return (XIRR) method</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {/* Overall XIRR */}
+                <div className="p-4 bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl border border-primary/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Percent className="w-4 h-4 text-primary" />
+                    <p className="text-xs text-muted-foreground">Overall XIRR</p>
+                  </div>
+                  <p className={`text-2xl font-bold ${parseFloat(xirrData.xirr) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {parseFloat(xirrData.xirr) >= 0 ? '+' : ''}{xirrData.xirr}%
+                  </p>
+                  <div className="flex items-center gap-1 mt-1">
+                    {parseFloat(xirrData.xirr) >= 0 ? (
+                      <ArrowUpRight className="w-3 h-3 text-green-600" />
+                    ) : (
+                      <ArrowDownRight className="w-3 h-3 text-red-600" />
+                    )}
+                    <span className="text-xs text-muted-foreground">Since inception</span>
+                  </div>
+                </div>
+
+                {/* FY XIRR */}
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <p className="text-xs text-muted-foreground">FY XIRR</p>
+                  </div>
+                  <p className={`text-2xl font-bold ${parseFloat(xirrData.FYxirr) >= 0 ? 'text-secondary' : 'text-red-600'}`}>
+                    {parseFloat(xirrData.FYxirr) >= 0 ? '+' : ''}{xirrData.FYxirr}%
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Current FY</p>
+                </div>
+
+                {/* Current Holding Value */}
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Wallet className="w-4 h-4 text-green-600" />
+                    <p className="text-xs text-muted-foreground">Current Value</p>
+                  </div>
+                  <p className="text-2xl font-bold text-secondary">₹{parseFloat(xirrData.currentHoldingValuation).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Holding valuation</p>
+                </div>
+
+                {/* Total Contribution */}
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <IndianRupee className="w-4 h-4 text-blue-600" />
+                    <p className="text-xs text-muted-foreground">Total Contributed</p>
+                  </div>
+                  <p className="text-2xl font-bold text-secondary">₹{parseFloat(xirrData.totalContributionAmount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{xirrData.totalNumberContribution} contribution(s)</p>
+                </div>
+
+                {/* Notional Gain/Loss */}
+                <div className={`p-4 rounded-xl ${parseFloat(xirrData.notionalGainLoss) >= 0 ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    {parseFloat(xirrData.notionalGainLoss) >= 0 ? (
+                      <TrendingUp className="w-4 h-4 text-green-600" />
+                    ) : (
+                      <TrendingDown className="w-4 h-4 text-red-600" />
+                    )}
+                    <p className="text-xs text-muted-foreground">Notional Gain/Loss</p>
+                  </div>
+                  <p className={`text-2xl font-bold ${parseFloat(xirrData.notionalGainLoss) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {parseFloat(xirrData.notionalGainLoss) >= 0 ? '+' : ''}₹{parseFloat(xirrData.notionalGainLoss).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">Unrealized</p>
+                </div>
+
+                {/* Total Withdrawal */}
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <DollarSign className="w-4 h-4 text-amber-600" />
+                    <p className="text-xs text-muted-foreground">Total Withdrawal</p>
+                  </div>
+                  <p className="text-2xl font-bold text-secondary">₹{parseFloat(xirrData.totalWithdrawal).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Redeemed amount</p>
+                </div>
+              </div>
+
+              {/* Information Note */}
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg text-sm text-blue-700 flex items-start gap-2">
+                <Info className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>
+                  XIRR (Extended Internal Rate of Return) is the annualized return considering the timing and amount of each contribution. 
+                  Notional gain/loss represents unrealized profit/loss on your current holdings.
+                </span>
               </div>
             </CardContent>
           </Card>
