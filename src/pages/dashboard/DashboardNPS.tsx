@@ -63,28 +63,101 @@ const DashboardNPS = () => {
     withdrawalType: "partial",
   });
 
-  // NPS Data
+  // Statement of Holding Data (from API)
+  const statementOfHolding = {
+    pran: "110185661660",
+    userName: "SHRI THVH NHCVVWXZVC NVCENDCVWXZVC",
+    tier1: {
+      schemes: [
+        {
+          schemeId: "SM008001",
+          schemeName: "NPS TRUST- A/C HDFC PENSION FUND MANAGEMENT LIMITED SCHEME E - TIER I",
+          units: 767.6179,
+          freeUnits: 767.6179,
+          blckdUnits: 0.0000,
+          nav: 48.8292,
+          navDate: "04/08/2025",
+          value: 37482.16,
+          schPercentage: 0.0
+        },
+        {
+          schemeId: "SM008002",
+          schemeName: "NPS TRUST- A/C HDFC PENSION FUND MANAGEMENT LIMITED SCHEME C - TIER I",
+          units: 417.7656,
+          freeUnits: 417.7656,
+          blckdUnits: 0.0000,
+          nav: 28.5734,
+          navDate: "04/08/2025",
+          value: 11936.98,
+          schPercentage: 0.0
+        },
+        {
+          schemeId: "SM008003",
+          schemeName: "NPS TRUST- A/C HDFC PENSION FUND MANAGEMENT LIMITED SCHEME G - TIER I",
+          units: 906.8500,
+          freeUnits: 906.8500,
+          blckdUnits: 0.0000,
+          nav: 28.2188,
+          navDate: "04/08/2025",
+          value: 25590.21,
+          schPercentage: 0.0
+        }
+      ],
+      amtInTransit: 0.00,
+      total: 75009.35,
+      message: "Tier Status-Active"
+    },
+    tier2: {
+      schemes: [],
+      amtInTransit: 0,
+      total: 0,
+      message: "No Schemes"
+    },
+    totalValue: 75009.35,
+    asOnDate: "10/12/2025"
+  };
+
+  // Helper function to extract scheme type from scheme name
+  const getSchemeType = (schemeName: string) => {
+    if (schemeName.includes("SCHEME E")) return { type: "Equity (E)", color: "bg-blue-500" };
+    if (schemeName.includes("SCHEME C")) return { type: "Corporate Bond (C)", color: "bg-green-500" };
+    if (schemeName.includes("SCHEME G")) return { type: "Government Bond (G)", color: "bg-amber-500" };
+    if (schemeName.includes("SCHEME A")) return { type: "Alternative Assets (A)", color: "bg-purple-500" };
+    return { type: "Other", color: "bg-gray-500" };
+  };
+
+  // Helper function to extract PFM name from scheme name
+  const getPFMName = (schemeName: string) => {
+    const match = schemeName.match(/A\/C\s+(.+?)\s+SCHEME/);
+    return match ? match[1] : "HDFC Pension Fund";
+  };
+
+  // NPS Data derived from Statement of Holding
   const npsData = {
-    pran: "1100345678901",
-    pranStatus: "Active",
+    pran: statementOfHolding.pran,
+    userName: statementOfHolding.userName,
+    pranStatus: statementOfHolding.tier1.message.includes("Active") ? "Active" : "Inactive",
     dateOfJoining: "15 Jan 2020",
-    totalCorpus: 685000,
-    totalContributed: 580000,
-    returns: 105000,
-    returnsPercentage: 18.1,
+    totalCorpus: statementOfHolding.totalValue,
+    totalContributed: 65000, // This would come from contribution history
+    returns: statementOfHolding.totalValue - 65000,
+    returnsPercentage: ((statementOfHolding.totalValue - 65000) / 65000 * 100).toFixed(1),
     annualizedReturn: 12.5,
-    tier1Balance: 535000,
-    tier2Balance: 150000,
-    pensionFundManager: "HDFC Pension Fund",
+    tier1Balance: statementOfHolding.tier1.total,
+    tier2Balance: statementOfHolding.tier2.total,
+    tier1AmtInTransit: statementOfHolding.tier1.amtInTransit,
+    tier2AmtInTransit: statementOfHolding.tier2.amtInTransit,
+    pensionFundManager: getPFMName(statementOfHolding.tier1.schemes[0]?.schemeName || ""),
     investmentChoice: "Active Choice",
     maturityDate: "15 Jun 2045",
     yearsToMaturity: 20,
     projectedCorpus: 4500000,
+    asOnDate: statementOfHolding.asOnDate,
     assetAllocation: {
-      equity: 50,
-      corporate: 30,
-      government: 15,
-      alternative: 5,
+      equity: Math.round((statementOfHolding.tier1.schemes.find(s => s.schemeName.includes("SCHEME E"))?.value || 0) / statementOfHolding.totalValue * 100),
+      corporate: Math.round((statementOfHolding.tier1.schemes.find(s => s.schemeName.includes("SCHEME C"))?.value || 0) / statementOfHolding.totalValue * 100),
+      government: Math.round((statementOfHolding.tier1.schemes.find(s => s.schemeName.includes("SCHEME G"))?.value || 0) / statementOfHolding.totalValue * 100),
+      alternative: 0,
     },
     fundPerformance: [
       { name: "Equity (E)", return: 14.2, benchmark: 12.5 },
@@ -99,53 +172,23 @@ const DashboardNPS = () => {
     ],
   };
 
-  // Investment Details with NAV, PFM, Units
-  const investmentDetails = [
-    { 
-      fundType: "Equity (E)", 
-      pfm: "HDFC Pension Fund",
-      units: 5862.45,
-      nav: 58.42,
-      currentValue: 342500,
-      investedValue: 292500,
-      returns: 50000,
-      returnsPercent: 17.1,
-      lastUpdated: "08 Dec 2025"
-    },
-    { 
-      fundType: "Corporate Bond (C)", 
-      pfm: "HDFC Pension Fund",
-      units: 4875.32,
-      nav: 42.18,
-      currentValue: 205625,
-      investedValue: 174000,
-      returns: 31625,
-      returnsPercent: 18.2,
-      lastUpdated: "08 Dec 2025"
-    },
-    { 
-      fundType: "Government Bond (G)", 
-      pfm: "HDFC Pension Fund",
-      units: 2885.21,
-      nav: 35.67,
-      currentValue: 102938,
-      investedValue: 87000,
-      returns: 15938,
-      returnsPercent: 18.3,
-      lastUpdated: "08 Dec 2025"
-    },
-    { 
-      fundType: "Alternative Assets (A)", 
-      pfm: "HDFC Pension Fund",
-      units: 1176.51,
-      nav: 28.95,
-      currentValue: 34062,
-      investedValue: 26500,
-      returns: 7562,
-      returnsPercent: 28.5,
-      lastUpdated: "08 Dec 2025"
-    },
-  ];
+  // Investment Details from Statement of Holding schemes
+  const investmentDetails = statementOfHolding.tier1.schemes.map((scheme) => {
+    const schemeInfo = getSchemeType(scheme.schemeName);
+    return {
+      schemeId: scheme.schemeId,
+      fundType: schemeInfo.type,
+      schemeName: scheme.schemeName,
+      pfm: getPFMName(scheme.schemeName),
+      units: scheme.units,
+      freeUnits: scheme.freeUnits,
+      blockedUnits: scheme.blckdUnits,
+      nav: scheme.nav,
+      navDate: scheme.navDate,
+      currentValue: scheme.value,
+      color: schemeInfo.color,
+    };
+  });
 
   // Transaction History
   const transactionHistory = [
@@ -699,33 +742,36 @@ const DashboardNPS = () => {
             </Card>
           </div>
 
-          {/* My Investments - Detailed View */}
+          {/* Statement of Holding - Tier 1 */}
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-primary" />
-                  My Investments
+                  Statement of Holding - Tier 1
                 </CardTitle>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Download className="w-4 h-4" />
-                  Export
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-green-100 text-green-700">{statementOfHolding.tier1.message}</Badge>
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Download className="w-4 h-4" />
+                    Export
+                  </Button>
+                </div>
               </div>
-              <CardDescription>Detailed fund-wise investment breakdown with NAV and units</CardDescription>
+              <CardDescription>Scheme-wise investment breakdown with NAV and units as on {npsData.asOnDate}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Fund Type</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">PFM</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-muted-foreground">Scheme</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Units</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Free Units</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Blocked</th>
                       <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV (₹)</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Invested</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Current Value</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Returns</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">NAV Date</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-muted-foreground">Value (₹)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -733,56 +779,86 @@ const DashboardNPS = () => {
                       <tr key={index} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                         <td className="py-4 px-4">
                           <div className="flex items-center gap-2">
-                            <div className={`w-3 h-3 rounded-full ${
-                              investment.fundType.includes('Equity') ? 'bg-blue-500' :
-                              investment.fundType.includes('Corporate') ? 'bg-green-500' :
-                              investment.fundType.includes('Government') ? 'bg-amber-500' : 'bg-purple-500'
-                            }`} />
-                            <span className="font-medium text-secondary">{investment.fundType}</span>
+                            <div className={`w-3 h-3 rounded-full flex-shrink-0 ${investment.color}`} />
+                            <div>
+                              <span className="font-medium text-secondary">{investment.fundType}</span>
+                              <p className="text-xs text-muted-foreground mt-0.5 max-w-xs truncate" title={investment.schemeName}>
+                                {investment.pfm}
+                              </p>
+                            </div>
                           </div>
                         </td>
-                        <td className="py-4 px-4 text-sm text-muted-foreground">{investment.pfm}</td>
-                        <td className="py-4 px-4 text-right font-mono text-sm">{investment.units.toFixed(2)}</td>
-                        <td className="py-4 px-4 text-right">
-                          <span className="font-semibold">₹{investment.nav.toFixed(2)}</span>
+                        <td className="py-4 px-4 text-right font-mono text-sm">{investment.units.toFixed(4)}</td>
+                        <td className="py-4 px-4 text-right font-mono text-sm text-green-600">{investment.freeUnits.toFixed(4)}</td>
+                        <td className="py-4 px-4 text-right font-mono text-sm">
+                          {investment.blockedUnits > 0 ? (
+                            <span className="text-red-600">{investment.blockedUnits.toFixed(4)}</span>
+                          ) : (
+                            <span className="text-muted-foreground">0.0000</span>
+                          )}
                         </td>
-                        <td className="py-4 px-4 text-right text-sm">₹{investment.investedValue.toLocaleString()}</td>
-                        <td className="py-4 px-4 text-right font-semibold text-secondary">₹{investment.currentValue.toLocaleString()}</td>
                         <td className="py-4 px-4 text-right">
-                          <div className="flex flex-col items-end">
-                            <span className="font-semibold text-green-600">+₹{investment.returns.toLocaleString()}</span>
-                            <span className="text-xs text-green-600">+{investment.returnsPercent}%</span>
-                          </div>
+                          <span className="font-semibold">₹{investment.nav.toFixed(4)}</span>
                         </td>
+                        <td className="py-4 px-4 text-right text-sm text-muted-foreground">{investment.navDate}</td>
+                        <td className="py-4 px-4 text-right font-semibold text-secondary">₹{investment.currentValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                       </tr>
                     ))}
                   </tbody>
                   <tfoot>
                     <tr className="bg-muted/50">
-                      <td className="py-4 px-4 font-semibold text-secondary" colSpan={2}>Total</td>
+                      <td className="py-4 px-4 font-semibold text-secondary">Total Tier 1</td>
                       <td className="py-4 px-4 text-right font-mono font-semibold">
-                        {investmentDetails.reduce((sum, i) => sum + i.units, 0).toFixed(2)}
+                        {investmentDetails.reduce((sum, i) => sum + i.units, 0).toFixed(4)}
+                      </td>
+                      <td className="py-4 px-4 text-right font-mono font-semibold text-green-600">
+                        {investmentDetails.reduce((sum, i) => sum + i.freeUnits, 0).toFixed(4)}
+                      </td>
+                      <td className="py-4 px-4 text-right font-mono font-semibold">
+                        {investmentDetails.reduce((sum, i) => sum + i.blockedUnits, 0).toFixed(4)}
                       </td>
                       <td className="py-4 px-4 text-right text-muted-foreground">-</td>
-                      <td className="py-4 px-4 text-right font-semibold">
-                        ₹{investmentDetails.reduce((sum, i) => sum + i.investedValue, 0).toLocaleString()}
-                      </td>
+                      <td className="py-4 px-4 text-right text-muted-foreground">-</td>
                       <td className="py-4 px-4 text-right font-bold text-secondary">
-                        ₹{investmentDetails.reduce((sum, i) => sum + i.currentValue, 0).toLocaleString()}
-                      </td>
-                      <td className="py-4 px-4 text-right">
-                        <span className="font-bold text-green-600">
-                          +₹{investmentDetails.reduce((sum, i) => sum + i.returns, 0).toLocaleString()}
-                        </span>
+                        ₹{statementOfHolding.tier1.total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
+                    {statementOfHolding.tier1.amtInTransit > 0 && (
+                      <tr className="bg-amber-50/50">
+                        <td className="py-3 px-4 text-sm text-amber-700" colSpan={6}>Amount in Transit</td>
+                        <td className="py-3 px-4 text-right font-semibold text-amber-700">
+                          ₹{statementOfHolding.tier1.amtInTransit.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </td>
+                      </tr>
+                    )}
                   </tfoot>
                 </table>
               </div>
-              <p className="text-xs text-muted-foreground mt-4 flex items-center gap-1">
-                <Info className="w-3 h-3" />
-                NAV updated as on {investmentDetails[0].lastUpdated}
-              </p>
+              
+              {/* Tier 2 Status */}
+              {statementOfHolding.tier2.schemes.length === 0 && (
+                <div className="mt-4 p-4 bg-muted/30 rounded-lg flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Info className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium text-secondary">Tier 2 Account</p>
+                      <p className="text-sm text-muted-foreground">{statementOfHolding.tier2.message}</p>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm">Activate Tier 2</Button>
+                </div>
+              )}
+              
+              <div className="mt-4 p-4 bg-primary/5 rounded-lg flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Portfolio Value</p>
+                  <p className="text-2xl font-bold text-secondary">₹{statementOfHolding.totalValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                </div>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  As on {npsData.asOnDate}
+                </p>
+              </div>
             </CardContent>
           </Card>
 
