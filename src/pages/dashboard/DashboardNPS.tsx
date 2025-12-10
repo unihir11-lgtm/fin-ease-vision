@@ -57,6 +57,10 @@ const DashboardNPS = () => {
   });
 
   // Redemption state
+  // FY and Quarter selection for API data
+  const [selectedFY, setSelectedFY] = useState("2025-26");
+  const [selectedQuarter, setSelectedQuarter] = useState("Q3");
+
   const [redemption, setRedemption] = useState({
     amount: "",
     reason: "",
@@ -606,6 +610,68 @@ const DashboardNPS = () => {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6 mt-6">
+          {/* FY & Quarter Selection */}
+          <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+            <CardContent className="p-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Calendar className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-secondary">Select Period</p>
+                    <p className="text-xs text-muted-foreground">Choose financial year and quarter to view data</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm text-muted-foreground whitespace-nowrap">Financial Year:</Label>
+                    <Select value={selectedFY} onValueChange={setSelectedFY}>
+                      <SelectTrigger className="w-[130px] h-9 bg-background">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background">
+                        <SelectItem value="2025-26">FY 2025-26</SelectItem>
+                        <SelectItem value="2024-25">FY 2024-25</SelectItem>
+                        <SelectItem value="2023-24">FY 2023-24</SelectItem>
+                        <SelectItem value="2022-23">FY 2022-23</SelectItem>
+                        <SelectItem value="2021-22">FY 2021-22</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm text-muted-foreground">Quarter:</Label>
+                    <Select value={selectedQuarter} onValueChange={setSelectedQuarter}>
+                      <SelectTrigger className="w-[100px] h-9 bg-background">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-background">
+                        <SelectItem value="Q1">Q1 (Apr-Jun)</SelectItem>
+                        <SelectItem value="Q2">Q2 (Jul-Sep)</SelectItem>
+                        <SelectItem value="Q3">Q3 (Oct-Dec)</SelectItem>
+                        <SelectItem value="Q4">Q4 (Jan-Mar)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="gap-2 h-9"
+                    onClick={() => {
+                      toast({
+                        title: "Data Refreshed",
+                        description: `Fetching data for FY ${selectedFY} - ${selectedQuarter}`,
+                      });
+                    }}
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Refresh
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Summary Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
