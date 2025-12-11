@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPS Dashboard - Statements Tab Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Raleway:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== CSS RESET & BASE ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* ===== CSS VARIABLES (Design Tokens) ===== */
+    :root {
+      /* Primary Colors */
+      --primary: hsl(187, 59%, 35%); /* #23698e - Teal */
+      --primary-light: hsl(187, 59%, 45%);
+      --primary-dark: hsl(187, 65%, 17%); /* #0a344a - Dark Teal */
+      
+      /* Accent Colors */
+      --accent: hsl(162, 72%, 39%); /* #1dab91 - Turquoise */
+      --accent-light: hsl(162, 72%, 50%);
+      
+      /* Semantic Colors */
+      --background: hsl(0, 0%, 100%); /* #FFFFFF */
+      --foreground: hsl(187, 65%, 17%); /* #0a344a - Dark Teal */
+      --muted: hsl(200, 20%, 96%); /* #f3f7f9 */
+      --muted-foreground: hsl(215, 16%, 47%); /* #64748b */
+      --border: hsl(200, 30%, 90%); /* #e2eef5 */
+      
+      /* Status Colors */
+      --success: hsl(142, 71%, 45%); /* #22c55e */
+      --success-light: hsl(142, 76%, 95%); /* #f0fdf4 */
+      --warning: hsl(38, 92%, 50%); /* #f59e0b */
+      --warning-light: hsl(38, 100%, 95%); /* #fef3c7 */
+      --error: hsl(0, 84%, 60%); /* #ef4444 */
+      --error-light: hsl(0, 86%, 95%); /* #fef2f2 */
+      --info: hsl(217, 91%, 60%); /* #3b82f6 */
+      --info-light: hsl(214, 95%, 93%); /* #eff6ff */
+      --purple: hsl(258, 90%, 66%); /* #8b5cf6 */
+      --purple-light: hsl(258, 89%, 95%);
+      
+      /* Typography */
+      --font-sans: 'Nunito', sans-serif;
+      --font-display: 'Raleway', sans-serif;
+      
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      
+      /* Border Radius */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-card: 0 4px 20px 0 rgba(23, 93, 128, 0.08);
+    }
+    
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--muted);
+      color: var(--foreground);
+      line-height: 1.6;
+      padding: var(--spacing-lg);
+    }
+    
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+    
+    /* ===== CARD COMPONENT ===== */
+    .card {
+      background: var(--background);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    
+    .card-header {
+      padding: var(--spacing-lg);
+      padding-bottom: var(--spacing-md);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--foreground);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .card-description {
+      font-size: 14px;
+      color: var(--muted-foreground);
+      margin-top: var(--spacing-xs);
+    }
+    
+    .card-content {
+      padding: var(--spacing-lg);
+      padding-top: 0;
+    }
+    
+    /* ===== GRID LAYOUTS ===== */
+    .grid-5-col {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--spacing-md);
+    }
+    
+    /* ===== STAT CARDS ===== */
+    .stat-card {
+      padding: 20px;
+    }
+    
+    .stat-card-content {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+    
+    .stat-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .stat-icon-box.blue { background: var(--info-light); }
+    .stat-icon-box.green { background: var(--success-light); }
+    .stat-icon-box.purple { background: var(--purple-light); }
+    .stat-icon-box.amber { background: var(--warning-light); }
+    .stat-icon-box.primary { background: hsla(187, 59%, 35%, 0.1); }
+    
+    .stat-icon-box svg.blue { color: var(--info); }
+    .stat-icon-box svg.green { color: var(--success); }
+    .stat-icon-box svg.purple { color: var(--purple); }
+    .stat-icon-box svg.amber { color: var(--warning); }
+    .stat-icon-box svg.primary { color: var(--primary); }
+    
+    .stat-info {
+      flex: 1;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--foreground);
+      margin-top: 2px;
+    }
+    
+    .stat-value.primary {
+      color: var(--primary);
+    }
+    
+    .stat-value.sm {
+      font-size: 14px;
+    }
+    
+    /* ===== TABLE ===== */
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .data-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted-foreground);
+      border-bottom: 1px solid var(--border);
+      background: var(--muted);
+    }
+    
+    .data-table th.text-right {
+      text-align: right;
+    }
+    
+    .data-table th.text-center {
+      text-align: center;
+    }
+    
+    .data-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid hsla(200, 30%, 90%, 0.5);
+    }
+    
+    .data-table tr:hover {
+      background: hsla(200, 20%, 96%, 0.3);
+    }
+    
+    /* ===== BADGE ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 9999px;
+    }
+    
+    .badge-green {
+      background: var(--success-light);
+      color: hsl(142, 76%, 30%);
+      border: 1px solid hsl(142, 71%, 70%);
+    }
+    
+    .badge-blue {
+      background: var(--info-light);
+      color: hsl(217, 91%, 40%);
+      border: 1px solid hsl(217, 91%, 70%);
+    }
+    
+    .badge-purple {
+      background: var(--purple-light);
+      color: hsl(258, 90%, 45%);
+      border: 1px solid hsl(258, 90%, 80%);
+    }
+    
+    .badge-amber {
+      background: var(--warning-light);
+      color: hsl(38, 92%, 30%);
+      border: 1px solid hsl(38, 92%, 70%);
+    }
+    
+    .badge-secondary {
+      background: var(--muted);
+      color: var(--muted-foreground);
+      border: 1px solid var(--border);
+    }
+    
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--foreground);
+    }
+    
+    .btn-outline:hover {
+      background: var(--muted);
+    }
+    
+    /* ===== SELECT ===== */
+    .form-select-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-family: var(--font-sans);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--background);
+      color: var(--foreground);
+    }
+    
+    /* ===== ICON ===== */
+    .icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    
+    .icon-lg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .icon-sm {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .icon-primary {
+      color: var(--primary);
+    }
+    
+    /* ===== SECTION SPACING ===== */
+    .section {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .section:last-child {
+      margin-bottom: 0;
+    }
+    
+    /* ===== TABLE FOOTER ===== */
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-top: 1px solid var(--border);
+    }
+    
+    .table-footer-text {
+      font-size: 12px;
+      color: var(--muted-foreground);
+    }
+    
+    /* ===== HELPER CLASSES ===== */
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+    .text-green { color: var(--success); }
+    .text-primary { color: var(--primary); }
+    .text-muted { color: var(--muted-foreground); }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .font-mono { font-family: 'Courier New', monospace; }
+    
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+      .grid-5-col {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .grid-5-col {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .grid-5-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- ===== STATEMENTS TAB ===== -->
+  
+  <!-- Statement Summary Cards -->
+  <div class="grid-5-col section">
+    <!-- Total Transactions -->
+    <div class="card stat-card">
+      <div class="stat-card-content">
+        <div class="stat-icon-box blue">
+          <svg class="icon-lg blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Total Transactions</p>
+          <p class="stat-value">48</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Total Invested -->
+    <div class="card stat-card">
+      <div class="stat-card-content">
+        <div class="stat-icon-box green">
+          <svg class="icon-lg green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Total Invested</p>
+          <p class="stat-value">₹5.8L</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Total Units -->
+    <div class="card stat-card">
+      <div class="stat-card-content">
+        <div class="stat-icon-box purple">
+          <svg class="icon-lg purple" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Total Units</p>
+          <p class="stat-value">14,799</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- PFM -->
+    <div class="card stat-card">
+      <div class="stat-card-content">
+        <div class="stat-icon-box amber">
+          <svg class="icon-lg amber" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">PFM</p>
+          <p class="stat-value sm">HDFC Pension</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Current Value -->
+    <div class="card stat-card">
+      <div class="stat-card-content">
+        <div class="stat-icon-box primary">
+          <svg class="icon-lg primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <div class="stat-info">
+          <p class="stat-label">Current Value</p>
+          <p class="stat-value primary">₹6.85L</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Last 5 Transactions Table -->
+  <div class="card section">
+    <div class="card-header" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+      <div>
+        <div class="card-title">
+          <svg class="icon icon-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+          Last 5 Transactions
+        </div>
+        <p class="card-description">Recent NPS transactions with fund details</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <select class="form-select-sm">
+          <option value="all" selected>All Types</option>
+          <option value="contribution">Contributions</option>
+          <option value="switch">Fund Switch</option>
+          <option value="lumpsum">Lump Sum</option>
+        </select>
+        <select class="form-select-sm">
+          <option value="all" selected>All Tiers</option>
+          <option value="tier1">Tier 1</option>
+          <option value="tier2">Tier 2</option>
+        </select>
+        <button class="btn btn-outline">
+          <svg class="icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          Export
+        </button>
+      </div>
+    </div>
+    <div class="card-content" style="padding: 0;">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Fund</th>
+              <th class="text-right">Amount</th>
+              <th class="text-right">Units</th>
+              <th class="text-right">NAV</th>
+              <th class="text-center">Tier</th>
+              <th class="text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-mono text-primary">TXN789456</td>
+              <td>15 Nov 2025</td>
+              <td><span class="badge badge-green">Contribution</span></td>
+              <td class="text-muted">Auto Choice</td>
+              <td class="text-right font-semibold">₹5,000</td>
+              <td class="text-right font-mono">85.62</td>
+              <td class="text-right">₹58.40</td>
+              <td class="text-center"><span class="badge badge-secondary">Tier 1</span></td>
+              <td class="text-center"><span class="badge badge-green">Completed</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-primary">TXN789455</td>
+              <td>15 Oct 2025</td>
+              <td><span class="badge badge-green">Contribution</span></td>
+              <td class="text-muted">Auto Choice</td>
+              <td class="text-right font-semibold">₹5,000</td>
+              <td class="text-right font-mono">86.21</td>
+              <td class="text-right">₹58.02</td>
+              <td class="text-center"><span class="badge badge-secondary">Tier 1</span></td>
+              <td class="text-center"><span class="badge badge-green">Completed</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-primary">TXN789454</td>
+              <td>01 Oct 2025</td>
+              <td><span class="badge badge-blue">Fund Switch</span></td>
+              <td class="text-muted">E to C</td>
+              <td class="text-right font-semibold">₹25,000</td>
+              <td class="text-right font-mono">432.18</td>
+              <td class="text-right">₹57.85</td>
+              <td class="text-center"><span class="badge badge-secondary">Tier 1</span></td>
+              <td class="text-center"><span class="badge badge-green">Completed</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-primary">TXN789453</td>
+              <td>15 Sep 2025</td>
+              <td><span class="badge badge-green">Contribution</span></td>
+              <td class="text-muted">Auto Choice</td>
+              <td class="text-right font-semibold">₹5,000</td>
+              <td class="text-right font-mono">87.45</td>
+              <td class="text-right">₹57.18</td>
+              <td class="text-center"><span class="badge badge-secondary">Tier 1</span></td>
+              <td class="text-center"><span class="badge badge-green">Completed</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-primary">TXN789452</td>
+              <td>01 Sep 2025</td>
+              <td><span class="badge badge-purple">Lump Sum</span></td>
+              <td class="text-muted">Equity Heavy</td>
+              <td class="text-right font-semibold">₹25,000</td>
+              <td class="text-right font-mono">442.31</td>
+              <td class="text-right">₹56.52</td>
+              <td class="text-center"><span class="badge badge-secondary">Tier 1</span></td>
+              <td class="text-center"><span class="badge badge-green">Completed</span></td>
+            </tr>
+            <tr>
+              <td class="font-mono text-primary">TXN789451</td>
+              <td>15 Aug 2025</td>
+              <td><span class="badge badge-green">Contribution</span></td>
+              <td class="text-muted">Auto Choice</td>
+              <td class="text-right font-semibold">₹5,000</td>
+              <td class="text-right font-mono">89.12</td>
+              <td class="text-right">₹56.10</td>
+              <td class="text-center"><span class="badge badge-secondary">Tier 2</span></td>
+              <td class="text-center"><span class="badge badge-green">Completed</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <p class="table-footer-text">Showing 6 of 48 transactions</p>
+        <button class="btn btn-outline">
+          View All
+          <svg class="icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Statement of Holding Summary Card -->
+  <div class="card section">
+    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div class="card-title">
+          <svg class="icon icon-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          Statement of Holding
+        </div>
+        <p class="card-description">Fund-wise breakdown of your NPS investments</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <select class="form-select-sm">
+          <option value="2024-25" selected>FY 2024-25</option>
+          <option value="2023-24">FY 2023-24</option>
+          <option value="2022-23">FY 2022-23</option>
+        </select>
+        <button class="btn btn-outline">
+          <svg class="icon-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+    <div class="card-content" style="padding: 0;">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Scheme</th>
+              <th>PFM</th>
+              <th class="text-right">Units</th>
+              <th class="text-right">Free Units</th>
+              <th class="text-right">Blocked Units</th>
+              <th class="text-right">NAV (₹)</th>
+              <th class="text-right">NAV Date</th>
+              <th class="text-right">Value (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: hsl(217, 91%, 60%);"></div>
+                  <span class="font-semibold">Equity (E)</span>
+                </div>
+              </td>
+              <td class="text-muted">HDFC Pension Fund</td>
+              <td class="text-right font-mono">767.6179</td>
+              <td class="text-right font-mono text-green">767.6179</td>
+              <td class="text-right font-mono text-muted">0.0000</td>
+              <td class="text-right font-semibold">₹48.8292</td>
+              <td class="text-right text-muted">04/08/2025</td>
+              <td class="text-right font-bold">₹37,482.16</td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: hsl(142, 71%, 45%);"></div>
+                  <span class="font-semibold">Corporate Bond (C)</span>
+                </div>
+              </td>
+              <td class="text-muted">HDFC Pension Fund</td>
+              <td class="text-right font-mono">417.7656</td>
+              <td class="text-right font-mono text-green">417.7656</td>
+              <td class="text-right font-mono text-muted">0.0000</td>
+              <td class="text-right font-semibold">₹28.5734</td>
+              <td class="text-right text-muted">04/08/2025</td>
+              <td class="text-right font-bold">₹11,936.98</td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: hsl(38, 92%, 50%);"></div>
+                  <span class="font-semibold">Government Bond (G)</span>
+                </div>
+              </td>
+              <td class="text-muted">HDFC Pension Fund</td>
+              <td class="text-right font-mono">906.8500</td>
+              <td class="text-right font-mono text-green">906.8500</td>
+              <td class="text-right font-mono text-muted">0.0000</td>
+              <td class="text-right font-semibold">₹28.2188</td>
+              <td class="text-right text-muted">04/08/2025</td>
+              <td class="text-right font-bold">₹25,590.21</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr style="background: hsla(200, 20%, 96%, 0.5);">
+              <td colspan="2" class="font-bold">Total Tier 1</td>
+              <td class="text-right font-mono font-bold">2,092.2335</td>
+              <td class="text-right font-mono font-bold text-green">2,092.2335</td>
+              <td class="text-right font-mono font-bold">0.0000</td>
+              <td class="text-right text-muted">-</td>
+              <td class="text-right text-muted">-</td>
+              <td class="text-right font-bold" style="font-size: 16px; color: var(--foreground);">₹75,009.35</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
