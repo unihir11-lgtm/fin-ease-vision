@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPS Dashboard Overview - FinEase Reference</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Raleway:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (CDN) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    /* ============================================
+       CSS VARIABLES / DESIGN TOKENS
+       ============================================ */
+    :root {
+      /* Colors - HSL Format */
+      --background: 0, 0%, 100%;           /* #FFFFFF - White */
+      --foreground: 200, 18%, 20%;         /* #2A3F4D - Dark slate */
+      
+      --card: 0, 0%, 100%;                 /* #FFFFFF - White */
+      --card-foreground: 200, 18%, 20%;    /* #2A3F4D - Dark slate */
+      
+      /* Primary - Teal accent */
+      --primary: 168, 72%, 40%;            /* #1DAB91 - Teal green */
+      --primary-foreground: 0, 0%, 100%;   /* #FFFFFF - White */
+      
+      /* Secondary - Dark teal for headings */
+      --secondary: 197, 77%, 17%;          /* #0A344A - Dark teal */
+      --secondary-foreground: 0, 0%, 100%; /* #FFFFFF - White */
+      
+      /* Muted - Gray text */
+      --muted: 210, 10%, 94%;              /* #EEF0F2 - Light gray */
+      --muted-foreground: 200, 10%, 44%;   /* #667580 - Medium gray */
+      
+      /* Accent - Teal green for buttons */
+      --accent: 174, 77%, 39%;             /* #16A0A0 - Teal */
+      --accent-foreground: 0, 0%, 100%;    /* #FFFFFF - White */
+      
+      --destructive: 0, 84%, 60%;          /* #EF4444 - Red */
+      --border: 210, 14%, 91%;             /* #E5E7EB - Light border */
+      --ring: 168, 72%, 40%;               /* #1DAB91 - Teal ring */
+      --radius: 0.5rem;                    /* 8px */
+      
+      /* Card shadow */
+      --card-shadow: 0 4px 20px 0 rgba(23, 93, 128, 0.08);
+      --card-shadow-hover: 0 8px 30px 0 rgba(23, 93, 128, 0.12);
+      
+      /* Gradients */
+      --gradient-hero: linear-gradient(to left, hsl(161, 74%, 39%) 0%, hsl(185, 58%, 37%) 100%);
+      
+      /* Specific colors */
+      --green-50: #F0FDF4;
+      --green-100: #DCFCE7;
+      --green-200: #BBF7D0;
+      --green-600: #16A34A;
+      --green-700: #15803D;
+      
+      --blue-50: #EFF6FF;
+      --blue-100: #DBEAFE;
+      --blue-200: #BFDBFE;
+      --blue-600: #2563EB;
+      
+      --amber-50: #FFFBEB;
+      --amber-600: #D97706;
+      
+      --purple-100: #F3E8FF;
+      --purple-600: #9333EA;
+      
+      --red-50: #FEF2F2;
+      --red-200: #FECACA;
+      --red-600: #DC2626;
+    }
+
+    /* ============================================
+       RESET & BASE STYLES
+       ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      background-color: #F9FAFB; /* Gray-50 dashboard background */
+      color: hsl(var(--foreground));
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Raleway', system-ui, sans-serif;
+      color: hsl(var(--secondary));
+    }
+
+    /* ============================================
+       LAYOUT CONTAINER
+       ============================================ */
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* ============================================
+       HEADER SECTION
+       ============================================ */
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .page-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .page-title {
+      font-size: 1.875rem; /* 30px */
+      font-weight: 700;
+      color: hsl(var(--secondary));
+    }
+
+    .page-subtitle {
+      color: hsl(var(--muted-foreground));
+      margin-top: 4px;
+      font-size: 0.875rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ============================================
+       BADGE COMPONENT
+       ============================================ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      gap: 8px;
+    }
+
+    .badge-success {
+      background-color: var(--green-50);
+      color: var(--green-700);
+      border: 1px solid var(--green-200);
+    }
+
+    .badge-outline {
+      background-color: transparent;
+      color: hsl(var(--secondary));
+      border: 1px solid hsl(var(--border));
+    }
+
+    /* ============================================
+       BUTTON COMPONENT
+       ============================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+      box-shadow: 0 4px 14px hsl(168, 72%, 40%, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px hsl(168, 72%, 40%, 0.35);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: hsl(var(--secondary));
+      border: 1px solid hsl(var(--border));
+    }
+
+    .btn-outline:hover {
+      background-color: hsl(var(--muted));
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8125rem;
+    }
+
+    /* ============================================
+       CARD COMPONENT
+       ============================================ */
+    .card {
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border), 0.6);
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .card-header {
+      padding: 24px 24px 12px;
+    }
+
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: hsl(var(--secondary));
+    }
+
+    .card-title-lg {
+      font-size: 1.25rem;
+    }
+
+    .card-description {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      margin-top: 4px;
+    }
+
+    .card-content {
+      padding: 0 24px 24px;
+    }
+
+    /* ============================================
+       CTA BANNER
+       ============================================ */
+    .cta-banner {
+      background: linear-gradient(to right, 
+        hsl(168, 72%, 40%, 0.1), 
+        hsl(174, 77%, 39%, 0.1), 
+        hsl(168, 72%, 40%, 0.05)
+      );
+      border: 1px solid hsl(168, 72%, 40%, 0.2);
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+
+    .cta-banner-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    @media (min-width: 768px) {
+      .cta-banner-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .cta-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cta-banner-icon {
+      padding: 12px;
+      border-radius: 12px;
+      background-color: hsl(168, 72%, 40%, 0.1);
+    }
+
+    .cta-banner-icon svg {
+      width: 32px;
+      height: 32px;
+      color: hsl(var(--primary));
+    }
+
+    .cta-banner-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: hsl(var(--secondary));
+    }
+
+    .cta-banner-text {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    /* ============================================
+       PERIOD SELECTION CARD
+       ============================================ */
+    .period-selection-card {
+      background: linear-gradient(to right, 
+        hsl(168, 72%, 40%, 0.05), 
+        hsl(174, 77%, 39%, 0.05)
+      );
+      border: 1px solid hsl(168, 72%, 40%, 0.2);
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+
+    .period-selection-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .period-selection-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .period-selection-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .period-selection-icon {
+      padding: 8px;
+      border-radius: 8px;
+      background-color: hsl(168, 72%, 40%, 0.1);
+    }
+
+    .period-selection-icon svg {
+      width: 20px;
+      height: 20px;
+      color: hsl(var(--primary));
+    }
+
+    .period-selection-label {
+      font-weight: 500;
+      color: hsl(var(--secondary));
+    }
+
+    .period-selection-sublabel {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .period-selection-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .select-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .select-label {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      white-space: nowrap;
+    }
+
+    .select-input {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.875rem;
+      color: hsl(var(--foreground));
+      cursor: pointer;
+    }
+
+    .select-input:focus {
+      outline: 2px solid hsl(var(--primary));
+      outline-offset: 2px;
+    }
+
+    /* ============================================
+       SUMMARY STATS GRID
+       ============================================ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stat-card {
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border), 0.6);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, hsl(168, 72%, 40%, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(30%, -30%);
+    }
+
+    .stat-card-primary {
+      background: linear-gradient(to bottom right, 
+        hsl(168, 72%, 40%, 0.05), 
+        hsl(168, 72%, 40%, 0.1)
+      );
+      border-color: hsl(168, 72%, 40%, 0.2);
+    }
+
+    .stat-card-green {
+      background: linear-gradient(to bottom right, var(--green-50), hsl(120, 60%, 95%, 0.5));
+      border-color: var(--green-200);
+    }
+
+    .stat-card-content {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: hsl(var(--secondary));
+    }
+
+    .stat-value-green {
+      color: var(--green-600);
+    }
+
+    .stat-trend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+      font-size: 0.75rem;
+    }
+
+    .stat-trend-positive {
+      color: var(--green-600);
+    }
+
+    .stat-trend-negative {
+      color: var(--red-600);
+    }
+
+    .stat-sublabel {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+      margin-top: 4px;
+    }
+
+    .stat-icon {
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .stat-icon-primary {
+      background-color: hsl(168, 72%, 40%, 0.1);
+    }
+
+    .stat-icon-primary svg {
+      color: hsl(var(--primary));
+    }
+
+    .stat-icon-blue {
+      background-color: var(--blue-100);
+    }
+
+    .stat-icon-blue svg {
+      color: var(--blue-600);
+    }
+
+    .stat-icon-green {
+      background-color: var(--green-100);
+    }
+
+    .stat-icon-green svg {
+      color: var(--green-600);
+    }
+
+    .stat-icon-purple {
+      background-color: var(--purple-100);
+    }
+
+    .stat-icon-purple svg {
+      color: var(--purple-600);
+    }
+
+    .stat-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* ============================================
+       XIRR PERFORMANCE SECTION
+       ============================================ */
+    .xirr-section {
+      margin-bottom: 24px;
+    }
+
+    .xirr-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .xirr-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .xirr-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .xirr-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    .xirr-card {
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .xirr-card-primary {
+      background: linear-gradient(to bottom right, 
+        hsl(168, 72%, 40%, 0.05), 
+        hsl(168, 72%, 40%, 0.1)
+      );
+      border: 1px solid hsl(168, 72%, 40%, 0.2);
+    }
+
+    .xirr-card-green {
+      background-color: var(--green-50);
+      border: 1px solid var(--green-200);
+    }
+
+    .xirr-card-blue {
+      background-color: var(--blue-50);
+      border: 1px solid var(--blue-200);
+    }
+
+    .xirr-card-muted {
+      background-color: hsl(var(--muted), 0.3);
+    }
+
+    .xirr-card-red {
+      background-color: var(--red-50);
+      border: 1px solid var(--red-200);
+    }
+
+    .xirr-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .xirr-card-header svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .xirr-card-label {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .xirr-card-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .xirr-card-value-positive {
+      color: var(--green-600);
+    }
+
+    .xirr-card-value-negative {
+      color: var(--red-600);
+    }
+
+    .xirr-card-value-blue {
+      color: var(--blue-600);
+    }
+
+    .xirr-card-value-secondary {
+      color: hsl(var(--secondary));
+    }
+
+    .xirr-card-sublabel {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+      margin-top: 4px;
+    }
+
+    /* Info Note */
+    .info-note {
+      margin-top: 16px;
+      padding: 12px;
+      background-color: var(--blue-50);
+      border-radius: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .info-note svg {
+      width: 16px;
+      height: 16px;
+      color: var(--blue-600);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info-note-text {
+      font-size: 0.875rem;
+      color: #1D4ED8; /* Blue-700 */
+    }
+
+    /* ============================================
+       TWO-COLUMN LAYOUT
+       ============================================ */
+    .two-column-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .two-column-grid {
+        grid-template-columns: 1fr 2fr;
+      }
+    }
+
+    /* Account Details Card */
+    .account-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background-color: hsl(var(--muted), 0.3);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .account-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .account-label {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .account-value {
+      font-weight: 700;
+      color: hsl(var(--secondary));
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .account-value-text {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    /* Asset Allocation Section */
+    .asset-allocation-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .asset-allocation-content {
+        flex-direction: row;
+      }
+    }
+
+    .pie-chart-placeholder {
+      width: 192px;
+      height: 192px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #3B82F6 0deg 180deg,      /* Blue - Equity 50% */
+        #22C55E 180deg 252deg,   /* Green - Corporate Bonds 20% */
+        #F59E0B 252deg 360deg    /* Amber - Govt Bonds 30% */
+      );
+      position: relative;
+    }
+
+    .pie-chart-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pie-chart-total-label {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .pie-chart-total-value {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: hsl(var(--secondary));
+    }
+
+    .allocation-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .allocation-item {
+      padding: 12px;
+      background-color: hsl(var(--muted), 0.3);
+      border-radius: 8px;
+    }
+
+    .allocation-item-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .allocation-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .allocation-dot-blue { background-color: #3B82F6; }
+    .allocation-dot-green { background-color: #22C55E; }
+    .allocation-dot-amber { background-color: #F59E0B; }
+    .allocation-dot-purple { background-color: #8B5CF6; }
+
+    .allocation-name {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .allocation-percentage {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: hsl(var(--secondary));
+    }
+
+    .allocation-value {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    /* ============================================
+       STATEMENT OF HOLDING TABLE
+       ============================================ */
+    .statement-section {
+      margin-bottom: 24px;
+    }
+
+    .statement-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .statement-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: hsl(var(--muted-foreground));
+      border-bottom: 1px solid hsl(var(--border));
+    }
+
+    .data-table th.text-right {
+      text-align: right;
+    }
+
+    .data-table td {
+      padding: 16px;
+      border-bottom: 1px solid hsl(var(--border), 0.5);
+      transition: background-color 0.2s;
+    }
+
+    .data-table tr:hover td {
+      background-color: hsl(var(--muted), 0.3);
+    }
+
+    .data-table td.text-right {
+      text-align: right;
+    }
+
+    .scheme-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scheme-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .scheme-dot-blue { background-color: #3B82F6; }
+    .scheme-dot-green { background-color: #22C55E; }
+    .scheme-dot-amber { background-color: #F59E0B; }
+
+    .scheme-name {
+      font-weight: 500;
+      color: hsl(var(--secondary));
+    }
+
+    .scheme-pfm {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+      margin-top: 2px;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mono-text {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.875rem;
+    }
+
+    .text-green { color: var(--green-600); }
+    .text-muted { color: hsl(var(--muted-foreground)); }
+    .text-secondary { color: hsl(var(--secondary)); }
+    .text-red { color: var(--red-600); }
+
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+
+    /* Table Footer */
+    .data-table tfoot tr {
+      background-color: hsl(var(--muted), 0.5);
+    }
+
+    .data-table tfoot td {
+      padding: 16px;
+      font-weight: 600;
+    }
+
+    .transit-row {
+      background-color: var(--amber-50) !important;
+    }
+
+    .transit-row td {
+      color: var(--amber-600);
+    }
+
+    /* ============================================
+       UTILITY CLASSES
+       ============================================ */
+    .icon-wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .gap-4 { gap: 16px; }
+
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+
+    .mt-1 { margin-top: 4px; }
+    .mt-4 { margin-top: 16px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-4 { margin-bottom: 16px; }
+
+    .whitespace-nowrap { white-space: nowrap; }
+
+    /* ============================================
+       RESPONSIVE UTILITIES
+       ============================================ */
+    @media (max-width: 640px) {
+      .dashboard-container {
+        padding: 16px;
+      }
+
+      .page-title {
+        font-size: 1.5rem;
+      }
+
+      .stat-value {
+        font-size: 1.25rem;
+      }
+
+      .xirr-card-value {
+        font-size: 1.25rem;
+      }
+
+      .allocation-percentage {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    
+    <!-- ============================================
+         PAGE HEADER
+         ============================================ -->
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">National Pension System</h1>
+        <p class="page-subtitle">Secure your retirement with Protean NPS</p>
+      </div>
+      <div class="header-actions">
+        <span class="badge badge-success">
+          <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+          PRAN: 110185661660
+        </span>
+        <button class="btn btn-outline btn-sm">
+          <i data-lucide="credit-card" style="width: 16px; height: 16px;"></i>
+          PRAN Card
+        </button>
+        <button class="btn btn-outline btn-sm">
+          <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+          Statement
+        </button>
+        <button class="btn btn-outline btn-sm">
+          <i data-lucide="line-chart" style="width: 16px; height: 16px;"></i>
+          NAV Details
+        </button>
+      </div>
+    </header>
+
+    <!-- ============================================
+         CTA BANNER
+         ============================================ -->
+    <div class="cta-banner">
+      <div class="cta-banner-content">
+        <div class="cta-banner-left">
+          <div class="cta-banner-icon">
+            <i data-lucide="building-2"></i>
+          </div>
+          <div>
+            <h3 class="cta-banner-title">Don't have an NPS account yet?</h3>
+            <p class="cta-banner-text">Register for PRAN and start building your retirement corpus today. Get tax benefits up to ₹2 Lakhs!</p>
+          </div>
+        </div>
+        <button class="btn btn-primary">
+          Register Now
+          <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================
+         TABS NAVIGATION (Static Display)
+         ============================================ -->
+    <div style="background: hsl(var(--muted), 0.5); padding: 4px; border-radius: 12px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 24px;">
+      <button style="background: white; padding: 10px; border-radius: 8px; border: none; font-weight: 600; font-size: 0.875rem; color: hsl(var(--secondary)); cursor: pointer;">Overview</button>
+      <button style="background: transparent; padding: 10px; border-radius: 8px; border: none; font-size: 0.875rem; color: hsl(var(--muted-foreground)); cursor: pointer;">Contributions</button>
+      <button style="background: transparent; padding: 10px; border-radius: 8px; border: none; font-size: 0.875rem; color: hsl(var(--muted-foreground)); cursor: pointer;">NAV & Performance</button>
+      <button style="background: transparent; padding: 10px; border-radius: 8px; border: none; font-size: 0.875rem; color: hsl(var(--muted-foreground)); cursor: pointer;">Statements</button>
+      <button style="background: transparent; padding: 10px; border-radius: 8px; border: none; font-size: 0.875rem; color: hsl(var(--muted-foreground)); cursor: pointer;">Analytics</button>
+      <button style="background: transparent; padding: 10px; border-radius: 8px; border: none; font-size: 0.875rem; color: hsl(var(--muted-foreground)); cursor: pointer;">Withdrawal</button>
+    </div>
+
+    <!-- ============================================
+         PERIOD SELECTION CARD
+         ============================================ -->
+    <div class="period-selection-card">
+      <div class="period-selection-content">
+        <div class="period-selection-left">
+          <div class="period-selection-icon">
+            <i data-lucide="calendar"></i>
+          </div>
+          <div>
+            <p class="period-selection-label">Select Period</p>
+            <p class="period-selection-sublabel">Choose financial year and quarter to view data</p>
+          </div>
+        </div>
+        <div class="period-selection-right">
+          <div class="select-group">
+            <label class="select-label">Financial Year:</label>
+            <select class="select-input">
+              <option value="2025-26">FY 2025-26</option>
+              <option value="2024-25">FY 2024-25</option>
+              <option value="2023-24">FY 2023-24</option>
+              <option value="2022-23">FY 2022-23</option>
+            </select>
+          </div>
+          <div class="select-group">
+            <label class="select-label">Quarter:</label>
+            <select class="select-input">
+              <option value="Q1">Q1 (Apr-Jun)</option>
+              <option value="Q2">Q2 (Jul-Sep)</option>
+              <option value="Q3" selected>Q3 (Oct-Dec)</option>
+              <option value="Q4">Q4 (Jan-Mar)</option>
+            </select>
+          </div>
+          <button class="btn btn-outline btn-sm">
+            <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+            Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SUMMARY STATS GRID
+         ============================================ -->
+    <div class="stats-grid">
+      <!-- Total Corpus -->
+      <div class="stat-card stat-card-primary">
+        <div class="stat-card-content">
+          <div>
+            <p class="stat-label">Total Corpus</p>
+            <p class="stat-value">₹75,009</p>
+            <div class="stat-trend stat-trend-positive">
+              <i data-lucide="arrow-up-right" style="width: 12px; height: 12px;"></i>
+              <span>+15.4%</span>
+            </div>
+          </div>
+          <div class="stat-icon stat-icon-primary">
+            <i data-lucide="wallet"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Contributed -->
+      <div class="stat-card">
+        <div class="stat-card-content">
+          <div>
+            <p class="stat-label">Total Contributed</p>
+            <p class="stat-value">₹65,000</p>
+            <p class="stat-sublabel">Since 15 Jan 2020</p>
+          </div>
+          <div class="stat-icon stat-icon-blue">
+            <i data-lucide="indian-rupee"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Returns -->
+      <div class="stat-card stat-card-green">
+        <div class="stat-card-content">
+          <div>
+            <p class="stat-label">Total Returns</p>
+            <p class="stat-value stat-value-green">₹10,009</p>
+            <p class="stat-sublabel" style="color: var(--green-600);">+12.5% CAGR</p>
+          </div>
+          <div class="stat-icon stat-icon-green">
+            <i data-lucide="trending-up"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projected at Maturity -->
+      <div class="stat-card">
+        <div class="stat-card-content">
+          <div>
+            <p class="stat-label">Projected at Maturity</p>
+            <p class="stat-value">₹45.0L</p>
+            <p class="stat-sublabel">20 years to go</p>
+          </div>
+          <div class="stat-icon stat-icon-purple">
+            <i data-lucide="target"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         XIRR PERFORMANCE SECTION
+         ============================================ -->
+    <div class="card xirr-section">
+      <div class="card-header">
+        <div class="xirr-header">
+          <div>
+            <h2 class="card-title card-title-lg">
+              <i data-lucide="percent" style="width: 20px; height: 20px; color: hsl(var(--primary));"></i>
+              Investment Performance (XIRR)
+            </h2>
+            <p class="card-description">Returns calculated using Extended Internal Rate of Return (XIRR) method</p>
+          </div>
+          <button class="btn btn-outline btn-sm">
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            Download Statement
+          </button>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="xirr-grid">
+          <!-- Overall XIRR -->
+          <div class="xirr-card xirr-card-primary">
+            <div class="xirr-card-header">
+              <i data-lucide="percent" style="color: hsl(var(--primary));"></i>
+              <p class="xirr-card-label">Overall XIRR</p>
+            </div>
+            <p class="xirr-card-value xirr-card-value-negative">-3.49%</p>
+            <div class="stat-trend stat-trend-negative">
+              <i data-lucide="arrow-down-right" style="width: 12px; height: 12px;"></i>
+              <span class="xirr-card-sublabel">Since inception</span>
+            </div>
+          </div>
+
+          <!-- FY XIRR -->
+          <div class="xirr-card xirr-card-green">
+            <div class="xirr-card-header">
+              <i data-lucide="calendar" style="color: var(--green-600);"></i>
+              <p class="xirr-card-label">FY XIRR</p>
+            </div>
+            <p class="xirr-card-value xirr-card-value-positive">+0.00%</p>
+            <p class="xirr-card-sublabel">Current FY</p>
+          </div>
+
+          <!-- Current Value -->
+          <div class="xirr-card xirr-card-blue">
+            <div class="xirr-card-header">
+              <i data-lucide="wallet" style="color: var(--blue-600);"></i>
+              <p class="xirr-card-label">Current Value</p>
+            </div>
+            <p class="xirr-card-value xirr-card-value-blue">₹413.90</p>
+            <p class="xirr-card-sublabel">Holding valuation</p>
+          </div>
+
+          <!-- Total Contributed -->
+          <div class="xirr-card xirr-card-muted">
+            <div class="xirr-card-header">
+              <i data-lucide="indian-rupee" style="color: hsl(var(--secondary));"></i>
+              <p class="xirr-card-label">Total Contributed</p>
+            </div>
+            <p class="xirr-card-value xirr-card-value-secondary">₹500.00</p>
+            <p class="xirr-card-sublabel">1 contribution(s)</p>
+          </div>
+
+          <!-- Notional Gain/Loss -->
+          <div class="xirr-card xirr-card-red">
+            <div class="xirr-card-header">
+              <i data-lucide="trending-down" style="color: var(--red-600);"></i>
+              <p class="xirr-card-label">Notional Gain/Loss</p>
+            </div>
+            <p class="xirr-card-value xirr-card-value-negative">-₹86.10</p>
+            <p class="xirr-card-sublabel">Unrealized</p>
+          </div>
+
+          <!-- Total Withdrawal -->
+          <div class="xirr-card xirr-card-muted">
+            <div class="xirr-card-header">
+              <i data-lucide="dollar-sign" style="color: var(--amber-600);"></i>
+              <p class="xirr-card-label">Total Withdrawal</p>
+            </div>
+            <p class="xirr-card-value xirr-card-value-secondary">₹0.00</p>
+            <p class="xirr-card-sublabel">Redeemed amount</p>
+          </div>
+        </div>
+
+        <!-- Info Note -->
+        <div class="info-note">
+          <i data-lucide="info"></i>
+          <span class="info-note-text">
+            XIRR (Extended Internal Rate of Return) is the annualized return considering the timing and amount of each contribution. 
+            Notional gain/loss represents unrealized profit/loss on your current holdings.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         TWO-COLUMN LAYOUT: Account Details & Asset Allocation
+         ============================================ -->
+    <div class="two-column-grid">
+      <!-- Account Details Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i data-lucide="building-2" style="width: 20px; height: 20px; color: hsl(var(--primary));"></i>
+            Account Details
+          </h2>
+        </div>
+        <div class="card-content">
+          <div class="account-row">
+            <span class="account-label">PRAN Number</span>
+            <span class="account-value">110185661660</span>
+          </div>
+          <div class="account-row">
+            <span class="account-label">Status</span>
+            <span class="badge badge-success" style="padding: 4px 12px;">Active</span>
+          </div>
+          <div class="account-row">
+            <span class="account-label">Tier 1 Balance</span>
+            <span class="account-value">₹75,009</span>
+          </div>
+          <div class="account-row">
+            <span class="account-label">Tier 2 Balance</span>
+            <span class="account-value">₹0</span>
+          </div>
+          <div class="account-row">
+            <span class="account-label">PFM</span>
+            <span class="account-value account-value-text">HDFC PENSION FUND</span>
+          </div>
+          <div class="account-row">
+            <span class="account-label">Investment Choice</span>
+            <span class="badge badge-outline" style="padding: 4px 12px;">Active Choice</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Asset Allocation Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center justify-between" style="width: 100%;">
+            <h2 class="card-title">
+              <i data-lucide="pie-chart" style="width: 20px; height: 20px; color: hsl(var(--primary));"></i>
+              Asset Allocation
+            </h2>
+            <button class="btn btn-outline btn-sm">Change Allocation</button>
+          </div>
+        </div>
+        <div class="card-content">
+          <div class="asset-allocation-content">
+            <!-- Pie Chart Placeholder -->
+            <div class="pie-chart-placeholder">
+              <div class="pie-chart-inner">
+                <span class="pie-chart-total-label">Total</span>
+                <span class="pie-chart-total-value">₹75,009</span>
+              </div>
+            </div>
+            
+            <!-- Allocation Grid -->
+            <div class="allocation-grid">
+              <div class="allocation-item">
+                <div class="allocation-item-header">
+                  <div class="allocation-dot allocation-dot-blue"></div>
+                  <span class="allocation-name">Equity</span>
+                </div>
+                <p class="allocation-percentage">50%</p>
+                <p class="allocation-value">₹37,482</p>
+              </div>
+              <div class="allocation-item">
+                <div class="allocation-item-header">
+                  <div class="allocation-dot allocation-dot-green"></div>
+                  <span class="allocation-name">Corporate Bonds</span>
+                </div>
+                <p class="allocation-percentage">16%</p>
+                <p class="allocation-value">₹11,937</p>
+              </div>
+              <div class="allocation-item">
+                <div class="allocation-item-header">
+                  <div class="allocation-dot allocation-dot-amber"></div>
+                  <span class="allocation-name">Govt Bonds</span>
+                </div>
+                <p class="allocation-percentage">34%</p>
+                <p class="allocation-value">₹25,590</p>
+              </div>
+              <div class="allocation-item">
+                <div class="allocation-item-header">
+                  <div class="allocation-dot allocation-dot-purple"></div>
+                  <span class="allocation-name">Alternative</span>
+                </div>
+                <p class="allocation-percentage">0%</p>
+                <p class="allocation-value">₹0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         STATEMENT OF HOLDING TABLE
+         ============================================ -->
+    <div class="card statement-section">
+      <div class="card-header">
+        <div class="statement-header">
+          <div>
+            <h2 class="card-title card-title-lg">
+              <i data-lucide="bar-chart-3" style="width: 20px; height: 20px; color: hsl(var(--primary));"></i>
+              Statement of Holding - Tier 1
+            </h2>
+            <p class="card-description">Scheme-wise investment breakdown with NAV and units as on 10/12/2025</p>
+          </div>
+          <div class="statement-header-right">
+            <span class="badge badge-success" style="padding: 4px 12px;">Tier Status-Active</span>
+            <button class="btn btn-outline btn-sm">
+              <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+              Export
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Scheme</th>
+                <th class="text-right">Units</th>
+                <th class="text-right">Free Units</th>
+                <th class="text-right">Blocked</th>
+                <th class="text-right">NAV (₹)</th>
+                <th class="text-right">NAV Date</th>
+                <th class="text-right">Value (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Equity Scheme E -->
+              <tr>
+                <td>
+                  <div class="scheme-cell">
+                    <div class="scheme-dot scheme-dot-blue"></div>
+                    <div>
+                      <span class="scheme-name">Equity (E)</span>
+                      <p class="scheme-pfm">HDFC PENSION FUND MANAGEMENT LIMITED</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-right mono-text">767.6179</td>
+                <td class="text-right mono-text text-green">767.6179</td>
+                <td class="text-right mono-text text-muted">0.0000</td>
+                <td class="text-right font-semibold">₹48.8292</td>
+                <td class="text-right mono-text text-muted">04/08/2025</td>
+                <td class="text-right font-semibold text-secondary">₹37,482.16</td>
+              </tr>
+              <!-- Corporate Bond Scheme C -->
+              <tr>
+                <td>
+                  <div class="scheme-cell">
+                    <div class="scheme-dot scheme-dot-green"></div>
+                    <div>
+                      <span class="scheme-name">Corporate Bond (C)</span>
+                      <p class="scheme-pfm">HDFC PENSION FUND MANAGEMENT LIMITED</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-right mono-text">417.7656</td>
+                <td class="text-right mono-text text-green">417.7656</td>
+                <td class="text-right mono-text text-muted">0.0000</td>
+                <td class="text-right font-semibold">₹28.5734</td>
+                <td class="text-right mono-text text-muted">04/08/2025</td>
+                <td class="text-right font-semibold text-secondary">₹11,936.98</td>
+              </tr>
+              <!-- Government Bond Scheme G -->
+              <tr>
+                <td>
+                  <div class="scheme-cell">
+                    <div class="scheme-dot scheme-dot-amber"></div>
+                    <div>
+                      <span class="scheme-name">Government Bond (G)</span>
+                      <p class="scheme-pfm">HDFC PENSION FUND MANAGEMENT LIMITED</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-right mono-text">906.8500</td>
+                <td class="text-right mono-text text-green">906.8500</td>
+                <td class="text-right mono-text text-muted">0.0000</td>
+                <td class="text-right font-semibold">₹28.2188</td>
+                <td class="text-right mono-text text-muted">04/08/2025</td>
+                <td class="text-right font-semibold text-secondary">₹25,590.21</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td class="font-semibold text-secondary">Total Tier 1</td>
+                <td class="text-right mono-text font-semibold">2,092.2335</td>
+                <td class="text-right mono-text font-semibold text-green">2,092.2335</td>
+                <td class="text-right mono-text font-semibold">0.0000</td>
+                <td class="text-right text-muted">-</td>
+                <td class="text-right text-muted">-</td>
+                <td class="text-right font-bold text-secondary">₹75,009.35</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Initialize Lucide Icons -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
