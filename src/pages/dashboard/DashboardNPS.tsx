@@ -1593,67 +1593,170 @@ const DashboardNPS = () => {
 
             {/* Contribution Summary & Stats */}
             <div className="space-y-6">
+              {/* PFRDA Charge Structure */}
               <Card className="bg-gradient-to-br from-primary/5 to-accent/5">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <IndianRupee className="w-5 h-5 text-primary" />
-                    Contribution Summary
-                  </CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Receipt className="w-5 h-5 text-primary" />
+                      Contribution Breakdown
+                    </CardTitle>
+                    <Badge variant="outline" className="text-xs">As per PFRDA Norms</Badge>
+                  </div>
+                  <CardDescription>Charges applicable as per PFRDA & Protean guidelines</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="p-4 bg-white rounded-xl border border-primary/20">
-                    <p className="text-sm text-muted-foreground">Total Investment Amount</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-muted-foreground">Contribution Amount</p>
+                      <Badge className="bg-primary/10 text-primary">Tier 1</Badge>
+                    </div>
                     <p className="text-3xl font-bold text-primary mt-1">₹{contributionDetails.totalInvestment.toLocaleString()}</p>
                   </div>
+                  
+                  {/* PFRDA Prescribed Charges */}
                   <div className="space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">PFRDA Prescribed Charges</p>
+                    
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
-                        <DollarSign className="w-4 h-4 text-amber-600" />
-                        <span className="text-sm text-muted-foreground">POP Charges (0.1%)</span>
+                        <Building2 className="w-4 h-4 text-blue-600" />
+                        <div>
+                          <span className="text-sm text-secondary">POP Charges</span>
+                          <p className="text-xs text-muted-foreground">Point of Presence (0.10%)</p>
+                        </div>
                       </div>
-                      <span className="font-semibold text-amber-600">- ₹{contributionDetails.popCharges.toLocaleString()}</span>
+                      <span className="font-semibold text-blue-600">₹{contributionDetails.popCharges.toLocaleString()}</span>
                     </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                      <div className="flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-purple-600" />
+                        <div>
+                          <span className="text-sm text-secondary">CRA Charges</span>
+                          <p className="text-xs text-muted-foreground">Protean - Central Recordkeeping</p>
+                        </div>
+                      </div>
+                      <span className="font-semibold text-purple-600">₹15.00</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-teal-600" />
+                        <div>
+                          <span className="text-sm text-secondary">PFM Charges</span>
+                          <p className="text-xs text-muted-foreground">Pension Fund Manager (0.09%)</p>
+                        </div>
+                      </div>
+                      <span className="font-semibold text-teal-600">₹{Math.round(contributionDetails.totalInvestment * 0.0009).toLocaleString()}</span>
+                    </div>
+                    
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
                         <Percent className="w-4 h-4 text-orange-500" />
-                        <span className="text-sm text-muted-foreground">Service Tax (18%)</span>
+                        <div>
+                          <span className="text-sm text-secondary">GST on Charges</span>
+                          <p className="text-xs text-muted-foreground">18% on applicable charges</p>
+                        </div>
                       </div>
-                      <span className="font-semibold text-orange-500">- ₹{contributionDetails.serviceTax.toLocaleString()}</span>
+                      <span className="font-semibold text-orange-500">₹{contributionDetails.serviceTax.toLocaleString()}</span>
                     </div>
+                    
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4 text-red-500" />
-                        <span className="text-sm text-muted-foreground">Payment Gateway Charges</span>
+                        <CreditCard className="w-4 h-4 text-slate-500" />
+                        <div>
+                          <span className="text-sm text-secondary">Payment Gateway</span>
+                          <p className="text-xs text-muted-foreground">Online transaction fee</p>
+                        </div>
                       </div>
-                      <span className="font-semibold text-red-500">- ₹{contributionDetails.paymentGatewayCharges.toLocaleString()}</span>
+                      <span className="font-semibold text-slate-600">₹{contributionDetails.paymentGatewayCharges.toLocaleString()}</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
-                      <div className="flex items-center gap-2">
-                        <Receipt className="w-4 h-4 text-red-600" />
-                        <span className="text-sm font-medium text-red-700">Total Charges</span>
-                      </div>
-                      <span className="font-bold text-red-700">- ₹{contributionDetails.totalCharges.toLocaleString()}</span>
+                  </div>
+
+                  {/* Total Summary */}
+                  <div className="border-t pt-3 space-y-2">
+                    <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg border border-amber-200">
+                      <span className="text-sm font-medium text-amber-800">Total Deductions</span>
+                      <span className="font-bold text-amber-700">- ₹{(contributionDetails.totalCharges + 15 + Math.round(contributionDetails.totalInvestment * 0.0009)).toLocaleString()}</span>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-green-600" />
-                        <span className="text-sm font-medium text-green-700">Net Contribution</span>
+                        <span className="text-sm font-medium text-green-800">Net Investment to NPS</span>
                       </div>
-                      <span className="font-bold text-green-700">₹{contributionDetails.netContribution.toLocaleString()}</span>
+                      <span className="font-bold text-green-700 text-lg">₹{(contributionDetails.totalInvestment - contributionDetails.totalCharges - 15 - Math.round(contributionDetails.totalInvestment * 0.0009)).toLocaleString()}</span>
                     </div>
                   </div>
-                  <p className="text-xs text-muted-foreground text-center">Last updated: {contributionDetails.lastUpdated}</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-white rounded-xl">
-                      <p className="text-xs text-muted-foreground">This Financial Year</p>
-                      <p className="text-xl font-bold text-secondary mt-1">₹55,000</p>
-                      <Progress value={55} className="mt-2 h-1.5" />
-                      <p className="text-xs text-muted-foreground mt-1">₹55K of ₹1.5L limit</p>
+
+                  {/* Info Note */}
+                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-start gap-2">
+                      <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-blue-700">
+                        Charges are as per PFRDA circular dated 31.03.2023. POP charges capped at 0.10% of contribution. 
+                        PFM charges are deducted from NAV daily.
+                      </p>
                     </div>
-                    <div className="p-4 bg-white rounded-xl">
-                      <p className="text-xs text-muted-foreground">Last Financial Year</p>
-                      <p className="text-xl font-bold text-secondary mt-1">₹72,000</p>
-                      <p className="text-xs text-green-600 mt-1">+20% from previous</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Tax Benefit Tracker */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <Gift className="w-5 h-5 text-green-600" />
+                      Tax Benefit Tracker
+                    </CardTitle>
+                    <Badge className="bg-green-100 text-green-700">FY 2025-26</Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* 80CCD(1) Progress */}
+                  <div className="p-4 bg-muted/30 rounded-xl">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-secondary">Section 80CCD(1)</span>
+                      <span className="text-xs text-muted-foreground">Within 80C limit</span>
+                    </div>
+                    <div className="flex items-end justify-between">
+                      <p className="text-2xl font-bold text-secondary">₹55,000</p>
+                      <p className="text-sm text-muted-foreground">of ₹1,50,000</p>
+                    </div>
+                    <Progress value={37} className="mt-2 h-2" />
+                    <p className="text-xs text-green-600 mt-2">₹95,000 more for full benefit</p>
+                  </div>
+                  
+                  {/* 80CCD(1B) Progress */}
+                  <div className="p-4 bg-purple-50 rounded-xl border border-purple-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-purple-800">Section 80CCD(1B)</span>
+                      <Badge className="bg-purple-100 text-purple-700 text-xs">Exclusive NPS</Badge>
+                    </div>
+                    <div className="flex items-end justify-between">
+                      <p className="text-2xl font-bold text-purple-700">₹25,000</p>
+                      <p className="text-sm text-purple-600">of ₹50,000</p>
+                    </div>
+                    <Progress value={50} className="mt-2 h-2 [&>div]:bg-purple-500" />
+                    <p className="text-xs text-purple-600 mt-2">₹25,000 more for additional tax saving</p>
+                  </div>
+
+                  {/* Tax Savings Summary */}
+                  <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                    <div className="flex items-center gap-2 mb-3">
+                      <IndianRupee className="w-5 h-5 text-green-600" />
+                      <span className="text-sm font-semibold text-green-800">Estimated Tax Savings</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <p className="text-xs text-green-700">At 30% Slab</p>
+                        <p className="text-lg font-bold text-green-700">₹24,000</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-green-700">At 20% Slab</p>
+                        <p className="text-lg font-bold text-green-700">₹16,000</p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
