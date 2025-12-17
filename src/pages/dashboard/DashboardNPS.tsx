@@ -1392,272 +1392,255 @@ const DashboardNPS = () => {
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Make Contribution Form */}
-            <Card>
-              <CardHeader>
+          {/* Make Contribution - Unified Card */}
+          <Card>
+            <CardHeader className="border-b">
+              <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-primary" />
                   Make Contribution
                 </CardTitle>
-                <CardDescription>Choose your contribution type and fund allocation as per PFRDA guidelines</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                {/* Tier Selection */}
-                <div>
-                  <Label className="text-sm font-medium">Select Tier</Label>
-                  <Select value={contribution.tier} onValueChange={(v) => setContribution({...contribution, tier: v})}>
-                    <SelectTrigger className="mt-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="tier1">
-                        <div className="flex items-center gap-2">
-                          <span>Tier 1 (Pension Account)</span>
-                          <Badge variant="outline" className="text-xs">Tax Benefits</Badge>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="tier2">
-                        <div className="flex items-center gap-2">
-                          <span>Tier 2 (Investment Account)</span>
-                          <Badge variant="outline" className="text-xs">Flexible</Badge>
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                    <Info className="w-3 h-3" />
-                    {contribution.tier === "tier1" 
-                      ? "Tier 1 is mandatory for retirement with tax benefits. Min ₹500/contribution, ₹1,000/year."
-                      : "Tier 2 is optional investment account. Min ₹250/contribution, no annual minimum."
-                    }
-                  </p>
-                </div>
-
-                <div>
-                  <Label className="text-sm font-medium">Contribution Type</Label>
-                  <Select value={contribution.type} onValueChange={(v) => setContribution({...contribution, type: v})}>
-                    <SelectTrigger className="mt-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="one-time">One-time Contribution</SelectItem>
-                      <SelectItem value="recurring">Recurring (SIP)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                {contribution.type === "one-time" ? (
+                <Badge variant="outline">As per PFRDA Norms</Badge>
+              </div>
+              <CardDescription>Choose your contribution type and fund allocation as per PFRDA guidelines</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                {/* Left Column - Form */}
+                <div className="p-6 space-y-5 border-r">
+                  {/* Tier Selection */}
                   <div>
-                    <Label className="text-sm font-medium">Amount (₹)</Label>
-                    <Input 
-                      type="number" 
-                      placeholder={`Minimum ₹${contribution.tier === "tier1" ? "500" : "250"}`}
-                      value={contribution.amount}
-                      onChange={(e) => setContribution({...contribution, amount: e.target.value})}
-                      className="mt-2 text-lg font-semibold"
-                      min={contribution.tier === "tier1" ? 500 : 250}
-                    />
-                    <div className="mt-2 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                    <Label className="text-sm font-medium">Select Tier</Label>
+                    <Select value={contribution.tier} onValueChange={(v) => setContribution({...contribution, tier: v})}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="tier1">
+                          <div className="flex items-center gap-2">
+                            <span>Tier 1 (Pension Account)</span>
+                            <Badge variant="outline" className="text-xs">Tax Benefits</Badge>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="tier2">
+                          <div className="flex items-center gap-2">
+                            <span>Tier 2 (Investment Account)</span>
+                            <Badge variant="outline" className="text-xs">Flexible</Badge>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                      <Info className="w-3 h-3" />
+                      {contribution.tier === "tier1" 
+                        ? "Tier 1 is mandatory for retirement with tax benefits. Min ₹500/contribution, ₹1,000/year."
+                        : "Tier 2 is optional investment account. Min ₹250/contribution, no annual minimum."
+                      }
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label className="text-sm font-medium">Contribution Type</Label>
+                    <Select value={contribution.type} onValueChange={(v) => setContribution({...contribution, type: v})}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="one-time">One-time Contribution</SelectItem>
+                        <SelectItem value="recurring">Recurring (SIP)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {contribution.type === "one-time" ? (
+                    <div>
+                      <Label className="text-sm font-medium">Amount (₹)</Label>
+                      <Input 
+                        type="number" 
+                        placeholder={`Minimum ₹${contribution.tier === "tier1" ? "500" : "250"}`}
+                        value={contribution.amount}
+                        onChange={(e) => setContribution({...contribution, amount: e.target.value})}
+                        className="mt-2 text-lg font-semibold"
+                        min={contribution.tier === "tier1" ? 500 : 250}
+                      />
+                      <div className="mt-2 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                        <div className="flex items-start gap-2">
+                          <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5" />
+                          <div className="text-xs text-amber-700 space-y-1">
+                            <p className="font-medium">PFRDA Contribution Rules:</p>
+                            <ul className="list-disc list-inside space-y-0.5">
+                              <li>Minimum ₹{contribution.tier === "tier1" ? "500" : "250"} per contribution for {contribution.tier === "tier1" ? "Tier 1" : "Tier 2"}</li>
+                              <li>{contribution.tier === "tier1" ? "Minimum ₹1,000 annually to keep account active" : "No annual minimum for Tier 2"}</li>
+                              <li>No maximum limit on contributions</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div>
+                        <Label className="text-sm font-medium">Monthly Amount (₹)</Label>
+                        <Input 
+                          type="number" 
+                          placeholder={`Minimum ₹${contribution.tier === "tier1" ? "500" : "250"}`}
+                          value={contribution.recurringAmount}
+                          onChange={(e) => setContribution({...contribution, recurringAmount: e.target.value})}
+                          className="mt-2 text-lg font-semibold"
+                          min={contribution.tier === "tier1" ? 500 : 250}
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-sm font-medium">Frequency</Label>
+                        <Select value={contribution.recurringFrequency} onValueChange={(v) => setContribution({...contribution, recurringFrequency: v})}>
+                          <SelectTrigger className="mt-2">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="monthly">Monthly</SelectItem>
+                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                            <SelectItem value="half-yearly">Half-Yearly</SelectItem>
+                            <SelectItem value="yearly">Yearly</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="flex items-start gap-2">
+                          <Info className="w-4 h-4 text-blue-600 mt-0.5" />
+                          <p className="text-xs text-blue-700">
+                            <span className="font-medium">Auto-Debit Facility:</span> Set up standing instruction for automatic monthly deductions. 
+                            Protean eNPS supports UPI Autopay and NACH mandate.
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <div>
+                    <Label className="text-sm font-medium">Investment Choice</Label>
+                    <Select value={contribution.fundType} onValueChange={(v) => setContribution({...contribution, fundType: v})}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="auto">
+                          <div className="flex flex-col">
+                            <span>Auto Choice (Lifecycle Fund)</span>
+                            <span className="text-xs text-muted-foreground">PFRDA recommended - allocation based on age</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="active">
+                          <div className="flex flex-col">
+                            <span>Active Choice</span>
+                            <span className="text-xs text-muted-foreground">Choose your own E, C, G, A allocation</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="aggressive">
+                          <div className="flex flex-col">
+                            <span>LC75 - Aggressive</span>
+                            <span className="text-xs text-muted-foreground">Max 75% Equity, reduces with age</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="moderate">
+                          <div className="flex flex-col">
+                            <span>LC50 - Moderate</span>
+                            <span className="text-xs text-muted-foreground">Max 50% Equity, balanced approach</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="conservative">
+                          <div className="flex flex-col">
+                            <span>LC25 - Conservative</span>
+                            <span className="text-xs text-muted-foreground">Max 25% Equity, low risk</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {contribution.fundType === "active" && (
+                    <div className="p-4 bg-muted/30 rounded-lg space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium">Custom Allocation (must total 100%)</p>
+                        <Badge variant="outline" className="text-xs">PFRDA Limits Apply</Badge>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label className="text-xs flex items-center gap-1">
+                            Equity (E) %
+                            <span className="text-muted-foreground">(Max 75%)</span>
+                          </Label>
+                          <Input type="number" value={contribution.equityAllocation} onChange={(e) => setContribution({...contribution, equityAllocation: e.target.value})} className="mt-1" max={75} />
+                        </div>
+                        <div>
+                          <Label className="text-xs flex items-center gap-1">
+                            Corporate Bond (C) %
+                            <span className="text-muted-foreground">(Max 100%)</span>
+                          </Label>
+                          <Input type="number" value={contribution.corporateBondAllocation} onChange={(e) => setContribution({...contribution, corporateBondAllocation: e.target.value})} className="mt-1" />
+                        </div>
+                        <div>
+                          <Label className="text-xs flex items-center gap-1">
+                            Govt Securities (G) %
+                            <span className="text-muted-foreground">(Max 100%)</span>
+                          </Label>
+                          <Input type="number" value={contribution.govtBondAllocation} onChange={(e) => setContribution({...contribution, govtBondAllocation: e.target.value})} className="mt-1" />
+                        </div>
+                        <div>
+                          <Label className="text-xs flex items-center gap-1">
+                            Alternative (A) %
+                            <span className="text-muted-foreground">(Max 5%)</span>
+                          </Label>
+                          <Input type="number" value={contribution.alternativeAllocation} onChange={(e) => setContribution({...contribution, alternativeAllocation: e.target.value})} className="mt-1" max={5} />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 p-2 bg-amber-50 rounded border border-amber-200">
+                        <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                        <p className="text-xs text-amber-700">
+                          As per PFRDA guidelines: Equity (E) max 75%, Alternative Assets (A) max 5%. Equity allocation reduces by 2.5% each year after age 50.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tax Benefit Summary - Only show for Tier 1 */}
+                  {contribution.tier === "tier1" && (
+                    <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-start gap-2">
-                        <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5" />
-                        <div className="text-xs text-amber-700 space-y-1">
-                          <p className="font-medium">PFRDA Contribution Rules:</p>
-                          <ul className="list-disc list-inside space-y-0.5">
-                            <li>Minimum ₹{contribution.tier === "tier1" ? "500" : "250"} per contribution for {contribution.tier === "tier1" ? "Tier 1" : "Tier 2"}</li>
-                            <li>{contribution.tier === "tier1" ? "Minimum ₹1,000 annually to keep account active" : "No annual minimum for Tier 2"}</li>
-                            <li>No maximum limit on contributions</li>
+                        <Gift className="w-5 h-5 text-green-600 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">Tax Benefits Available</p>
+                          <ul className="text-xs text-green-700 mt-2 space-y-1">
+                            <li className="flex items-center gap-2">
+                              <CheckCircle className="w-3 h-3" />
+                              <span><strong>Section 80CCD(1):</strong> Up to ₹1.5 Lakh (within 80C limit)</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <CheckCircle className="w-3 h-3" />
+                              <span><strong>Section 80CCD(1B):</strong> Additional ₹50,000 (exclusive benefit)</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <CheckCircle className="w-3 h-3" />
+                              <span><strong>Section 80CCD(2):</strong> Employer contribution up to 10% of salary (14% for Govt)</span>
+                            </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ) : (
-                  <>
-                    <div>
-                      <Label className="text-sm font-medium">Monthly Amount (₹)</Label>
-                      <Input 
-                        type="number" 
-                        placeholder={`Minimum ₹${contribution.tier === "tier1" ? "500" : "250"}`}
-                        value={contribution.recurringAmount}
-                        onChange={(e) => setContribution({...contribution, recurringAmount: e.target.value})}
-                        className="mt-2 text-lg font-semibold"
-                        min={contribution.tier === "tier1" ? 500 : 250}
-                      />
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium">Frequency</Label>
-                      <Select value={contribution.recurringFrequency} onValueChange={(v) => setContribution({...contribution, recurringFrequency: v})}>
-                        <SelectTrigger className="mt-2">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="monthly">Monthly</SelectItem>
-                          <SelectItem value="quarterly">Quarterly</SelectItem>
-                          <SelectItem value="half-yearly">Half-Yearly</SelectItem>
-                          <SelectItem value="yearly">Yearly</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <div className="flex items-start gap-2">
-                        <Info className="w-4 h-4 text-blue-600 mt-0.5" />
-                        <p className="text-xs text-blue-700">
-                          <span className="font-medium">Auto-Debit Facility:</span> Set up standing instruction for automatic monthly deductions. 
-                          Protean eNPS supports UPI Autopay and NACH mandate.
-                        </p>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                <div>
-                  <Label className="text-sm font-medium">Investment Choice</Label>
-                  <Select value={contribution.fundType} onValueChange={(v) => setContribution({...contribution, fundType: v})}>
-                    <SelectTrigger className="mt-2">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="auto">
-                        <div className="flex flex-col">
-                          <span>Auto Choice (Lifecycle Fund)</span>
-                          <span className="text-xs text-muted-foreground">PFRDA recommended - allocation based on age</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="active">
-                        <div className="flex flex-col">
-                          <span>Active Choice</span>
-                          <span className="text-xs text-muted-foreground">Choose your own E, C, G, A allocation</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="aggressive">
-                        <div className="flex flex-col">
-                          <span>LC75 - Aggressive</span>
-                          <span className="text-xs text-muted-foreground">Max 75% Equity, reduces with age</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="moderate">
-                        <div className="flex flex-col">
-                          <span>LC50 - Moderate</span>
-                          <span className="text-xs text-muted-foreground">Max 50% Equity, balanced approach</span>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="conservative">
-                        <div className="flex flex-col">
-                          <span>LC25 - Conservative</span>
-                          <span className="text-xs text-muted-foreground">Max 25% Equity, low risk</span>
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                  )}
                 </div>
 
-                {contribution.fundType === "active" && (
-                  <div className="p-4 bg-muted/30 rounded-lg space-y-3">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium">Custom Allocation (must total 100%)</p>
-                      <Badge variant="outline" className="text-xs">PFRDA Limits Apply</Badge>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label className="text-xs flex items-center gap-1">
-                          Equity (E) %
-                          <span className="text-muted-foreground">(Max 75%)</span>
-                        </Label>
-                        <Input type="number" value={contribution.equityAllocation} onChange={(e) => setContribution({...contribution, equityAllocation: e.target.value})} className="mt-1" max={75} />
-                      </div>
-                      <div>
-                        <Label className="text-xs flex items-center gap-1">
-                          Corporate Bond (C) %
-                          <span className="text-muted-foreground">(Max 100%)</span>
-                        </Label>
-                        <Input type="number" value={contribution.corporateBondAllocation} onChange={(e) => setContribution({...contribution, corporateBondAllocation: e.target.value})} className="mt-1" />
-                      </div>
-                      <div>
-                        <Label className="text-xs flex items-center gap-1">
-                          Govt Securities (G) %
-                          <span className="text-muted-foreground">(Max 100%)</span>
-                        </Label>
-                        <Input type="number" value={contribution.govtBondAllocation} onChange={(e) => setContribution({...contribution, govtBondAllocation: e.target.value})} className="mt-1" />
-                      </div>
-                      <div>
-                        <Label className="text-xs flex items-center gap-1">
-                          Alternative (A) %
-                          <span className="text-muted-foreground">(Max 5%)</span>
-                        </Label>
-                        <Input type="number" value={contribution.alternativeAllocation} onChange={(e) => setContribution({...contribution, alternativeAllocation: e.target.value})} className="mt-1" max={5} />
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 p-2 bg-amber-50 rounded border border-amber-200">
-                      <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                      <p className="text-xs text-amber-700">
-                        As per PFRDA guidelines: Equity (E) max 75%, Alternative Assets (A) max 5%. Equity allocation reduces by 2.5% each year after age 50.
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Tax Benefit Summary - Only show for Tier 1 */}
-                {contribution.tier === "tier1" && (
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div className="flex items-start gap-2">
-                      <Gift className="w-5 h-5 text-green-600 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-semibold text-green-800">Tax Benefits Available</p>
-                        <ul className="text-xs text-green-700 mt-2 space-y-1">
-                          <li className="flex items-center gap-2">
-                            <CheckCircle className="w-3 h-3" />
-                            <span><strong>Section 80CCD(1):</strong> Up to ₹1.5 Lakh (within 80C limit)</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <CheckCircle className="w-3 h-3" />
-                            <span><strong>Section 80CCD(1B):</strong> Additional ₹50,000 (exclusive benefit)</span>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <CheckCircle className="w-3 h-3" />
-                            <span><strong>Section 80CCD(2):</strong> Employer contribution up to 10% of salary (14% for Govt)</span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                <Button 
-                  onClick={handleContribution} 
-                  className="w-full bg-primary" 
-                  size="lg"
-                  disabled={currentAmount < (contribution.tier === "tier1" ? 500 : 250)}
-                >
-                  <CreditCard className="w-4 h-4 mr-2" />
-                  {currentAmount >= (contribution.tier === "tier1" ? 500 : 250) 
-                    ? `Pay ₹${currentAmount.toLocaleString('en-IN')} - Net: ₹${charges.netInvestment.toLocaleString('en-IN')}`
-                    : `Minimum ₹${contribution.tier === "tier1" ? "500" : "250"} required`
-                  }
-                </Button>
-
-                {/* Protean Disclaimer */}
-                <p className="text-xs text-center text-muted-foreground">
-                  Powered by Protean eGov Technologies Limited (formerly NSDL eGov) - 
-                  Central Recordkeeping Agency appointed by PFRDA
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Contribution Breakdown - Dynamic */}
-            <div className="space-y-6">
-              <Card className="bg-gradient-to-br from-primary/5 to-accent/5">
-                <CardHeader className="pb-3">
+                {/* Right Column - Contribution Breakdown */}
+                <div className="p-6 bg-gradient-to-br from-primary/5 to-accent/5 space-y-4">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Receipt className="w-5 h-5 text-primary" />
+                    <p className="text-sm font-semibold text-secondary flex items-center gap-2">
+                      <Receipt className="w-4 h-4 text-primary" />
                       Contribution Breakdown
-                    </CardTitle>
-                    <Badge variant="outline" className="text-xs">As per PFRDA Norms</Badge>
+                    </p>
+                    <Badge variant="outline" className="text-xs">eNPS Platform</Badge>
                   </div>
-                  <CardDescription>Charges applicable as per PFRDA & Protean guidelines</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
+                  <p className="text-xs text-muted-foreground">Charges applicable as per PFRDA & Protean guidelines</p>
+
+                  {/* NPS Investment Amount */}
                   <div className="p-4 bg-white rounded-xl border border-primary/20">
                     <div className="flex items-center justify-between">
                       <p className="text-sm text-muted-foreground">NPS Investment Amount</p>
@@ -1677,12 +1660,9 @@ const DashboardNPS = () => {
                     )}
                   </div>
                   
-                  {/* PFRDA Prescribed Charges - As per PFRDA Circular effective 31.01.2025 */}
+                  {/* PFRDA Prescribed Charges */}
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">PFRDA Charges (w.e.f. 31.01.2025)</p>
-                      <Badge variant="outline" className="text-[10px]">eNPS Platform</Badge>
-                    </div>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">PFRDA Charges (w.e.f. 31.01.2025)</p>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
@@ -1735,92 +1715,115 @@ const DashboardNPS = () => {
                       </p>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
 
-              {/* Tax Benefit Tracker */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-base flex items-center gap-2">
-                      <Gift className="w-5 h-5 text-green-600" />
-                      Tax Benefit Tracker
-                    </CardTitle>
-                    <Badge className="bg-green-100 text-green-700">FY 2025-26</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* 80CCD(1) Progress */}
-                  <div className="p-4 bg-muted/30 rounded-xl">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-secondary">Section 80CCD(1)</span>
-                      <span className="text-xs text-muted-foreground">Within 80C limit</span>
-                    </div>
-                    <div className="flex items-end justify-between">
-                      <p className="text-2xl font-bold text-secondary">₹55,000</p>
-                      <p className="text-sm text-muted-foreground">of ₹1,50,000</p>
-                    </div>
-                    <Progress value={37} className="mt-2 h-2" />
-                    <p className="text-xs text-green-600 mt-2">₹95,000 more for full benefit</p>
-                  </div>
-                  
-                  {/* 80CCD(1B) Progress */}
-                  <div className="p-4 bg-purple-50 rounded-xl border border-purple-200">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-purple-800">Section 80CCD(1B)</span>
-                      <Badge className="bg-purple-100 text-purple-700 text-xs">Exclusive NPS</Badge>
-                    </div>
-                    <div className="flex items-end justify-between">
-                      <p className="text-2xl font-bold text-purple-700">₹25,000</p>
-                      <p className="text-sm text-purple-600">of ₹50,000</p>
-                    </div>
-                    <Progress value={50} className="mt-2 h-2 [&>div]:bg-purple-500" />
-                    <p className="text-xs text-purple-600 mt-2">₹25,000 more for additional tax saving</p>
-                  </div>
+                  {/* Pay Button */}
+                  <Button 
+                    onClick={handleContribution} 
+                    className="w-full bg-primary" 
+                    size="lg"
+                    disabled={currentAmount < (contribution.tier === "tier1" ? 500 : 250)}
+                  >
+                    <CreditCard className="w-4 h-4 mr-2" />
+                    {currentAmount >= (contribution.tier === "tier1" ? 500 : 250) 
+                      ? `Pay ₹${charges.totalPayable.toLocaleString('en-IN')}`
+                      : `Minimum ₹${contribution.tier === "tier1" ? "500" : "250"} required`
+                    }
+                  </Button>
 
-                  {/* Tax Savings Summary */}
-                  <div className="p-4 bg-green-50 rounded-xl border border-green-200">
-                    <div className="flex items-center gap-2 mb-3">
-                      <IndianRupee className="w-5 h-5 text-green-600" />
-                      <span className="text-sm font-semibold text-green-800">Estimated Tax Savings</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <p className="text-xs text-green-700">At 30% Slab</p>
-                        <p className="text-lg font-bold text-green-700">₹24,000</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-green-700">At 20% Slab</p>
-                        <p className="text-lg font-bold text-green-700">₹16,000</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  {/* Protean Disclaimer */}
+                  <p className="text-xs text-center text-muted-foreground">
+                    Powered by Protean eGov Technologies Limited (formerly NSDL eGov) - 
+                    Central Recordkeeping Agency appointed by PFRDA
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* Monthly Trend Chart */}
-              <Card>
-                <CardHeader className="pb-3">
+          {/* Tax Benefit Tracker & Monthly Chart */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Tax Benefit Tracker */}
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
                   <CardTitle className="text-base flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-primary" />
-                    Monthly Contributions
+                    <Gift className="w-5 h-5 text-green-600" />
+                    Tax Benefit Tracker
                   </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-40">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={monthlyContributionTrend}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                        <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="#9CA3AF" />
-                        <YAxis tick={{ fontSize: 11 }} stroke="#9CA3AF" tickFormatter={(v) => `₹${v/1000}K`} />
-                        <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`]} />
-                        <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
+                  <Badge className="bg-green-100 text-green-700">FY 2025-26</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* 80CCD(1) Progress */}
+                <div className="p-4 bg-muted/30 rounded-xl">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-secondary">Section 80CCD(1)</span>
+                    <span className="text-xs text-muted-foreground">Within 80C limit</span>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                  <div className="flex items-end justify-between">
+                    <p className="text-2xl font-bold text-secondary">₹55,000</p>
+                    <p className="text-sm text-muted-foreground">of ₹1,50,000</p>
+                  </div>
+                  <Progress value={37} className="mt-2 h-2" />
+                  <p className="text-xs text-green-600 mt-2">₹95,000 more for full benefit</p>
+                </div>
+                
+                {/* 80CCD(1B) Progress */}
+                <div className="p-4 bg-purple-50 rounded-xl border border-purple-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-purple-800">Section 80CCD(1B)</span>
+                    <Badge className="bg-purple-100 text-purple-700 text-xs">Exclusive NPS</Badge>
+                  </div>
+                  <div className="flex items-end justify-between">
+                    <p className="text-2xl font-bold text-purple-700">₹25,000</p>
+                    <p className="text-sm text-purple-600">of ₹50,000</p>
+                  </div>
+                  <Progress value={50} className="mt-2 h-2 [&>div]:bg-purple-500" />
+                  <p className="text-xs text-purple-600 mt-2">₹25,000 more for additional tax saving</p>
+                </div>
+
+                {/* Tax Savings Summary */}
+                <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                  <div className="flex items-center gap-2 mb-3">
+                    <IndianRupee className="w-5 h-5 text-green-600" />
+                    <span className="text-sm font-semibold text-green-800">Estimated Tax Savings</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs text-green-700">At 30% Slab</p>
+                      <p className="text-lg font-bold text-green-700">₹24,000</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-green-700">At 20% Slab</p>
+                      <p className="text-lg font-bold text-green-700">₹16,000</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Monthly Trend Chart */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                  Monthly Contributions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-40">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={monthlyContributionTrend}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="#9CA3AF" />
+                      <YAxis tick={{ fontSize: 11 }} stroke="#9CA3AF" tickFormatter={(v) => `₹${v/1000}K`} />
+                      <Tooltip formatter={(value: number) => [`₹${value.toLocaleString()}`]} />
+                      <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Contribution History Table */}
