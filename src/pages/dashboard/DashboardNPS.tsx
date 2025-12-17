@@ -57,25 +57,23 @@ const DashboardNPS = () => {
     alternativeAllocation: "5",
   });
 
-  // Dynamic charge calculation based on contribution amount
+  // Dynamic charge calculation - entered amount is net investment, charges added on top
   const calculateCharges = (amount: number) => {
-    const popCharges = Math.round(amount * 0.001); // 0.10%
-    const craCharges = 15; // Fixed CRA charges
-    const pfmCharges = Math.round(amount * 0.0009); // 0.09%
-    const gstOnCharges = Math.round((popCharges + craCharges) * 0.18); // 18% GST
-    const paymentGateway = amount > 0 ? Math.round(amount * 0.0002) + 100 : 0; // ~0.02% + fixed
-    const totalDeductions = popCharges + craCharges + pfmCharges + gstOnCharges + paymentGateway;
-    const netInvestment = amount - totalDeductions;
+    const popCharges = Math.round(amount * 0.001); // 0.10% POP Charges
+    const craCharges = 15; // Fixed CRA charges per PFRDA
+    const pfmCharges = Math.round(amount * 0.0009); // 0.09% PFM Charges
+    const gstOnCharges = Math.round((popCharges + craCharges + pfmCharges) * 0.18); // 18% GST on charges
+    const totalCharges = popCharges + craCharges + pfmCharges + gstOnCharges;
+    const totalPayable = amount + totalCharges; // Charges added on top
     
     return {
-      contributionAmount: amount,
+      netInvestment: amount, // User's entered amount goes fully to NPS
       popCharges,
       craCharges,
       pfmCharges,
       gstOnCharges,
-      paymentGateway,
-      totalDeductions,
-      netInvestment
+      totalCharges,
+      totalPayable // Total amount user pays
     };
   };
 
@@ -1660,25 +1658,26 @@ const DashboardNPS = () => {
                 <CardContent className="space-y-4">
                   <div className="p-4 bg-white rounded-xl border border-primary/20">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground">Contribution Amount</p>
+                      <p className="text-sm text-muted-foreground">NPS Investment Amount</p>
                       <Badge className={contribution.tier === "tier1" ? "bg-primary/10 text-primary" : "bg-purple-100 text-purple-700"}>
                         {contribution.tier === "tier1" ? "Tier 1" : "Tier 2"}
                       </Badge>
                     </div>
-                    <p className="text-3xl font-bold text-primary mt-1">
-                      ₹{charges.contributionAmount.toLocaleString('en-IN')}
+                    <p className="text-3xl font-bold text-green-600 mt-1">
+                      ₹{charges.netInvestment.toLocaleString('en-IN')}
                     </p>
-                    {charges.contributionAmount < 500 && charges.contributionAmount > 0 && (
+                    <p className="text-xs text-green-600 mt-1">This full amount goes to your NPS account</p>
+                    {charges.netInvestment < (contribution.tier === "tier1" ? 500 : 250) && charges.netInvestment > 0 && (
                       <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" />
-                        Minimum ₹500 required for Tier 1
+                        Minimum ₹{contribution.tier === "tier1" ? "500" : "250"} required for {contribution.tier === "tier1" ? "Tier 1" : "Tier 2"}
                       </p>
                     )}
                   </div>
                   
-                  {/* PFRDA Prescribed Charges */}
+                  {/* PFRDA Prescribed Charges - Added on top */}
                   <div className="space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">PFRDA Prescribed Charges</p>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">PFRDA Prescribed Charges (Added)</p>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
@@ -1688,7 +1687,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">Point of Presence (0.10%)</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-blue-600">₹{charges.popCharges.toLocaleString('en-IN')}</span>
+                      <span className="font-semibold text-blue-600">+ ₹{charges.popCharges.toLocaleString('en-IN')}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -1699,7 +1698,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">Protean - Central Recordkeeping</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-purple-600">₹{charges.craCharges.toFixed(2)}</span>
+                      <span className="font-semibold text-purple-600">+ ₹{charges.craCharges.toFixed(2)}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -1710,7 +1709,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">Pension Fund Manager (0.09%)</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-teal-600">₹{charges.pfmCharges.toLocaleString('en-IN')}</span>
+                      <span className="font-semibold text-teal-600">+ ₹{charges.pfmCharges.toLocaleString('en-IN')}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -1721,34 +1720,26 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">18% on applicable charges</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-orange-500">₹{charges.gstOnCharges.toLocaleString('en-IN')}</span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
-                      <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4 text-slate-500" />
-                        <div>
-                          <span className="text-sm text-secondary">Payment Gateway</span>
-                          <p className="text-xs text-muted-foreground">Online transaction fee</p>
-                        </div>
-                      </div>
-                      <span className="font-semibold text-slate-600">₹{charges.paymentGateway.toLocaleString('en-IN')}</span>
+                      <span className="font-semibold text-orange-500">+ ₹{charges.gstOnCharges.toLocaleString('en-IN')}</span>
                     </div>
                   </div>
 
                   {/* Total Summary */}
                   <div className="border-t pt-3 space-y-2">
-                    <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg border border-amber-200">
-                      <span className="text-sm font-medium text-amber-800">Total Deductions</span>
-                      <span className="font-bold text-amber-700">- ₹{charges.totalDeductions.toLocaleString('en-IN')}</span>
+                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <span className="text-sm font-medium text-blue-800">Total Charges</span>
+                      <span className="font-bold text-blue-700">+ ₹{charges.totalCharges.toLocaleString('en-IN')}</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg border border-primary/20">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-600" />
-                        <span className="text-sm font-medium text-green-800">Net Investment to NPS</span>
+                        <Wallet className="w-4 h-4 text-primary" />
+                        <span className="text-sm font-medium text-primary">Total Payable</span>
                       </div>
-                      <span className="font-bold text-green-700 text-lg">₹{charges.netInvestment.toLocaleString('en-IN')}</span>
+                      <span className="font-bold text-primary text-lg">₹{charges.totalPayable.toLocaleString('en-IN')}</span>
                     </div>
+                    <p className="text-xs text-muted-foreground text-center">
+                      Payment gateway charges will be added separately at checkout
+                    </p>
                   </div>
 
                   {/* Info Note */}
