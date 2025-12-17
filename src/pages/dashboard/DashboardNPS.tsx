@@ -57,23 +57,38 @@ const DashboardNPS = () => {
     alternativeAllocation: "5",
   });
 
-  // Dynamic charge calculation - entered amount is net investment, charges added on top
+  // Latest PFRDA/Protean charge calculation (effective 31.01.2025)
+  // Source: https://npstrust.org.in/charges-under-nps
   const calculateCharges = (amount: number) => {
-    const popCharges = Math.round(amount * 0.001); // 0.10% POP Charges
-    const craCharges = 15; // Fixed CRA charges per PFRDA
-    const pfmCharges = Math.round(amount * 0.0009); // 0.09% PFM Charges
-    const gstOnCharges = Math.round((popCharges + craCharges + pfmCharges) * 0.18); // 18% GST on charges
-    const totalCharges = popCharges + craCharges + pfmCharges + gstOnCharges;
-    const totalPayable = amount + totalCharges; // Charges added on top
+    // POP Charges: 0.20% for eNPS, min ₹15, max ₹10,000
+    const popChargesRaw = amount * 0.002; // 0.20%
+    const popCharges = amount > 0 ? Math.max(15, Math.min(popChargesRaw, 10000)) : 0;
+    
+    // CRA Charges (Protean PCRA): ₹3.75 per transaction
+    const craCharges = amount > 0 ? 3.75 : 0;
+    
+    // PFM Charges (Investment Management Fee): 0.09% for AUM up to 10,000 Cr
+    const pfmCharges = Math.round(amount * 0.0009 * 100) / 100; // 0.09%
+    
+    // NPS Trust Charges: 0.003% p.a. (nominal, applied per transaction)
+    const npsTrustCharges = Math.round(amount * 0.00003 * 100) / 100;
+    
+    // GST: 18% on all charges
+    const subtotalCharges = popCharges + craCharges + pfmCharges + npsTrustCharges;
+    const gstOnCharges = Math.round(subtotalCharges * 0.18 * 100) / 100;
+    
+    const totalCharges = Math.round((subtotalCharges + gstOnCharges) * 100) / 100;
+    const totalPayable = amount + totalCharges;
     
     return {
-      netInvestment: amount, // User's entered amount goes fully to NPS
-      popCharges,
+      netInvestment: amount,
+      popCharges: Math.round(popCharges * 100) / 100,
       craCharges,
       pfmCharges,
+      npsTrustCharges,
       gstOnCharges,
       totalCharges,
-      totalPayable // Total amount user pays
+      totalPayable
     };
   };
 
@@ -1675,27 +1690,30 @@ const DashboardNPS = () => {
                     )}
                   </div>
                   
-                  {/* PFRDA Prescribed Charges - Added on top */}
+                  {/* PFRDA Prescribed Charges - As per PFRDA Circular effective 31.01.2025 */}
                   <div className="space-y-2">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">PFRDA Prescribed Charges (Added)</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">PFRDA Charges (w.e.f. 31.01.2025)</p>
+                      <Badge variant="outline" className="text-[10px]">eNPS Platform</Badge>
+                    </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
                         <Building2 className="w-4 h-4 text-blue-600" />
                         <div>
                           <span className="text-sm text-secondary">POP Charges</span>
-                          <p className="text-xs text-muted-foreground">Point of Presence (0.10%)</p>
+                          <p className="text-xs text-muted-foreground">0.20% (Min ₹15, Max ₹10,000)</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-blue-600">+ ₹{charges.popCharges.toLocaleString('en-IN')}</span>
+                      <span className="font-semibold text-blue-600">+ ₹{charges.popCharges.toFixed(2)}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
                         <Shield className="w-4 h-4 text-purple-600" />
                         <div>
-                          <span className="text-sm text-secondary">CRA Charges</span>
-                          <p className="text-xs text-muted-foreground">Protean - Central Recordkeeping</p>
+                          <span className="text-sm text-secondary">CRA Charges (Protean)</span>
+                          <p className="text-xs text-muted-foreground">₹3.75 per transaction</p>
                         </div>
                       </div>
                       <span className="font-semibold text-purple-600">+ ₹{charges.craCharges.toFixed(2)}</span>
@@ -1705,22 +1723,33 @@ const DashboardNPS = () => {
                       <div className="flex items-center gap-2">
                         <TrendingUp className="w-4 h-4 text-teal-600" />
                         <div>
-                          <span className="text-sm text-secondary">PFM Charges</span>
-                          <p className="text-xs text-muted-foreground">Pension Fund Manager (0.09%)</p>
+                          <span className="text-sm text-secondary">PFM Charges (IMF)</span>
+                          <p className="text-xs text-muted-foreground">0.09% Investment Mgmt Fee</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-teal-600">+ ₹{charges.pfmCharges.toLocaleString('en-IN')}</span>
+                      <span className="font-semibold text-teal-600">+ ₹{charges.pfmCharges.toFixed(2)}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                      <div className="flex items-center gap-2">
+                        <Target className="w-4 h-4 text-indigo-500" />
+                        <div>
+                          <span className="text-sm text-secondary">NPS Trust Charges</span>
+                          <p className="text-xs text-muted-foreground">0.003% Reimbursement</p>
+                        </div>
+                      </div>
+                      <span className="font-semibold text-indigo-500">+ ₹{charges.npsTrustCharges.toFixed(2)}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
                       <div className="flex items-center gap-2">
                         <Percent className="w-4 h-4 text-orange-500" />
                         <div>
-                          <span className="text-sm text-secondary">GST on Charges</span>
-                          <p className="text-xs text-muted-foreground">18% on applicable charges</p>
+                          <span className="text-sm text-secondary">GST</span>
+                          <p className="text-xs text-muted-foreground">18% on all charges</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-orange-500">+ ₹{charges.gstOnCharges.toLocaleString('en-IN')}</span>
+                      <span className="font-semibold text-orange-500">+ ₹{charges.gstOnCharges.toFixed(2)}</span>
                     </div>
                   </div>
 
