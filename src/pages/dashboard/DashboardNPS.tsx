@@ -45,8 +45,9 @@ const DashboardNPS = () => {
 
   // Contribution state
   const [contribution, setContribution] = useState({
-    amount: "",
+    amount: "500",
     type: "one-time",
+    tier: "tier1",
     fundType: "auto",
     recurringAmount: "",
     recurringFrequency: "monthly",
@@ -55,6 +56,34 @@ const DashboardNPS = () => {
     govtBondAllocation: "15",
     alternativeAllocation: "5",
   });
+
+  // Dynamic charge calculation based on contribution amount
+  const calculateCharges = (amount: number) => {
+    const popCharges = Math.round(amount * 0.001); // 0.10%
+    const craCharges = 15; // Fixed CRA charges
+    const pfmCharges = Math.round(amount * 0.0009); // 0.09%
+    const gstOnCharges = Math.round((popCharges + craCharges) * 0.18); // 18% GST
+    const paymentGateway = amount > 0 ? Math.round(amount * 0.0002) + 100 : 0; // ~0.02% + fixed
+    const totalDeductions = popCharges + craCharges + pfmCharges + gstOnCharges + paymentGateway;
+    const netInvestment = amount - totalDeductions;
+    
+    return {
+      contributionAmount: amount,
+      popCharges,
+      craCharges,
+      pfmCharges,
+      gstOnCharges,
+      paymentGateway,
+      totalDeductions,
+      netInvestment
+    };
+  };
+
+  const currentAmount = contribution.type === "one-time" 
+    ? parseFloat(contribution.amount) || 0 
+    : parseFloat(contribution.recurringAmount) || 0;
+  
+  const charges = calculateCharges(currentAmount);
 
   // Redemption state
   // FY and Quarter selection for API data
@@ -357,10 +386,21 @@ const DashboardNPS = () => {
   };
 
   const handleContribution = () => {
-    const amount = contribution.type === "one-time" ? contribution.amount : contribution.recurringAmount;
+    const amount = parseFloat(contribution.type === "one-time" ? contribution.amount : contribution.recurringAmount) || 0;
+    const minAmount = contribution.tier === "tier1" ? 500 : 250;
+    
+    if (amount < minAmount) {
+      toast({
+        title: "Invalid Amount",
+        description: `Minimum contribution for ${contribution.tier === "tier1" ? "Tier 1" : "Tier 2"} is ₹${minAmount}`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
     toast({
       title: "Contribution Initiated",
-      description: `Your contribution of ₹${amount} has been initiated. Redirecting to payment gateway...`,
+      description: `Your ${contribution.tier === "tier1" ? "Tier 1" : "Tier 2"} contribution of ₹${amount.toLocaleString('en-IN')} has been initiated. Net investment: ₹${charges.netInvestment.toLocaleString('en-IN')}. Redirecting to payment gateway...`,
     });
   };
 
@@ -1366,7 +1406,7 @@ const DashboardNPS = () => {
                 {/* Tier Selection */}
                 <div>
                   <Label className="text-sm font-medium">Select Tier</Label>
-                  <Select defaultValue="tier1">
+                  <Select value={contribution.tier} onValueChange={(v) => setContribution({...contribution, tier: v})}>
                     <SelectTrigger className="mt-2">
                       <SelectValue />
                     </SelectTrigger>
@@ -1387,7 +1427,10 @@ const DashboardNPS = () => {
                   </Select>
                   <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                     <Info className="w-3 h-3" />
-                    Tier 1 is mandatory for retirement. Tier 2 is optional investment account.
+                    {contribution.tier === "tier1" 
+                      ? "Tier 1 is mandatory for retirement with tax benefits. Min ₹500/contribution, ₹1,000/year."
+                      : "Tier 2 is optional investment account. Min ₹250/contribution, no annual minimum."
+                    }
                   </p>
                 </div>
 
@@ -1409,11 +1452,11 @@ const DashboardNPS = () => {
                     <Label className="text-sm font-medium">Amount (₹)</Label>
                     <Input 
                       type="number" 
-                      placeholder="Minimum ₹500" 
+                      placeholder={`Minimum ₹${contribution.tier === "tier1" ? "500" : "250"}`}
                       value={contribution.amount}
                       onChange={(e) => setContribution({...contribution, amount: e.target.value})}
-                      className="mt-2"
-                      min={500}
+                      className="mt-2 text-lg font-semibold"
+                      min={contribution.tier === "tier1" ? 500 : 250}
                     />
                     <div className="mt-2 p-3 bg-amber-50 rounded-lg border border-amber-200">
                       <div className="flex items-start gap-2">
@@ -1421,8 +1464,8 @@ const DashboardNPS = () => {
                         <div className="text-xs text-amber-700 space-y-1">
                           <p className="font-medium">PFRDA Contribution Rules:</p>
                           <ul className="list-disc list-inside space-y-0.5">
-                            <li>Minimum ₹500 per contribution for Tier 1</li>
-                            <li>Minimum ₹1,000 annually to keep account active</li>
+                            <li>Minimum ₹{contribution.tier === "tier1" ? "500" : "250"} per contribution for {contribution.tier === "tier1" ? "Tier 1" : "Tier 2"}</li>
+                            <li>{contribution.tier === "tier1" ? "Minimum ₹1,000 annually to keep account active" : "No annual minimum for Tier 2"}</li>
                             <li>No maximum limit on contributions</li>
                           </ul>
                         </div>
@@ -1435,11 +1478,11 @@ const DashboardNPS = () => {
                       <Label className="text-sm font-medium">Monthly Amount (₹)</Label>
                       <Input 
                         type="number" 
-                        placeholder="Minimum ₹500" 
+                        placeholder={`Minimum ₹${contribution.tier === "tier1" ? "500" : "250"}`}
                         value={contribution.recurringAmount}
                         onChange={(e) => setContribution({...contribution, recurringAmount: e.target.value})}
-                        className="mt-2"
-                        min={500}
+                        className="mt-2 text-lg font-semibold"
+                        min={contribution.tier === "tier1" ? 500 : 250}
                       />
                     </div>
                     <div>
@@ -1554,33 +1597,43 @@ const DashboardNPS = () => {
                   </div>
                 )}
 
-                {/* Tax Benefit Summary */}
-                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-start gap-2">
-                    <Gift className="w-5 h-5 text-green-600 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-semibold text-green-800">Tax Benefits Available</p>
-                      <ul className="text-xs text-green-700 mt-2 space-y-1">
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-3 h-3" />
-                          <span><strong>Section 80CCD(1):</strong> Up to ₹1.5 Lakh (within 80C limit)</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-3 h-3" />
-                          <span><strong>Section 80CCD(1B):</strong> Additional ₹50,000 (exclusive benefit)</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle className="w-3 h-3" />
-                          <span><strong>Section 80CCD(2):</strong> Employer contribution up to 10% of salary (14% for Govt)</span>
-                        </li>
-                      </ul>
+                {/* Tax Benefit Summary - Only show for Tier 1 */}
+                {contribution.tier === "tier1" && (
+                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-start gap-2">
+                      <Gift className="w-5 h-5 text-green-600 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-green-800">Tax Benefits Available</p>
+                        <ul className="text-xs text-green-700 mt-2 space-y-1">
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-3 h-3" />
+                            <span><strong>Section 80CCD(1):</strong> Up to ₹1.5 Lakh (within 80C limit)</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-3 h-3" />
+                            <span><strong>Section 80CCD(1B):</strong> Additional ₹50,000 (exclusive benefit)</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="w-3 h-3" />
+                            <span><strong>Section 80CCD(2):</strong> Employer contribution up to 10% of salary (14% for Govt)</span>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
                 
-                <Button onClick={handleContribution} className="w-full bg-primary" size="lg">
+                <Button 
+                  onClick={handleContribution} 
+                  className="w-full bg-primary" 
+                  size="lg"
+                  disabled={currentAmount < (contribution.tier === "tier1" ? 500 : 250)}
+                >
                   <CreditCard className="w-4 h-4 mr-2" />
-                  Proceed to Payment
+                  {currentAmount >= (contribution.tier === "tier1" ? 500 : 250) 
+                    ? `Pay ₹${currentAmount.toLocaleString('en-IN')} - Net: ₹${charges.netInvestment.toLocaleString('en-IN')}`
+                    : `Minimum ₹${contribution.tier === "tier1" ? "500" : "250"} required`
+                  }
                 </Button>
 
                 {/* Protean Disclaimer */}
@@ -1591,9 +1644,8 @@ const DashboardNPS = () => {
               </CardContent>
             </Card>
 
-            {/* Contribution Summary & Stats */}
+            {/* Contribution Breakdown - Dynamic */}
             <div className="space-y-6">
-              {/* PFRDA Charge Structure */}
               <Card className="bg-gradient-to-br from-primary/5 to-accent/5">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -1609,9 +1661,19 @@ const DashboardNPS = () => {
                   <div className="p-4 bg-white rounded-xl border border-primary/20">
                     <div className="flex items-center justify-between">
                       <p className="text-sm text-muted-foreground">Contribution Amount</p>
-                      <Badge className="bg-primary/10 text-primary">Tier 1</Badge>
+                      <Badge className={contribution.tier === "tier1" ? "bg-primary/10 text-primary" : "bg-purple-100 text-purple-700"}>
+                        {contribution.tier === "tier1" ? "Tier 1" : "Tier 2"}
+                      </Badge>
                     </div>
-                    <p className="text-3xl font-bold text-primary mt-1">₹{contributionDetails.totalInvestment.toLocaleString()}</p>
+                    <p className="text-3xl font-bold text-primary mt-1">
+                      ₹{charges.contributionAmount.toLocaleString('en-IN')}
+                    </p>
+                    {charges.contributionAmount < 500 && charges.contributionAmount > 0 && (
+                      <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        Minimum ₹500 required for Tier 1
+                      </p>
+                    )}
                   </div>
                   
                   {/* PFRDA Prescribed Charges */}
@@ -1626,7 +1688,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">Point of Presence (0.10%)</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-blue-600">₹{contributionDetails.popCharges.toLocaleString()}</span>
+                      <span className="font-semibold text-blue-600">₹{charges.popCharges.toLocaleString('en-IN')}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -1637,7 +1699,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">Protean - Central Recordkeeping</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-purple-600">₹15.00</span>
+                      <span className="font-semibold text-purple-600">₹{charges.craCharges.toFixed(2)}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -1648,7 +1710,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">Pension Fund Manager (0.09%)</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-teal-600">₹{Math.round(contributionDetails.totalInvestment * 0.0009).toLocaleString()}</span>
+                      <span className="font-semibold text-teal-600">₹{charges.pfmCharges.toLocaleString('en-IN')}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -1659,7 +1721,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">18% on applicable charges</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-orange-500">₹{contributionDetails.serviceTax.toLocaleString()}</span>
+                      <span className="font-semibold text-orange-500">₹{charges.gstOnCharges.toLocaleString('en-IN')}</span>
                     </div>
                     
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
@@ -1670,7 +1732,7 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">Online transaction fee</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-slate-600">₹{contributionDetails.paymentGatewayCharges.toLocaleString()}</span>
+                      <span className="font-semibold text-slate-600">₹{charges.paymentGateway.toLocaleString('en-IN')}</span>
                     </div>
                   </div>
 
@@ -1678,14 +1740,14 @@ const DashboardNPS = () => {
                   <div className="border-t pt-3 space-y-2">
                     <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg border border-amber-200">
                       <span className="text-sm font-medium text-amber-800">Total Deductions</span>
-                      <span className="font-bold text-amber-700">- ₹{(contributionDetails.totalCharges + 15 + Math.round(contributionDetails.totalInvestment * 0.0009)).toLocaleString()}</span>
+                      <span className="font-bold text-amber-700">- ₹{charges.totalDeductions.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-green-600" />
                         <span className="text-sm font-medium text-green-800">Net Investment to NPS</span>
                       </div>
-                      <span className="font-bold text-green-700 text-lg">₹{(contributionDetails.totalInvestment - contributionDetails.totalCharges - 15 - Math.round(contributionDetails.totalInvestment * 0.0009)).toLocaleString()}</span>
+                      <span className="font-bold text-green-700 text-lg">₹{charges.netInvestment.toLocaleString('en-IN')}</span>
                     </div>
                   </div>
 
