@@ -46,7 +46,8 @@ const DashboardNPS = () => {
   // Contribution state
   const [contribution, setContribution] = useState({
     amount: "500",
-    type: "one-time",
+    type: "one-time", // one-time, recurring
+    contributionLabel: "one-time-contribution", // initial-contribution, one-time-contribution, recurring-contribution
     tier: "tier1",
     fundType: "auto",
     recurringAmount: "",
@@ -57,23 +58,80 @@ const DashboardNPS = () => {
     alternativeAllocation: "5",
   });
 
+  // Payment entries state - stores all payment entries with charges breakdown
+  const [paymentEntries, setPaymentEntries] = useState([
+    {
+      id: "PE001",
+      date: "15 Nov 2025",
+      label: "One-time Contribution",
+      contributionAmount: 5000,
+      popCharges: 15,
+      gstOnPopCharges: 2.70,
+      accountOpeningCharges: 0,
+      gstOnAccountOpeningCharges: 0,
+      totalCharges: 17.70,
+      totalPayable: 5017.70,
+      status: "Completed",
+      tier: "Tier 1",
+      reference: "TXN001234"
+    },
+    {
+      id: "PE002",
+      date: "01 Oct 2025",
+      label: "Initial Contribution",
+      contributionAmount: 1000,
+      popCharges: 15,
+      gstOnPopCharges: 2.70,
+      accountOpeningCharges: 200,
+      gstOnAccountOpeningCharges: 36,
+      totalCharges: 253.70,
+      totalPayable: 1253.70,
+      status: "Completed",
+      tier: "Tier 1",
+      reference: "TXN001230"
+    },
+    {
+      id: "PE003",
+      date: "15 Sep 2025",
+      label: "Recurring Contribution",
+      contributionAmount: 5000,
+      popCharges: 15,
+      gstOnPopCharges: 2.70,
+      accountOpeningCharges: 0,
+      gstOnAccountOpeningCharges: 0,
+      totalCharges: 17.70,
+      totalPayable: 5017.70,
+      status: "Completed",
+      tier: "Tier 1",
+      reference: "TXN001229"
+    }
+  ]);
+
   // Latest PFRDA/Protean charge calculation (effective 31.01.2025)
-  // Only POP charges + GST for now
-  const calculateCharges = (amount: number) => {
+  // POP charges + GST, with account opening charges for initial contribution
+  const calculateCharges = (amount: number, isInitialContribution: boolean = false) => {
     // POP Charges: 0.20% for eNPS, min ₹15, max ₹10,000
     const popChargesRaw = amount * 0.002; // 0.20%
     const popCharges = amount > 0 ? Math.max(15, Math.min(popChargesRaw, 10000)) : 0;
     
     // GST: 18% on POP charges
-    const gstOnCharges = Math.round(popCharges * 0.18 * 100) / 100;
+    const gstOnPopCharges = Math.round(popCharges * 0.18 * 100) / 100;
     
-    const totalCharges = Math.round((popCharges + gstOnCharges) * 100) / 100;
+    // Account Opening Charges (only for Initial Contribution): ₹200
+    const accountOpeningCharges = isInitialContribution ? 200 : 0;
+    
+    // GST: 18% on Account Opening Charges
+    const gstOnAccountOpeningCharges = Math.round(accountOpeningCharges * 0.18 * 100) / 100;
+    
+    const totalCharges = Math.round((popCharges + gstOnPopCharges + accountOpeningCharges + gstOnAccountOpeningCharges) * 100) / 100;
     const totalPayable = amount + totalCharges;
     
     return {
       netInvestment: amount,
       popCharges: Math.round(popCharges * 100) / 100,
-      gstOnCharges,
+      gstOnPopCharges,
+      accountOpeningCharges,
+      gstOnAccountOpeningCharges,
       totalCharges,
       totalPayable
     };
@@ -83,7 +141,8 @@ const DashboardNPS = () => {
     ? parseFloat(contribution.amount) || 0 
     : parseFloat(contribution.recurringAmount) || 0;
   
-  const charges = calculateCharges(currentAmount);
+  const isInitialContribution = contribution.contributionLabel === "initial-contribution";
+  const charges = calculateCharges(currentAmount, isInitialContribution);
 
   // Redemption state
   // FY and Quarter selection for API data
@@ -386,7 +445,7 @@ const DashboardNPS = () => {
   };
 
   const handleContribution = () => {
-    const amount = parseFloat(contribution.type === "one-time" ? contribution.amount : contribution.recurringAmount) || 0;
+    const amount = parseFloat(contribution.contributionLabel !== "recurring-contribution" ? contribution.amount : contribution.recurringAmount) || 0;
     const minAmount = contribution.tier === "tier1" ? 500 : 250;
     
     if (amount < minAmount) {
@@ -397,10 +456,37 @@ const DashboardNPS = () => {
       });
       return;
     }
+
+    // Get contribution label display name
+    const labelMap: Record<string, string> = {
+      "initial-contribution": "Initial Contribution",
+      "one-time-contribution": "One-time Contribution",
+      "recurring-contribution": "Recurring Contribution"
+    };
+    const labelDisplay = labelMap[contribution.contributionLabel] || "One-time Contribution";
+
+    // Create new payment entry
+    const newEntry = {
+      id: `PE${String(paymentEntries.length + 1).padStart(3, '0')}`,
+      date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+      label: labelDisplay,
+      contributionAmount: amount,
+      popCharges: charges.popCharges,
+      gstOnPopCharges: charges.gstOnPopCharges,
+      accountOpeningCharges: charges.accountOpeningCharges,
+      gstOnAccountOpeningCharges: charges.gstOnAccountOpeningCharges,
+      totalCharges: charges.totalCharges,
+      totalPayable: charges.totalPayable,
+      status: "Pending" as const,
+      tier: contribution.tier === "tier1" ? "Tier 1" : "Tier 2",
+      reference: `TXN${Date.now().toString().slice(-6)}`
+    };
+
+    setPaymentEntries([newEntry, ...paymentEntries]);
     
     toast({
-      title: "Contribution Initiated",
-      description: `Your ${contribution.tier === "tier1" ? "Tier 1" : "Tier 2"} contribution of ₹${amount.toLocaleString('en-IN')} has been initiated. Net investment: ₹${charges.netInvestment.toLocaleString('en-IN')}. Redirecting to payment gateway...`,
+      title: "Payment Entry Created",
+      description: `${labelDisplay} of ₹${amount.toLocaleString('en-IN')} + ₹${charges.totalCharges.toFixed(2)} charges = ₹${charges.totalPayable.toLocaleString('en-IN')} total. Redirecting to payment gateway...`,
     });
   };
 
@@ -1440,19 +1526,47 @@ const DashboardNPS = () => {
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium">Contribution Type</Label>
-                    <Select value={contribution.type} onValueChange={(v) => setContribution({...contribution, type: v})}>
+                    <Label className="text-sm font-medium">Contribution Label</Label>
+                    <Select 
+                      value={contribution.contributionLabel} 
+                      onValueChange={(v) => {
+                        const newType = v === "recurring-contribution" ? "recurring" : "one-time";
+                        setContribution({...contribution, contributionLabel: v, type: newType});
+                      }}
+                    >
                       <SelectTrigger className="mt-2">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="one-time">One-time Contribution</SelectItem>
-                        <SelectItem value="recurring">Recurring (SIP)</SelectItem>
+                        <SelectItem value="initial-contribution">
+                          <div className="flex flex-col">
+                            <span>Initial Contribution</span>
+                            <span className="text-xs text-muted-foreground">First-time account opening (includes registration charges)</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="one-time-contribution">
+                          <div className="flex flex-col">
+                            <span>One-time Contribution</span>
+                            <span className="text-xs text-muted-foreground">Lump sum contribution to existing account</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="recurring-contribution">
+                          <div className="flex flex-col">
+                            <span>Recurring Contribution</span>
+                            <span className="text-xs text-muted-foreground">Set up SIP for regular contributions</span>
+                          </div>
+                        </SelectItem>
                       </SelectContent>
                     </Select>
+                    {contribution.contributionLabel === "initial-contribution" && (
+                      <p className="text-xs text-purple-600 mt-1 flex items-center gap-1">
+                        <Info className="w-3 h-3" />
+                        Account opening charges (₹200 + GST) will be added
+                      </p>
+                    )}
                   </div>
                   
-                  {contribution.type === "one-time" ? (
+                  {contribution.contributionLabel !== "recurring-contribution" ? (
                     <div>
                       <Label className="text-sm font-medium">Amount (₹)</Label>
                       <Input 
@@ -1683,8 +1797,35 @@ const DashboardNPS = () => {
                           <p className="text-xs text-muted-foreground">18% on POP charges</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-orange-500">+ ₹{charges.gstOnCharges.toFixed(2)}</span>
+                      <span className="font-semibold text-orange-500">+ ₹{charges.gstOnPopCharges.toFixed(2)}</span>
                     </div>
+
+                    {/* Account Opening Charges - Only for Initial Contribution */}
+                    {isInitialContribution && (
+                      <>
+                        <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-purple-200">
+                          <div className="flex items-center gap-2">
+                            <CreditCard className="w-4 h-4 text-purple-600" />
+                            <div>
+                              <span className="text-sm text-secondary">Account Opening Charges</span>
+                              <p className="text-xs text-muted-foreground">One-time registration fee</p>
+                            </div>
+                          </div>
+                          <span className="font-semibold text-purple-600">+ ₹{charges.accountOpeningCharges.toFixed(2)}</span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-purple-200">
+                          <div className="flex items-center gap-2">
+                            <Percent className="w-4 h-4 text-purple-500" />
+                            <div>
+                              <span className="text-sm text-secondary">GST on Account Opening</span>
+                              <p className="text-xs text-muted-foreground">18% on account opening charges</p>
+                            </div>
+                          </div>
+                          <span className="font-semibold text-purple-500">+ ₹{charges.gstOnAccountOpeningCharges.toFixed(2)}</span>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {/* Total Summary */}
@@ -1740,14 +1881,17 @@ const DashboardNPS = () => {
             </CardContent>
           </Card>
 
-          {/* Contribution History Table */}
+          {/* Payment Entries Table */}
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-primary" />
-                  Contribution History
-                </CardTitle>
+                <div>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Receipt className="w-5 h-5 text-primary" />
+                    Payment Entries
+                  </CardTitle>
+                  <CardDescription className="text-xs mt-1">All contribution payments with charges breakdown</CardDescription>
+                </div>
                 <Button variant="outline" size="sm" className="gap-2">
                   <Download className="w-4 h-4" />
                   Export
@@ -1760,24 +1904,55 @@ const DashboardNPS = () => {
                   <thead>
                     <tr className="border-b bg-muted/30">
                       <th className="text-left p-4 font-medium text-secondary text-sm">Date</th>
-                      <th className="text-left p-4 font-medium text-secondary text-sm">Reference</th>
-                      <th className="text-left p-4 font-medium text-secondary text-sm">Type</th>
-                      <th className="text-left p-4 font-medium text-secondary text-sm">Fund</th>
-                      <th className="text-left p-4 font-medium text-secondary text-sm">Amount</th>
+                      <th className="text-left p-4 font-medium text-secondary text-sm">Label</th>
+                      <th className="text-right p-4 font-medium text-secondary text-sm">Contribution</th>
+                      <th className="text-right p-4 font-medium text-secondary text-sm">POP Charges</th>
+                      <th className="text-right p-4 font-medium text-secondary text-sm">GST (POP)</th>
+                      <th className="text-right p-4 font-medium text-secondary text-sm">A/C Opening</th>
+                      <th className="text-right p-4 font-medium text-secondary text-sm">GST (A/C)</th>
+                      <th className="text-right p-4 font-medium text-secondary text-sm">Total Payable</th>
                       <th className="text-left p-4 font-medium text-secondary text-sm">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {contributionHistory.map((item, index) => (
-                      <tr key={index} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
-                        <td className="p-4 text-sm text-secondary">{item.date}</td>
-                        <td className="p-4 text-sm text-muted-foreground font-mono">{item.reference}</td>
-                        <td className="p-4 text-sm text-muted-foreground">{item.type}</td>
-                        <td className="p-4 text-sm text-muted-foreground">{item.fund}</td>
-                        <td className="p-4 text-sm font-bold text-secondary">₹{item.amount.toLocaleString()}</td>
+                    {paymentEntries.map((entry) => (
+                      <tr key={entry.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
+                        <td className="p-4 text-sm text-secondary">{entry.date}</td>
                         <td className="p-4">
-                          <Badge className={item.status === "Completed" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}>
-                            {item.status}
+                          <Badge 
+                            variant="outline" 
+                            className={
+                              entry.label === "Initial Contribution" 
+                                ? "border-purple-300 text-purple-700 bg-purple-50" 
+                                : entry.label === "Recurring Contribution"
+                                ? "border-blue-300 text-blue-700 bg-blue-50"
+                                : "border-green-300 text-green-700 bg-green-50"
+                            }
+                          >
+                            {entry.label}
+                          </Badge>
+                        </td>
+                        <td className="p-4 text-sm font-semibold text-secondary text-right">₹{entry.contributionAmount.toLocaleString('en-IN')}</td>
+                        <td className="p-4 text-sm text-muted-foreground text-right">₹{entry.popCharges.toFixed(2)}</td>
+                        <td className="p-4 text-sm text-muted-foreground text-right">₹{entry.gstOnPopCharges.toFixed(2)}</td>
+                        <td className="p-4 text-sm text-right">
+                          {entry.accountOpeningCharges > 0 ? (
+                            <span className="text-purple-600">₹{entry.accountOpeningCharges.toFixed(2)}</span>
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </td>
+                        <td className="p-4 text-sm text-right">
+                          {entry.gstOnAccountOpeningCharges > 0 ? (
+                            <span className="text-purple-600">₹{entry.gstOnAccountOpeningCharges.toFixed(2)}</span>
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </td>
+                        <td className="p-4 text-sm font-bold text-primary text-right">₹{entry.totalPayable.toLocaleString('en-IN')}</td>
+                        <td className="p-4">
+                          <Badge className={entry.status === "Completed" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}>
+                            {entry.status}
                           </Badge>
                         </td>
                       </tr>
